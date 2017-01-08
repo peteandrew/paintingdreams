@@ -1,0 +1,70 @@
+{% extends "mainapp_base.html" %}
+
+{% block content %}
+<h1>Search results</h1>
+<!-- <form method="GET" class="form-horizontal">
+  <div class="form-group">
+    <div class="col-sm-6">
+      <input class="form-control" id="query" name="query" value="{{ query }}">
+    </div>
+    <button type="submit" class="btn btn-default">Search</button>
+  </div>
+</form> -->
+
+{% if product_exact_match or product_matches %}
+<h2>Product matches</h2>
+<div class="row gallery">
+  {% if product_exact_match %}
+  <div class="col-md-3">
+    <a class="thumbnail" href="{% url 'product_detail' product_exact_match.slug %}">
+      <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ product_exact_match.thumbnail }}" />
+      <div class="caption">
+        <p>{{ product_exact_match.title }}</p>
+      </div>
+    </a>
+  </div>
+  {% endif %}
+  {% if product_matches %}
+  {% for product in product_matches %}
+  <div class="col-md-3">
+    <a class="thumbnail" href="{% url 'product_detail' product.slug %}">
+      <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ product.thumbnail }}" />
+      <div class="caption">
+        <p>{{ product.title }}</p>
+      </div>
+    </a>
+  </div>
+  {% endfor %}
+  {% endif %}
+</div>
+{% endif %}
+
+{% if image_exact_match or image_matches %}
+<h2>Image matches</h2>
+<div class="row gallery">
+  {% if image_exact_match %}
+  <div class="col-md-3">
+    <a class="thumbnail" href="{% url 'image_detail' image_exact_match.slug %}">
+      <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ image_exact_match.thumbnail }}" />
+      <div class="caption">
+        <p>{{ image_exact_match.title }}</p>
+      </div>
+    </a>
+  </div>
+  {% endif %}
+  {% if image_matches %}
+  {% for image in image_matches %}
+  <div class="col-md-3">
+    <a class="thumbnail" href="{% url 'image_detail' image.slug %}">
+      <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ image.thumbnail }}" />
+      <div class="caption">
+        <p>{{ image.title }}</p>
+      </div>
+    </a>
+  </div>
+  {% endfor %}
+  {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

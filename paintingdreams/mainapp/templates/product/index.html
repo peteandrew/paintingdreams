@@ -1,0 +1,31 @@
+{% extends "mainapp_base.html" %}
+
+{% block content %}
+<h1>{{ pagetitle }}</h1>
+{% if products %}
+    <div class="row gallery">
+    {% for product in products %}
+        <div class="col-md-3">
+        {% if product.image %}
+            <a class="thumbnail" href="{% url 'product_detail' product.image.slug %}__{{ product.product_type.slug }}">
+        {% endif %}
+        {% if not product.image %}
+            <a class="thumbnail" href="{% url 'product_detail' product.product_type.slug %}">
+        {% endif %}
+            {% with webimage=product.webimages.first %}
+                <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ webimage.filename }}" alt="{{ webimage.name }}" />
+            {% endwith %}
+            <div class="caption">
+                <p>
+                    {% if product.image %}{{ product.image.title }} - {% endif %}
+                    {{ product.product_type.displayname_final }}
+                </p>
+            </div>
+        </a>
+        </div>
+    {% endfor %}
+    </div>
+{% else %}
+    <p>No products found</p>
+{% endif %}
+{% endblock %}

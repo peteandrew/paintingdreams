@@ -1,0 +1,58 @@
+AL,Albania
+AD,Andorra
+AM,Armenia
+AT,Austria          
+AZ,Azerbaijan
+BY,Belarus     
+BE,Belgium    
+BA,Bosnia Herzegovina   
+BG,Bulgaria       
+HR,Croatia        
+CY,Cyprus        
+CZ,Czech Republic 
+DK,Denmark 
+EE,Estonia 
+FO,Faroe Islands
+FI,Finland 
+FR,France 
+GE,Georgia 
+DE,Germany 
+GI,Gibraltar 
+GR,Greece 
+GL,Greenland
+GG,Guernsey
+HU,Hungary 
+IS,Iceland 
+IM,Isle of Man
+IE,Irish Republic 
+IT,Italy 
+JE,Jersey
+KZ,Kazakhstan
+KG,Kyrgyzstan
+LV,Latvia 
+LI,Liechtenstein
+LT,Lithuania 
+LU,Luxembourg 
+MK,Macedonia
+MT,Malta 
+MD,Moldova
+MC,Monaco 
+ME,Montenegro  
+NL,Netherlands 
+NO,Norway  
+PL,Poland 
+PT,Portugal 
+RO,Romania
+RU,Russia
+SM,San Marino
+RS,Serbia
+SK,Slovakia 
+SI,Slovenia 
+ES,Spain 
+SE,Sweden 
+CH,Switzerland
+TJ,Tajikistan
+TR,Turkey
+TM,Turkmenistan
+UA,Ukraine
+UZ,Uzbekistan

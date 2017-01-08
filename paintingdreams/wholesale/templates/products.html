@@ -1,0 +1,15 @@
+{% extends "wholesale_base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1>Wholesale Order</h1>
+<div id="wholesale-container">
+  <p class="step-num">Step 1 of 3</p>
+  <p>Fields marked with * are required</p>
+  {% crispy form %}
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="/static/wholesale/js/wholesale.js"></script>
+{% endblock %}

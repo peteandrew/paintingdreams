@@ -1,0 +1,21 @@
+{% extends "mainapp_base.html" %}
+
+{% block content %}
+<h1>{{ pagetitle }}</h1>
+{% if images %}
+    <div class="row gallery">
+    {% for image in images %}
+        <div class="col-md-3"><a class="thumbnail" href="{% url 'image_detail' image.slug %}">
+            {% with webimage=image.webimages.first %}
+                <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ webimage.filename }}" alt="{{ webimage.name }}" />
+            {% endwith %}
+            <div class="caption">
+                <p>{{ image.title }}</p>
+            </div>
+        </a></div>
+    {% endfor %}
+    </div>
+{% else %}
+    <p>No images found</p>
+{% endif %}
+{% endblock %}

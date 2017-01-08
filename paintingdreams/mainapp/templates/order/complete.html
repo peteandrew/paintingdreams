@@ -1,0 +1,15 @@
+{% extends "mainapp_base.html" %}
+
+{% block content %}
+{% if order.state == 'paid' %}
+  <h1>Order complete</h1>
+{% else %}
+  {% if order.last_transaction.state == 'failed' %}
+    <h1>Order transaction failed</h1>
+  {% elif order.last_transaction.state == 'cancelled' %}
+    <h1>Order transaction cancelled</h1>
+  {% else %}
+    <h1>Order in progress
+  {% endif %}
+{% endif %}
+{% endblock %}

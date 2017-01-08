@@ -1,0 +1,46 @@
+{% extends "mainapp_base.html" %}
+
+{% block content %}
+    {% if homepage_images %}
+        <div class="homepage-images carousel slide carousel-fade" data-ride="carousel">
+
+            <div class="carousel-inner" role="listbox">
+            {% for image in homepage_images %}
+                <div class="item {% if forloop.first %}active{% endif %}">
+                    <a class="image" href="{% url 'image_detail' image.slug %}">
+                    {% with webimage=image.webimages.first %}
+                        <img src="/media/images/standard/{{ webimage.filename }}" alt="{{ webimage.name }}" />
+                    {% endwith %}
+                    </a>
+                </div>
+            {% endfor %}
+            </div>
+
+        </div>
+    {% endif %}
+    {% if homepage_products %}
+        <h2>Selected products</h2>
+        <div class="homepage-products row gallery">
+        {% for product in homepage_products %}
+            <div class="col-md-3">
+            {% if product.image %}
+                <a class="thumbnail" href="{% url 'product_detail' product.image.slug %}__{{ product.product_type.slug }}">
+            {% endif %}
+            {% if not product.image %}
+                <a class="thumbnail" href="{% url 'product_detail' product.product_type.slug %}">
+            {% endif %}
+                {% with webimage=product.webimages.first %}
+                    <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ webimage.filename }}" alt="{{ webimage.name }}" />
+                {% endwith %}
+                <div class="caption">
+                    <p>
+                        {% if product.image %}{{ product.image.title }} - {% endif %}
+                        {{ product.product_type.displayname_final }}
+                    </p>
+                </div>
+                </a>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
