@@ -7,15 +7,6 @@ from crispy_forms.bootstrap import FormActions
 
 def products_table():
     html = """
-        {% if product_errors|length > 0 %}
-            <div class="product-errors">
-            <ul>
-            {% for error in product_errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-            </ul>
-            </div>
-        {% endif %}
         {% for category, products in categories_products.items %}
             <h3>{{ category }}</h3>
             <table class="wholesale_products">
@@ -44,10 +35,10 @@ def products_table():
             {% endfor %}
             </table>
         {% endfor %}
-        <table class="wholesale_products">
+        <table class="wholesale_subtotal">
             <tr>
-                <td colspan="4">Sub total</td>
-                <td class="colTotal">{{ subtotal }}</td>
+                <td>Sub total</td>
+                <td>&pound;<span>{{ subtotal }}</span></td>
             </tr>
         </table>
     """

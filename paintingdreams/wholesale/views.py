@@ -97,13 +97,15 @@ def start(request, special_name):
             order_details['contact_name'] = form.cleaned_data['contact_name']
             order_details['contact_email'] = form.cleaned_data['contact_email']
             order_details['contact_tel'] = form.cleaned_data['contact_tel']
+        else:
+            product_errors.append('Required field is missing or invalid')
 
         request.session['wholesale_order'] = order_details
 
         if order_subtotal < 50:
             product_errors.append('Order sub total less than £50 minimum')
 
-        if len(product_errors) == 0 and form.is_valid():
+        if len(product_errors) == 0:
             url = '/wholesale_order/'
             if special is not None:
                 url += special_name + '/'
