@@ -8,9 +8,6 @@ from django.core.mail import send_mail
 from wholesale.forms import ProductsForm
 from wholesale.models import Product, Category, Special, SpecialProductRemoved
 
-import logging
-logger = logging.getLogger('django')
-
 def get_categories_products(products_removed):
     categories_products = OrderedDict()
 
@@ -76,7 +73,7 @@ def start(request, special_name):
 
                 if quantity > 0:
                     order_details[key] = quantity
-                    
+
                     if quantity < product.min_quantity:
                         product.error = True
                         product_errors.append('Quantity entered for ' + product.code + ' - ' + product.title + ' less than minimum quantity: ' + str(product.min_quantity))
@@ -233,13 +230,12 @@ def build_order(request, special_name='', complete=False):
 
         ctx['order_sub_total'] = order_total
 
+        ctx['delivery_charge'] = 0
         if postage_option == 'std' and order_total < 125:
             ctx['delivery_charge'] = 8
             order_total += 8
 
         ctx['order_total'] = order_total
-
-        logger.debug(ctx)
 
         if complete:
             send_emails(ctx)
