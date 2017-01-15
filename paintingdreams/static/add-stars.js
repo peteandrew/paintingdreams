@@ -4,6 +4,8 @@ $(function() {
   var addStars = function() {
     var starWidth = starImg.width;
     var starHeight = starImg.height;
+    starWidth = starWidth / 2;
+    starHeight = starHeight / 2;
 
     console.log(starWidth);
     console.log(starHeight);
