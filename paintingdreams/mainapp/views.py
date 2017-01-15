@@ -94,7 +94,7 @@ def image_tag_index(request, tagstr):
 
     pagetitle = 'Search'
     if len(tags) == 1:
-        imagetag = ImageTag.objects.get(slug=tags[0])
+        imagetag = get_object_or_404(ImageTag, slug=tags[0])
         if imagetag:
             pagetitle = imagetag.name
 
