@@ -84,6 +84,11 @@ def wholesale_info(request):
     return render(request, 'wholesale_info.html', ctx)
 
 
+def delivery_info(request):
+    ctx = {'pagetitle': 'Delivery info'}
+    return render(request, 'delivery_info.html', ctx)
+
+
 def image_index(request):
     images = Image.objects.order_by('title')
     context = {'images': images, 'pagetitle': 'All paintings'}

@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^shows$', views.shows),
     url(r'^feedback$', views.feedback),
     url(r'^wholesale-info$', views.wholesale_info),
+    url(r'^delivery-info$', views.delivery_info),
     url(r'^mail-test$', views.mailtest),
     url(r'^original_image/(.+)$', views.original_file_serve),
 
