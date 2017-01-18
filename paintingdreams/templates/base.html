@@ -146,15 +146,22 @@
         font-size: 1.6em;
       }
       .main-content {
-        margin-bottom: 150px;
+        margin-bottom: 185px;
       }
       .footer {
-        height: 130px;
+        height: 160px;
         background-color: rgba(0,0,0,.2);
         border-top: 2px solid rgba(255,255,255,.1);
       }
+      .footer p {
+        text-align: left;
+        line-height: 1.8em;
+      }
       .footer .container {
         top: 15px;
+      }
+      .footer p.text-center {
+        text-align: center;
       }
       .info-text p {
         font-size: 1.15em;
@@ -180,6 +187,15 @@
         line-height: 1.5em;
         font-size: 1.1em;
       }
+      .paypal-logo {
+        background-color: white;
+        padding: 4px 5px;
+        margin-left: 12px;
+        margin-top: 5px;
+      }
+      .navbar {
+        margin-bottom: 30px;
+      }
     </style>
 </head>
 
@@ -196,8 +212,17 @@
     <footer class="footer">
         <div class="container">
           <div class="row">
-            <div class="col-md-8"><p style="text-align: left;">Copyright &copy; 2017 Wendy Andrew</p></div>
-            <div class="col-md-4"><img style="position: absolute; right: 0;" src="/static/cardsave-secure-badge-colour.png" alt="Cardsave Gateway from Worldpay" /></div>
+            <div class="col-md-9">
+              <p><a href="/delivery-info">Delivery info</a></p>
+              <p><a href="/terms-and-conditions">Terms and Conditions</a></p>
+            </div>
+            <div class="col-md-3">
+              <img class="img-responsive" src="/static/cardsave/cardsave_card-logos_horizontal_transparent.png" alt="Cardsave Gateway from Worldpay" />
+              <img class="img-responsive paypal-logo" src="/static/paypal/paypal_logo_100x26.png" alt="PayPal" />
+            </div>
+          </div>
+          <div class="row">
+            <p class="text-center">info@paintingdreams.co.uk | Copyright &copy; 2017 Wendy Andrew</p>
           </div>
         </div>
     </footer>
