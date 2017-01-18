@@ -75,7 +75,7 @@ def shows(request):
 
 
 def feedback(request):
-    ctx = {'pagetitle': 'Feedback'}
+    ctx = {'pagetitle': 'Customer feedback'}
     return render(request, 'feedback.html', ctx)
 
 
