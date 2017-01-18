@@ -65,19 +65,23 @@ def original_file_serve(request, filename):
 
 
 def artist_info(request):
-    return render(request, 'artist_info.html')
+    ctx = {'pagetitle': 'Artist info'}
+    return render(request, 'artist_info.html', ctx)
 
 
 def shows(request):
-    return render(request, 'shows.html')
+    ctx = {'pagetitle': 'Shows'}
+    return render(request, 'shows.html', ctx)
 
 
 def feedback(request):
-    return render(request, 'feedback.html')
+    ctx = {'pagetitle': 'Feedback'}
+    return render(request, 'feedback.html', ctx)
 
 
 def wholesale_info(request):
-    return render(request, 'wholesale_info.html')
+    ctx = {'pagetitle': 'Wholesale info'}
+    return render(request, 'wholesale_info.html', ctx)
 
 
 def image_index(request):
