@@ -25,6 +25,7 @@ urlpatterns = patterns('',
     url(r'^feedback$', views.feedback),
     url(r'^wholesale-info$', views.wholesale_info),
     url(r'^delivery-info$', views.delivery_info),
+    url(r'^terms-and-conditions$', views.terms_and_conditions),
     url(r'^mail-test$', views.mailtest),
     url(r'^original_image/(.+)$', views.original_file_serve),
 

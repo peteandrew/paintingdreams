@@ -89,6 +89,11 @@ def delivery_info(request):
     return render(request, 'delivery_info.html', ctx)
 
 
+def terms_and_conditions(request):
+    ctx = {'pagetitle': 'Terms and Conditions'}
+    return render(request, 'terms_and_conditions.html', ctx)
+
+
 def image_index(request):
     images = Image.objects.order_by('title')
     context = {'images': images, 'pagetitle': 'All paintings'}
