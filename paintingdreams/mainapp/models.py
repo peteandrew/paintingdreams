@@ -72,6 +72,7 @@ class ProductType(models.Model):
     title = models.CharField(max_length=100)
     displayname = models.CharField(max_length=100, blank=True)
     inherit_displayname = models.BooleanField(default=False)
+    subproduct_hide = models.BooleanField(default=False)
     description = models.TextField(blank=True)
     inherit_description = models.BooleanField(default=False)
     stand_alone = models.BooleanField(default=False)
@@ -94,7 +95,7 @@ class ProductType(models.Model):
             children = reduce(operator.or_, [children, self.children(child)])
         return children
 
-    def child_ids(self, prod_types=None, parent=None):
+    def child_ids(self, prod_types=None, parent=None, level=1):
         if not prod_types:
             prod_types = list(ProductType.objects.all())
             if len(prod_types) == 0:
@@ -104,7 +105,7 @@ class ProductType(models.Model):
         ids = []
         for prod_type in prod_types:
             if prod_type.parent_id == parent.id:
-                ids += [prod_type.id] + self.child_ids(prod_types, prod_type)
+                ids += [(level, prod_type.id,)] + self.child_ids(prod_types, prod_type, level + 1)
         return ids
 
     def parents(self):
