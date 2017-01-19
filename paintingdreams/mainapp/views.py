@@ -381,8 +381,7 @@ def order_transaction_complete_test(request):
     orderline = OrderLine(product=product2, title='Product 2', item_price=55.50, item_weight=550, quantity=2, order=order)
     orderline.save()
     order_transaction = OrderTransaction(order=order, payment_processor='cardsave')
-    if request.GET['state']:
-        order_transaction.state = request.GET['state']
+    order_transaction.state = request.GET.get('state', 'started')
     order_transaction.save()
     if order_transaction.state == 'complete':
         order.state = 'paid'
@@ -447,8 +446,25 @@ def paypal_ipn_handler(sender, **kwargs):
 
 @csrf_exempt
 def paypal_cancel(request):
-    print(request)
-    return HttpResponse("PayPal cancel")
+    # Check that we have a valid order in the session. Redirect to home page
+    # if we don't
+    order_id = request.session.get('order_id')
+    if not order_id:
+        return redirect('/')
+
+    try:
+        order = Order.objects.get(unique_id=order_id)
+    except:
+        return redirect('/')
+
+    if order.last_transaction.payment_processor != 'paypal':
+        return redirect('/')
+
+    transaction = order.last_transaction
+    transaction.state = 'cancelled'
+    transaction.save()
+
+    return redirect('/order-complete')
 
 
 @receiver(cardsave.signals.payment_successful)

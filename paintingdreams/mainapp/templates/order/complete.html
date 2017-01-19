@@ -34,9 +34,17 @@
       <p>You may choose to re-attempt payment by visiting the <a href="/order-payment">payment selection page</a></p>
     </div>
   {% elif order.last_transaction.state == 'cancelled' %}
-    <h1>Order transaction cancelled</h1>
+    <h1>Order payment cancelled</h1>
+    <div class="info-text">
+      <p>Your order payment has been cancelled.</p>
+      <p>You may choose to re-start payment by visiting the <a href="/order-payment">payment selection page</a></p>
+    </div>
   {% else %}
     <h1>Order in progress</h1>
+    <div class="info-text">
+      <p>Your order is in progress. If you are seeing this page after successfully providing payment, we might have not yet recieved confirmation from the payment processor. Please try refreshing this page after a minute.</p>
+      <p>If you still see this page after refreshing and you have not received an order confirmation email, please email info@paintingdreams.co.uk quoting your order number.</p>
+    </div>
   {% endif %}
 {% endif %}
 {% endblock %}
