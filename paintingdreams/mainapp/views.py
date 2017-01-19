@@ -95,13 +95,13 @@ def terms_and_conditions(request):
 
 
 def image_index(request):
-    images = Image.objects.order_by('title')
+    images = Image.objects.prefetch_related('webimages').order_by('title')
     context = {'images': images, 'pagetitle': 'All paintings'}
     return render(request, 'image/index.html', context)
 
 
 def image_tag_index(request, tagstr):
-    images = Image.objects
+    images = Image.objects.prefetch_related('webimages')
     tags = tagstr.split('+')
     for tag in tags:
         images = images.filter(tags__slug__exact=tag)
