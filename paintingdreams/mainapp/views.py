@@ -369,6 +369,30 @@ def order_transaction_complete(request):
     return render(request, 'order/complete.html', ctx)
 
 
+def order_transaction_complete_test(request):
+    order_address = OrderAddress(address1='test address', address2='test line 2', city='blah', country='GB')
+    order_address.save()
+    order = Order(customer_name='test', customer_email='test@example.com', billing_address=order_address, shipping_address=order_address, postage_price=3.50,)
+    order.save()
+    product1 = Product.objects.all()[0]
+    product2 = Product.objects.all()[1]
+    orderline = OrderLine(product=product1, title='Product 1', item_price=25.50, item_weight=150, quantity=3, order=order)
+    orderline.save()
+    orderline = OrderLine(product=product2, title='Product 2', item_price=55.50, item_weight=550, quantity=2, order=order)
+    orderline.save()
+    order_transaction = OrderTransaction(order=order, payment_processor='cardsave')
+    if request.GET['state']:
+        order_transaction.state = request.GET['state']
+    order_transaction.save()
+    if order_transaction.state == 'complete':
+        order.state = 'paid'
+        order.save()
+    ctx = {
+        'order': order
+    }
+    return render(request, 'order/complete.html', ctx)
+
+
 def temp_complete_order_transaction(request):
     transaction = OrderTransaction.objects.get(unique_id=request.GET['id'])
 

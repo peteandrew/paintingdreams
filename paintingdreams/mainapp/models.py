@@ -222,6 +222,22 @@ class OrderAddress(models.Model):
     post_code = models.CharField(max_length=255, blank=True)
     country = CountryField()
 
+    def __addAttribute(self, ret, attr):
+        if attr != '':
+            ret += ', ' + attr
+        return ret
+
+    def __str__(self):
+        ret = self.address1
+        ret = self.__addAttribute(ret, self.address2)
+        ret = self.__addAttribute(ret, self.address3)
+        ret = self.__addAttribute(ret, self.address4)
+        ret = self.__addAttribute(ret, self.city)
+        ret = self.__addAttribute(ret, self.state)
+        ret = self.__addAttribute(ret, self.post_code)
+        ret = self.__addAttribute(ret, self.country.name)
+        return ret
+
 
 class Order(models.Model):
     STATE_CHOICES = (
@@ -268,7 +284,7 @@ class Order(models.Model):
 
     @property
     def total_price(self):
-        return self.sub_total_price + self.postage_price
+        return float(self.sub_total_price) + float(self.postage_price)
 
 
 class OrderLine(models.Model):
