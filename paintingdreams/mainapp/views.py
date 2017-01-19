@@ -126,15 +126,13 @@ def image_detail(request, slug):
 def product_index(request, slug=None):
     if slug:
         base_product_type = get_object_or_404(ProductType, slug=slug)
-        product_types = [base_product_type] + list(base_product_type.children())
-        products = []
-        for product_type in product_types:
-            products += list(Product.objects.filter(product_type=product_type))
+        product_type_ids = [base_product_type.id] + base_product_type.child_ids()
+        products = Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').filter(product_type_id__in=product_type_ids)
 
         pagetitle = base_product_type.displayname_final + 's'
         context = {'product_type': base_product_type, 'products': products, 'pagetitle': pagetitle}
     else:
-        products = Product.objects.all()
+        products = Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').all()
         context = {'products': products, 'pagetitle': 'All products'}
 
     return render(request, 'product/index.html', context)

@@ -94,6 +94,19 @@ class ProductType(models.Model):
             children = reduce(operator.or_, [children, self.children(child)])
         return children
 
+    def child_ids(self, prod_types=None, parent=None):
+        if not prod_types:
+            prod_types = list(ProductType.objects.all())
+            if len(prod_types) == 0:
+                return []
+        if not parent:
+            parent = self
+        ids = []
+        for prod_type in prod_types:
+            if prod_type.parent_id == parent.id:
+                ids += [prod_type.id] + self.child_ids(prod_types, prod_type)
+        return ids
+
     def parents(self):
         if not self.parent:
             return []
