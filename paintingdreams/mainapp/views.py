@@ -323,23 +323,34 @@ def order_payment(request):
         'order': order
     }
 
+    order_transaction_list_view = OrderTransactionListView()
+    get_current_transaction = False
+
     if request.method == 'POST':
-        # If current transaction, need to cancel it before adding a new one
+        # Cancel current transaction if there is one and user has chosen to cancel it
         if order.current_transaction:
-            order.current_transaction.state = 'cancelled'
-            order.current_transaction.save()
-
-        logger.debug('order_payment post')
-        logger.debug(request.__dict__)
-
-        order_transaction_list_view = OrderTransactionListView()
-        api_request = APIRequest(request, (FormParser(),))
-        response = order_transaction_list_view.post(api_request, order_id)
-        # Need to check response here
-        ctx['transaction'] = response.data
+            if request.POST.get('cancel-current-trans', False):
+                trans = order.current_transaction
+                trans.state = 'cancelled'
+                trans.save()
+            else:
+                get_current_transaction = True
+        else:
+            api_request = APIRequest(request, (FormParser(),))
+            response = order_transaction_list_view.post(api_request, order_id)
+            # if response.status_code == 204:
+            ctx['transaction'] = response.data
     else:
-        # Get current transaction if it exists
-        ctx['transaction'] = order.current_transaction
+        get_current_transaction = True
+
+    if get_current_transaction:
+        get_copy = request.GET.copy()
+        get_copy['current'] = 'true'
+        request.GET = get_copy
+        api_request = APIRequest(request)
+        response = order_transaction_list_view.get(api_request, order_id)
+        if response.status_code == 200:
+            ctx['transaction'] = response.data
 
     # Need to output most recent current transactions in template with prompt to
     # change payment method. In change payment method box need to display warning not
@@ -625,8 +636,14 @@ class OrderTransactionListView(APIView):
         if isinstance(order, APIResponse):
             return order
 
-        transactions = order.ordertransaction_set.all()
-        serializer = OrderTransactionSerializer(transactions, many=True)
+        if not request.query_params.get('current', False):
+            transactions = order.ordertransaction_set.all()
+            serializer = OrderTransactionSerializer(transactions, many=True)
+        else:
+            transaction = order.current_transaction
+            if not transaction:
+                return APIResponse({}, APIStatus.HTTP_404_NOT_FOUND)
+            serializer = OrderTransactionSerializer(transaction)
 
         return APIResponse(serializer.data)
 

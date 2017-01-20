@@ -201,6 +201,32 @@
       ul.nav.navbar-nav {
         margin-top: 25px;
       }
+      span.paypal-button {
+        background-image: url(/static/paypal/paypal_button_60px.png);
+        display: inline-block;
+        width: 194px;
+        height: 60px;
+        color: transparent;
+      }
+      span.cardsave-button {
+        background-image: url(/static/cardsave/cardsave_card-logos_horizontal.png);
+        display: inline-block;
+        width: 245px;
+        height: 70px;
+        color: transparent;
+      }
+      #payment-selection .radio input {
+        display: none;
+      }
+      #payment-selection .radio input:checked + span {
+        border: 1px solid red;
+      }
+      .larger-text {
+        font-size: 1.2em;
+      }
+      #selected-payment form {
+        margin-bottom: 10px;
+      }
     </style>
 </head>
 
