@@ -2,7 +2,7 @@
 
 {% block mainnav %}
     <nav class="navbar navbar-default navbar-static-top">
-        <div class="container ontop">
+        <div class="container">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar-collapse" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
@@ -12,7 +12,7 @@
               </button>
               <a class="navbar-brand" href="/"><img src="/static/logo.svg"><span class="brand-text">Painting Dreams</span></a>
             </div>
-            <div class="collapse navbar-collapse" id="main-navbar-collapse">
+            <div class="collapse navbar-collapse ontop" id="main-navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                       <a href="/">Home</a>
@@ -63,17 +63,15 @@
                         </ul>
                     </li>
                 </ul>
+                <form action="/search" class="navbar-form navbar-right" style="clear: right;">
+                  <div class="input-group">
+                    <input type="text" name="query" class="form-control" placeholder="Search" value="{{ query }}">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </span>
+                  </div>
+                </form>
             </div>
-        </div>
-        <div class="container">
-        <form action="/search" class="navbar-form navbar-right">
-          <div class="input-group">
-            <input type="text" name="query" class="form-control" placeholder="Search" value="{{ query }}">
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
-            </span>
-          </div>
-        </form>
         </div>
 
         {% if basket.items|length > 0 %}
