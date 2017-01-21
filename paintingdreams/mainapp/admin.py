@@ -32,14 +32,19 @@ class ImageAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductWebimageInline]
 
-    list_display = ['image', 'product_type']
+    list_display = ['image', 'product_type', 'product_type_order']
 
 
 class ImageTagAdmin(admin.ModelAdmin):
     list_display = ['slug', 'name', 'parent', 'order']
 
 
+class ProductTypeAdmin(admin.ModelAdmin):
+    list_display = ['slug', 'title', 'parent', 'order']
+
+
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ImageTag, ImageTagAdmin)
-admin.site.register([ProductType, ImageImageTag, ProductTag, PostagePrice])
+admin.site.register(ProductType, ProductTypeAdmin)
+admin.site.register([ImageImageTag, ProductTag, PostagePrice])

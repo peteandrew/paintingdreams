@@ -104,13 +104,13 @@ def image_index(request, slug):
     firstgen_imagetags = []
     for level in child_imagetags_levels.keys():
         for tag in child_imagetags_levels[level]:
+            if level == 1:
+                firstgen_imagetags.append(tag)
             images = Image.objects.prefetch_related('webimages').filter(tags=tag)
             if len(images) == 0:
                 continue
             num_images += len(images)
             imagetag_images.append({'tag': tag, 'images': images})
-            if level == 1:
-                firstgen_imagetags.append(tag)
 
     pagetitle = base_imagetag.name
     context = {'imagetagimages': imagetag_images, 'firstgenimagetags': firstgen_imagetags, 'numimages': num_images, 'pagetitle': pagetitle}
@@ -127,20 +127,20 @@ def image_detail(request, slug):
 
 def product_index(request, slug):
     base_product_type = get_object_or_404(ProductType, slug=slug)
+    products = Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').filter(product_type=base_product_type).order_by('product_type_order')
+    num_products = len(products)
+    producttype_products = [{'producttype': base_product_type, 'products': products}]
 
-    product_type_levels_ids = [(0, base_product_type.id,)] + base_product_type.child_ids()
-    first_generation = []
-    product_type_ids = []
-    for product_type_level_id in product_type_levels_ids:
-        if product_type_level_id[0] == 1:
-            first_generation.append(product_type_level_id[1])
-        product_type_ids.append(product_type_level_id[1])
-    first_generation_product_types = ProductType.objects.filter(pk__in=first_generation)
-
-    products = Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').filter(product_type_id__in=product_type_ids)
+    product_type_children = base_product_type.children()
+    for child in product_type_children:
+        products = Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').filter(product_type_id__in=child['branch_ids']).order_by('product_type_order')
+        if len(products) == 0:
+            continue
+        num_products += len(products)
+        producttype_products.append({'producttype': child['product_type'], 'products': products})
 
     pagetitle = base_product_type.displayname_final + 's'
-    context = {'product_type': base_product_type, 'products': products, 'pagetitle': pagetitle, 'first_generation_product_types': first_generation_product_types}
+    context = {'product_type_products': producttype_products, 'num_products': num_products, 'pagetitle': pagetitle}
 
     return render(request, 'product/index.html', context)
 

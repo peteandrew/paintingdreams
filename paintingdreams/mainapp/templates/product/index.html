@@ -2,18 +2,22 @@
 
 {% block content %}
 <h1>{{ pagetitle }}</h1>
-{% if first_generation_product_types %}
-  <ul>
-  {% for product_type in first_generation_product_types %}
-    {% if not product_type.subproduct_hide %}
-      <li><a href="{% url 'product_index' product_type.slug %}">{{ product_type.title }}s</a></li>
+{% if num_products > 0 %}
+  {% if product_type_products|length > 1 %}
+    <ul>
+    {% for product_type in product_type_products %}
+      {% if forloop.counter > 1 and not product_type.producttype.subproduct_hide %}
+        <li><a href="{% url 'product_index' product_type.producttype.slug %}">{{ product_type.producttype.displayname_final }}s</a></li>
+      {% endif %}
+    {% endfor %}
+    </ul>
+  {% endif %}
+  {% for product_type in product_type_products %}
+    {% if forloop.counter > 1 and not product_type.producttype.subproduct_hide %}
+      <h2>{{ product_type.producttype.displayname_final }}s</h2>
     {% endif %}
-  {% endfor %}
-  </ul>
-{% endif %}
-{% if products %}
     <div class="row gallery">
-    {% for product in products %}
+    {% for product in product_type.products %}
         <div class="col-md-3">
         {% if product.image %}
             <a class="thumbnail" href="{% url 'product_detail' product.image.slug %}__{{ product.product_type.slug }}">
@@ -34,6 +38,7 @@
         </div>
     {% endfor %}
     </div>
+  {% endfor %}
 {% else %}
     <p>No products found</p>
 {% endif %}

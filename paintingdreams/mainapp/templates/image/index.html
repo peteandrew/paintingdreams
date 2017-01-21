@@ -11,7 +11,7 @@
     </ul>
   {% endif %}
   {% for imagetag in imagetagimages %}
-    {% if forloop.counter > 1 and imagetag.tag %}
+    {% if forloop.counter > 1 %}
       <h2>{{ imagetag.tag.name }}</h2>
     {% endif %}
     <div class="row gallery">

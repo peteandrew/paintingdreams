@@ -31,6 +31,9 @@ class Image(models.Model):
     products = models.ManyToManyField('ProductType', through='Product')
     tags = models.ManyToManyField('ImageTag', through='ImageImageTag')
 
+    class Meta:
+        ordering = ['title',]
+
     def __str__(self):
         return self.title
 
@@ -86,30 +89,32 @@ class ProductType(models.Model):
     inherit_shipping_weight = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['title',]
 
     def __str__(self):
         return self.title
 
-    def children(self, parent=None, level=1):
-        if not parent:
-            parent = self
-        children = (level, ProductType.objects.filter(parent=parent).order_by('order'),)
-        for child in children[1]:
-            children += self.children(children[1], level + 1)
-        return children
-
-    def child_ids(self, prod_types=None, parent=None, level=1):
+    def children(self, prod_types=None, parent=None, level=1):
         if not prod_types:
-            prod_types = list(ProductType.objects.all())
+            prod_types = list(ProductType.objects.all().order_by('parent_id', 'order'))
             if len(prod_types) == 0:
                 return []
         if not parent:
             parent = self
-        ids = []
+
+        children = []
         for prod_type in prod_types:
             if prod_type.parent_id == parent.id:
-                ids += [(level, prod_type.id,)] + self.child_ids(prod_types, prod_type, level + 1)
-        return ids
+                prod_type_children = self.children(prod_types, prod_type, level + 1)
+                branch_ids = [prod_type.id]
+                for child in prod_type_children:
+                    branch_ids += child['branch_ids']
+                children += [{'product_type': prod_type, 'children': self.children(prod_types, prod_type, level + 1), 'branch_ids': branch_ids}]
+
+        return children
 
     def parents(self):
         if not self.parent:
@@ -217,9 +222,11 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField('ProductTag', default=None, blank=True)
+    product_type_order = models.IntegerField(default=0)
 
     class Meta:
         unique_together = ("image", "product_type")
+        ordering = ['product_type_order']
 
     def clean(self):
         if not self.image and not self.product_type.stand_alone:
@@ -239,9 +246,6 @@ class Product(models.Model):
             string += str(self.image) + " - "
         string += self.product_type.displayname_final
         return string
-
-    class Meta:
-        ordering = ['product_type', '-image']
 
 
 # class UserAddress(models.Model):

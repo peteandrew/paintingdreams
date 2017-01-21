@@ -107,9 +107,6 @@
 
     <div class="col-md-6 product-description">
         <div>{{ product.product_type.description_final|safe }}{{ product.extra_description|safe }}</div>
-        {% if product.image %}
-            <p><a href="{% url 'image_detail' product.image.slug %}">Other products that use this image</a></p>
-        {% endif %}
     </div>
 
 </div>
