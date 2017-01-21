@@ -101,17 +101,19 @@ def image_index(request, slug):
     imagetag_images = [{'tag': base_imagetag, 'images': images}]
 
     child_imagetags_levels = base_imagetag.children()
+    firstgen_imagetags = []
     for level in child_imagetags_levels.keys():
         for tag in child_imagetags_levels[level]:
             images = Image.objects.prefetch_related('webimages').filter(tags=tag)
+            if len(images) == 0:
+                continue
             num_images += len(images)
             imagetag_images.append({'tag': tag, 'images': images})
+            if level == 1:
+                firstgen_imagetags.append(tag)
 
     pagetitle = base_imagetag.name
-    context = {'imagetagimages': imagetag_images, 'numimages': num_images, 'pagetitle': pagetitle}
-
-    if 1 in child_imagetags_levels:
-        context['firstgenimagetags'] = child_imagetags_levels[1]
+    context = {'imagetagimages': imagetag_images, 'firstgenimagetags': firstgen_imagetags, 'numimages': num_images, 'pagetitle': pagetitle}
 
     return render(request, 'image/index.html', context)
 

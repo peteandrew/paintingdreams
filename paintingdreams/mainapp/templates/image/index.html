@@ -3,7 +3,7 @@
 {% block content %}
 <h1>{{ pagetitle }}</h1>
 {% if numimages > 0 %}
-  {% if firstgenimagetags %}
+  {% if firstgenimagetags|length > 0 %}
     <ul>
     {% for imagetag in firstgenimagetags %}
       <li><a href="{% url 'image_index' imagetag.slug %}">{{ imagetag.name }}</a></li>
