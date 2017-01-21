@@ -112,7 +112,7 @@ class ProductType(models.Model):
                 branch_ids = [prod_type.id]
                 for child in prod_type_children:
                     branch_ids += child['branch_ids']
-                children += [{'product_type': prod_type, 'children': self.children(prod_types, prod_type, level + 1), 'branch_ids': branch_ids}]
+                children += [{'product_type': prod_type, 'children': prod_type_children, 'branch_ids': branch_ids}]
 
         return children
 
@@ -171,24 +171,30 @@ class ImageTag(models.Model):
     parent = models.ForeignKey('self', null=True, default=None, blank=True)
     order = models.IntegerField(default=0)
 
+    class Meta:
+        ordering = ['order',]
+
     def __str__(self):
         return self.name
 
-    def children(self, parent=None, level_children={}, level=1):
+    def children(self, image_tags=None, parent=None, level=1):
+        if not image_tags:
+            image_tags = list(ImageTag.objects.all().order_by('parent_id', 'order'))
+            if len(image_tags) == 0:
+                return []
         if not parent:
             parent = self
-            level_children = {}
-            level = 1
-        children = ImageTag.objects.filter(parent=parent).order_by('order')
-        if len(children) == 0:
-            return level_children
-        level_children[level] = children
-        for child in children:
-            level_children = self.children(child, level_children, level + 1)
-        return level_children
 
-    class Meta:
-        ordering = ['order',]
+        children = []
+        for image_tag in image_tags:
+            if image_tag.parent_id == parent.id:
+                image_tag_children = self.children(image_tags, image_tag, level + 1)
+                branch_ids = [image_tag.id]
+                for child in image_tag_children:
+                    branch_ids += child['branch_ids']
+                children += [{'image_tag': image_tag, 'children': image_tag_children, 'branch_ids': branch_ids}]
+
+        return children
 
 
 class ImageImageTag(models.Model):

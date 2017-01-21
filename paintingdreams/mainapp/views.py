@@ -100,20 +100,16 @@ def image_index(request, slug):
     num_images = len(images)
     imagetag_images = [{'tag': base_imagetag, 'images': images}]
 
-    child_imagetags_levels = base_imagetag.children()
-    firstgen_imagetags = []
-    for level in child_imagetags_levels.keys():
-        for tag in child_imagetags_levels[level]:
-            if level == 1:
-                firstgen_imagetags.append(tag)
-            images = Image.objects.prefetch_related('webimages').filter(tags=tag)
-            if len(images) == 0:
-                continue
-            num_images += len(images)
-            imagetag_images.append({'tag': tag, 'images': images})
+    imagetag_children = base_imagetag.children()
+    for child in imagetag_children:
+        images = Image.objects.prefetch_related('webimages').filter(tags__in=child['branch_ids']).order_by('tags__imagetag__order', 'tags')
+        if len(images) == 0:
+            continue
+        num_images += len(images)
+        imagetag_images.append({'tag': child['image_tag'], 'images': images})
 
     pagetitle = base_imagetag.name
-    context = {'imagetagimages': imagetag_images, 'firstgenimagetags': firstgen_imagetags, 'numimages': num_images, 'pagetitle': pagetitle}
+    context = {'image_tag_images': imagetag_images, 'num_images': num_images, 'pagetitle': pagetitle}
 
     return render(request, 'image/index.html', context)
 
@@ -133,7 +129,7 @@ def product_index(request, slug):
 
     product_type_children = base_product_type.children()
     for child in product_type_children:
-        products = Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').filter(product_type_id__in=child['branch_ids']).order_by('product_type_order')
+        products = Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').filter(product_type_id__in=child['branch_ids']).order_by('product_type__order', 'product_type_order')
         if len(products) == 0:
             continue
         num_products += len(products)
