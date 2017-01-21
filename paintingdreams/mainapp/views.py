@@ -30,7 +30,7 @@ from paypal.standard.ipn.signals import valid_ipn_received
 
 import cardsave.signals
 
-from mainapp.models import Image, Product, ProductType, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, ImageTag
+from mainapp.models import Image, Product, ProductType, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, ImageTag, ImageImageTag
 from mainapp.forms import OrderDetailsForm
 from mainapp.email import send_order_complete_email, send_payment_failed_email
 from mainapp import postage_prices
@@ -94,25 +94,25 @@ def terms_and_conditions(request):
     return render(request, 'terms_and_conditions.html', ctx)
 
 
-def image_index(request):
-    images = Image.objects.prefetch_related('webimages').order_by('title')
-    context = {'images': images, 'pagetitle': 'All paintings'}
-    return render(request, 'image/index.html', context)
+def image_index(request, slug):
+    base_imagetag = get_object_or_404(ImageTag, slug=slug)
+    images = Image.objects.prefetch_related('webimages').filter(tags=base_imagetag)
+    num_images = len(images)
+    imagetag_images = [{'tag': base_imagetag, 'images': images}]
 
+    child_imagetags_levels = base_imagetag.children()
+    for level in child_imagetags_levels.keys():
+        for tag in child_imagetags_levels[level]:
+            images = Image.objects.prefetch_related('webimages').filter(tags=tag)
+            num_images += len(images)
+            imagetag_images.append({'tag': tag, 'images': images})
 
-def image_tag_index(request, tagstr):
-    images = Image.objects.prefetch_related('webimages')
-    tags = tagstr.split('+')
-    for tag in tags:
-        images = images.filter(tags__slug__exact=tag)
+    pagetitle = base_imagetag.name
+    context = {'imagetagimages': imagetag_images, 'numimages': num_images, 'pagetitle': pagetitle}
 
-    pagetitle = 'Search'
-    if len(tags) == 1:
-        imagetag = get_object_or_404(ImageTag, slug=tags[0])
-        if imagetag:
-            pagetitle = imagetag.name
+    if 1 in child_imagetags_levels:
+        context['firstgenimagetags'] = child_imagetags_levels[1]
 
-    context = {'images': images.all(), 'pagetitle': pagetitle}
     return render(request, 'image/index.html', context)
 
 
@@ -123,26 +123,22 @@ def image_detail(request, slug):
     return render(request, 'image/detail.html', context)
 
 
-def product_index(request, slug=None):
-    if slug:
-        base_product_type = get_object_or_404(ProductType, slug=slug)
+def product_index(request, slug):
+    base_product_type = get_object_or_404(ProductType, slug=slug)
 
-        product_type_levels_ids = [(0, base_product_type.id,)] + base_product_type.child_ids()
-        first_generation = []
-        product_type_ids = []
-        for product_type_level_id in product_type_levels_ids:
-            if product_type_level_id[0] == 1:
-                first_generation.append(product_type_level_id[1])
-            product_type_ids.append(product_type_level_id[1])
-        first_generation_product_types = ProductType.objects.filter(pk__in=first_generation)
+    product_type_levels_ids = [(0, base_product_type.id,)] + base_product_type.child_ids()
+    first_generation = []
+    product_type_ids = []
+    for product_type_level_id in product_type_levels_ids:
+        if product_type_level_id[0] == 1:
+            first_generation.append(product_type_level_id[1])
+        product_type_ids.append(product_type_level_id[1])
+    first_generation_product_types = ProductType.objects.filter(pk__in=first_generation)
 
-        products = Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').filter(product_type_id__in=product_type_ids)
+    products = Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').filter(product_type_id__in=product_type_ids)
 
-        pagetitle = base_product_type.displayname_final + 's'
-        context = {'product_type': base_product_type, 'products': products, 'pagetitle': pagetitle, 'first_generation_product_types': first_generation_product_types}
-    else:
-        products = Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').all()
-        context = {'products': products, 'pagetitle': 'All products'}
+    pagetitle = base_product_type.displayname_final + 's'
+    context = {'product_type': base_product_type, 'products': products, 'pagetitle': pagetitle, 'first_generation_product_types': first_generation_product_types}
 
     return render(request, 'product/index.html', context)
 

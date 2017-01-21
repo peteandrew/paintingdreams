@@ -6,7 +6,7 @@
   <ul>
   {% for product_type in first_generation_product_types %}
     {% if not product_type.subproduct_hide %}
-      <li><a href="{% url 'product_type_index' product_type.slug %}">{{ product_type.title }}s</a></li>
+      <li><a href="{% url 'product_index' product_type.slug %}">{{ product_type.title }}s</a></li>
     {% endif %}
   {% endfor %}
   </ul>

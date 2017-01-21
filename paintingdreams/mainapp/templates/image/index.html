@@ -2,9 +2,20 @@
 
 {% block content %}
 <h1>{{ pagetitle }}</h1>
-{% if images %}
+{% if numimages > 0 %}
+  {% if firstgenimagetags %}
+    <ul>
+    {% for imagetag in firstgenimagetags %}
+      <li><a href="{% url 'image_index' imagetag.slug %}">{{ imagetag.name }}</a></li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  {% for imagetag in imagetagimages %}
+    {% if forloop.counter > 1 and imagetag.tag %}
+      <h2>{{ imagetag.tag.name }}</h2>
+    {% endif %}
     <div class="row gallery">
-    {% for image in images %}
+    {% for image in imagetag.images %}
         <div class="col-md-3"><a class="thumbnail" href="{% url 'image_detail' image.slug %}">
             {% with webimage=image.webimages.first %}
                 <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ webimage.filename }}" alt="{{ webimage.name }}" />
@@ -15,6 +26,7 @@
         </a></div>
     {% endfor %}
     </div>
+  {% endfor %}
 {% else %}
     <p>No images found</p>
 {% endif %}

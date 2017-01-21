@@ -12,6 +12,9 @@ from django.utils.html import format_html
 
 from mainapp.ImageResizer import ImageResizer
 
+import logging
+logger = logging.getLogger('django')
+
 
 def get_webimage_path(instance, filename):
     ext = filename.split('.')[-1]
@@ -26,7 +29,7 @@ class Image(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     products = models.ManyToManyField('ProductType', through='Product')
-    tags = models.ManyToManyField('ImageTag', default=None, blank=True)
+    tags = models.ManyToManyField('ImageTag', through='ImageImageTag')
 
     def __str__(self):
         return self.title
@@ -87,12 +90,12 @@ class ProductType(models.Model):
     def __str__(self):
         return self.title
 
-    def children(self, parent=None):
+    def children(self, parent=None, level=1):
         if not parent:
             parent = self
-        children = ProductType.objects.filter(parent=parent)
-        for child in children:
-            children = reduce(operator.or_, [children, self.children(child)])
+        children = (level, ProductType.objects.filter(parent=parent).order_by('order'),)
+        for child in children[1]:
+            children += self.children(children[1], level + 1)
         return children
 
     def child_ids(self, prod_types=None, parent=None, level=1):
@@ -160,9 +163,36 @@ class ImageTag(models.Model):
     description = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    parent = models.ForeignKey('self', null=True, default=None, blank=True)
+    order = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
+
+    def children(self, parent=None, level_children={}, level=1):
+        if not parent:
+            parent = self
+            level_children = {}
+            level = 1
+        children = ImageTag.objects.filter(parent=parent).order_by('order')
+        if len(children) == 0:
+            return level_children
+        level_children[level] = children
+        for child in children:
+            level_children = self.children(child, level_children, level + 1)
+        return level_children
+
+    class Meta:
+        ordering = ['order',]
+
+
+class ImageImageTag(models.Model):
+    image = models.ForeignKey(Image)
+    image_tag = models.ForeignKey(ImageTag)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order',]
 
 
 class ProductTag(models.Model):

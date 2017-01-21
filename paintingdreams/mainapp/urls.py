@@ -3,12 +3,10 @@ from django.conf.urls import patterns, url, include
 from mainapp import views
 
 urlpatterns = patterns('',
-    url(r'^images/$', views.image_index, name='image_index'),
-    url(r'^images/tag/(.+)$', views.image_tag_index, name='image_tag_index'),
-    url(r'^images/(.+)$', views.image_detail, name='image_detail'),
-    url(r'^products/$', views.product_index, name='product_index'),
-    url(r'^products/type/(.+)$', views.product_index, name='product_type_index'),
-    url(r'^products/(.+)$', views.product_detail, name='product_detail'),
+    url(r'^gallery/(.+)$', views.image_index, name='image_index'),
+    url(r'^image/(.+)$', views.image_detail, name='image_detail'),
+    url(r'^products/(.+)$', views.product_index, name='product_index'),
+    url(r'^product/(.+)$', views.product_detail, name='product_detail'),
     url(r'^search$', views.search),
     url(r'^basket-add$', views.basket_add),
     url(r'^basket-change-quantity$', views.basket_change_quantity),

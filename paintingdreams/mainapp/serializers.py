@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 
 from paypal.standard.forms import PayPalPaymentsForm
+from mainapp.PayPalFormNiceRenderer import PayPalFormNiceRenderer
 
 from cardsave.forms import CardsavePaymentForm
 
@@ -47,7 +48,8 @@ class OrderTransactionSerializer(serializers.ModelSerializer):
                 "return_url": settings.BASE_URL + reverse('order-transaction-complete'),
                 "cancel_return": settings.BASE_URL + reverse('paypal-cancel')
             }
-            payment_form = PayPalPaymentsForm(initial=paypal_dict)
+            paypal_form = PayPalPaymentsForm(initial=paypal_dict)
+            payment_form = PayPalFormNiceRenderer(paypal_form)
 
         else:
             cardsave_dict = {
