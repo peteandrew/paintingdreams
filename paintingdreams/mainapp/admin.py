@@ -35,6 +35,11 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ['image', 'product_type']
 
 
+class ImageTagAdmin(admin.ModelAdmin):
+    list_display = ['slug', 'name', 'parent', 'order']
+
+
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Product, ProductAdmin)
-admin.site.register([ProductType, ImageTag, ImageImageTag, ProductTag, PostagePrice])
+admin.site.register(ImageTag, ImageTagAdmin)
+admin.site.register([ProductType, ImageImageTag, ProductTag, PostagePrice])
