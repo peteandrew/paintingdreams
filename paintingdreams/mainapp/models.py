@@ -79,6 +79,7 @@ class ProductType(models.Model):
     displayname = models.CharField(max_length=100, blank=True)
     inherit_displayname = models.BooleanField(default=False)
     subproduct_hide = models.BooleanField(default=False)
+    index_inline = models.BooleanField(default=False)
     description = models.TextField(blank=True)
     inherit_description = models.BooleanField(default=False)
     stand_alone = models.BooleanField(default=False)

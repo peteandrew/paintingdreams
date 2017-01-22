@@ -12,13 +12,18 @@
     {% endfor %}
     </ul>
   {% endif %}
-  {% for product_type in product_type_products %}
-    {% if forloop.counter > 1 and not product_type.producttype.subproduct_hide %}
-      <h2>{{ product_type.producttype.displayname_final }}s</h2>
-    {% endif %}
+  {% if index_inline %}
     <div class="row gallery">
+  {% endif %}
+  {% for product_type in product_type_products %}
+    {% if not index_inline %}
+      {% if forloop.counter > 1 and not product_type.producttype.subproduct_hide %}
+        <h2>{{ product_type.producttype.title }}s</h2>
+      {% endif %}
+    <div class="row gallery">
+    {% endif %}
     {% for product in product_type.products %}
-        <div class="col-md-3">
+      <div class="col-md-3">
         {% if product.image %}
             <a class="thumbnail" href="{% url 'product_detail' product.image.slug %}__{{ product.product_type.slug }}">
         {% endif %}
@@ -35,10 +40,15 @@
                 </p>
             </div>
         </a>
-        </div>
+      </div>
     {% endfor %}
+    {% if not index_inline %}
     </div>
+    {% endif %}
   {% endfor %}
+  {% if index_inline %}
+    </div>
+  {% endif %}
 {% else %}
     <p>No products found</p>
 {% endif %}
