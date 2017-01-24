@@ -7,7 +7,7 @@
     <ul>
     {% for product_type in product_type_products %}
       {% if forloop.counter > 1 and not product_type.producttype.subproduct_hide %}
-        <li><a href="{% url 'product_index' product_type.producttype.slug %}">{{ product_type.producttype.displayname_final }}s</a></li>
+        <li><a href="{% url 'product_index' product_type.producttype.slug %}">{{ product_type.producttype.title }}s</a></li>
       {% endif %}
     {% endfor %}
     </ul>

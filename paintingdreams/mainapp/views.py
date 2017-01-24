@@ -135,7 +135,7 @@ def product_index(request, slug):
         num_products += len(products)
         producttype_products.append({'producttype': child['product_type'], 'products': products})
 
-    pagetitle = base_product_type.displayname_final + 's'
+    pagetitle = base_product_type.title + 's'
     context = {'product_type_products': producttype_products, 'num_products': num_products, 'pagetitle': pagetitle, 'index_inline': base_product_type.index_inline}
 
     return render(request, 'product/index.html', context)
