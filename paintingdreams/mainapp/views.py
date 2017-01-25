@@ -126,9 +126,12 @@ def product_index(request, slug):
     products = Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').filter(product_type=base_product_type).order_by('product_type_order')
     num_products = len(products)
     producttype_products = [{'producttype': base_product_type, 'products': products}]
+    disp_categories = False
 
     product_type_children = base_product_type.children()
     for child in product_type_children:
+        if not child['product_type'].subproduct_hide:
+            disp_categories = True
         products = Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').filter(product_type_id__in=child['branch_ids']).order_by('product_type__order', 'product_type_order')
         if len(products) == 0:
             continue
@@ -136,7 +139,7 @@ def product_index(request, slug):
         producttype_products.append({'producttype': child['product_type'], 'products': products})
 
     pagetitle = base_product_type.title + 's'
-    context = {'product_type_products': producttype_products, 'num_products': num_products, 'pagetitle': pagetitle, 'index_inline': base_product_type.index_inline}
+    context = {'product_type_products': producttype_products, 'num_products': num_products, 'pagetitle': pagetitle, 'index_inline': base_product_type.index_inline, 'disp_categories': disp_categories}
 
     return render(request, 'product/index.html', context)
 

@@ -2,16 +2,10 @@
 
 {% block content %}
 <h1>{{ pagetitle }}</h1>
-{% if num_products > 0 %}
-  {% if product_type_products|length > 1 %}
-    <ul>
-    {% for product_type in product_type_products %}
-      {% if forloop.counter > 1 and not product_type.producttype.subproduct_hide %}
-        <li><a href="{% url 'product_index' product_type.producttype.slug %}">{{ product_type.producttype.title }}s</a></li>
-      {% endif %}
-    {% endfor %}
-    </ul>
-  {% endif %}
+{% if num_products = 0 %}
+  <p>No products found</p>
+{% else %}
+  {% include "product/categories_panel.html" %}
   {% if index_inline %}
     <div class="row gallery">
   {% endif %}
@@ -20,36 +14,15 @@
       {% if forloop.counter > 1 and not product_type.producttype.subproduct_hide %}
         <h2>{{ product_type.producttype.title }}s</h2>
       {% endif %}
-    <div class="row gallery">
+      <div class="row gallery">
     {% endif %}
-    {% for product in product_type.products %}
-      <div class="col-md-3">
-        {% if product.image %}
-            <a class="thumbnail" href="{% url 'product_detail' product.image.slug %}__{{ product.product_type.slug }}">
-        {% endif %}
-        {% if not product.image %}
-            <a class="thumbnail" href="{% url 'product_detail' product.product_type.slug %}">
-        {% endif %}
-            {% with webimage=product.webimages.first %}
-                <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ webimage.filename }}" alt="{{ webimage.name }}" />
-            {% endwith %}
-            <div class="caption">
-                <p>
-                    {% if product.image %}{{ product.image.title }} - {% endif %}
-                    {{ product.product_type.displayname_final }}
-                </p>
-            </div>
-        </a>
-      </div>
-    {% endfor %}
+    {% include "product/product_type_gallery.html" %}
     {% if not index_inline %}
-    </div>
+      </div>
     {% endif %}
   {% endfor %}
   {% if index_inline %}
     </div>
   {% endif %}
-{% else %}
-    <p>No products found</p>
 {% endif %}
 {% endblock %}
