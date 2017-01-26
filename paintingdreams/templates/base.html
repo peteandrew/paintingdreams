@@ -227,18 +227,31 @@
       #selected-payment form {
         margin-bottom: 10px;
       }
-      .product-types {
+      .categories {
         border-color: rgba(255, 255, 255, 0.2);
+        background-color: rgba(21,18,51,.4);
       }
-      .product-types h3 {
+      .categories h3 {
         margin-top: 0;
       }
-      .product-types ul {
+      .categories ul {
         margin-bottom: 0;
       }
-      .product-types li {
+      .categories li {
         line-height: 1.8em;
         font-size: 1.1em;
+      }
+      .categories li a {
+        transition: color .1s ease-in-out;
+      }
+      .categories li a:hover {
+        text-decoration: none;
+        color: #aaa;
+      }
+      .categories li a:before {
+        font-family: 'FontAwesome';
+        content: '\f061';
+        margin: 0 10px 0 0;
       }
     </style>
 </head>

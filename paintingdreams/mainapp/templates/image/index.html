@@ -2,16 +2,10 @@
 
 {% block content %}
 <h1>{{ pagetitle }}</h1>
-{% if num_images > 0 %}
-  {% if image_tag_images|length > 1 %}
-    <ul>
-    {% for image_tag in image_tag_images %}
-      {% if forloop.counter > 1 %}
-        <li><a href="{% url 'image_index' image_tag.tag.slug %}">{{ image_tag.tag.name }}</a></li>
-      {% endif %}
-    {% endfor %}
-    </ul>
-  {% endif %}
+{% if num_images = 0 %}
+  <p>No images found</p>
+{% else %}
+  {% include "image/categories_panel.html" %}
   {% for image_tag in image_tag_images %}
     {% if forloop.counter > 1 %}
       <h2>{{ image_tag.tag.name }}</h2>
@@ -29,7 +23,5 @@
     {% endfor %}
     </div>
   {% endfor %}
-{% else %}
-    <p>No images found</p>
 {% endif %}
 {% endblock %}

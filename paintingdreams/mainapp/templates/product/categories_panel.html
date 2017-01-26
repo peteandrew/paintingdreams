@@ -1,7 +1,6 @@
 {% if disp_categories %}
-<div class="panel panel-primary product-types">
+<div class="panel panel-primary categories">
   <div class="panel-body">
-    <h3>{{ product_type_products.0.producttype.title }} Categories</h3>
     <div class="row">
       <ul class="col-md-6 list-unstyled">
         {% for product_type in product_type_products|slice:":7" %}
