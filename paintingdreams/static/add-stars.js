@@ -7,14 +7,8 @@ $(function() {
     starWidth = starWidth / 2;
     starHeight = starHeight / 2;
 
-    console.log(starWidth);
-    console.log(starHeight);
-
     var docWidth = $(document).width();
     var docHeight = $(document).height();
-
-    console.log(docWidth);
-    console.log(docHeight);
 
     var wrapper = $('.wrapper')[0];
 
@@ -26,8 +20,6 @@ $(function() {
         positions.push({x:x, y:y});
       }
     }
-
-    console.log(positions);
 
     var numStars = Math.round(positions.length * 0.2);
 
@@ -52,7 +44,7 @@ $(function() {
           return function() {
             newStar.fadeIn(1000);
           };
-        }(newStar), i * 60);
+        }(newStar), i*2);
 
         positions[positionIdx] = null;
       }
