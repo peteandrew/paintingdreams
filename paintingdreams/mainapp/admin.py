@@ -4,6 +4,7 @@ from mainapp.models import Image, ImageWebimage, ProductType, ImageTag, ImageIma
 
 class ImageWebimageInline(admin.TabularInline):
     model = ImageWebimage
+    fields = ('webimage', 'name', 'order', 'original_image',)
     extra = 1
     readonly_fields = ('original_image',)
 

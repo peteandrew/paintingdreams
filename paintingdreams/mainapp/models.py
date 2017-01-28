@@ -2,6 +2,7 @@ from functools import reduce
 import operator
 import uuid
 import os
+import json
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -41,6 +42,7 @@ class Image(models.Model):
 class Webimage(models.Model):
     webimage = models.ImageField(upload_to=get_webimage_path)
     name = models.CharField(max_length=100, blank=True)
+    sizes = models.CharField(max_length=255, blank=True)
     order = models.PositiveSmallIntegerField(default=0, blank=True)
 
     def __str__(self):
@@ -52,8 +54,9 @@ class Webimage(models.Model):
         return fname
 
     def save(self, *args, **kwargs):
+        super(Webimage, self).save(*args, **kwargs)
         sizes = ImageResizer(self.filename()).resize()
-        logger.debug(sizes)
+        self.sizes = json.dumps(sizes)
         super(Webimage, self).save(*args, **kwargs)
 
     def original_image(self):
