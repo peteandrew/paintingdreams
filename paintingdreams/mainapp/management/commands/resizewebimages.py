@@ -10,7 +10,9 @@ class Command(BaseCommand):
         webimages = item.webimages.all()
         for webimage in webimages:
             print("\t" + str(webimage))
-            ImageResizer(webimage.filename()).resize()
+            sizes = ImageResizer(webimage.filename()).resize()
+            webimage.sizes = sizes
+            webimage.save()
 
 
 
@@ -28,4 +30,3 @@ class Command(BaseCommand):
             print(str(product.image) + "\t" + str(product.product_type))
             Command.resize_item_webimage(product)
             print("\n")
-
