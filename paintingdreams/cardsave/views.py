@@ -2,7 +2,7 @@ import time
 import datetime
 
 from django.conf import settings
-from django.utils.importlib import import_module
+from importlib import import_module
 from django.http import HttpResponse, QueryDict
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
@@ -33,7 +33,7 @@ def cardsave_result(request):
 
     # Check order exists
     order_model = get_order_model()
-    try:        
+    try:
         order = order_model.objects.get(unique_id=form.cleaned_data['OrderID'])
     except:
         return cardsave_response(30, 'Unable to process Cardsave result. Order does not exist')

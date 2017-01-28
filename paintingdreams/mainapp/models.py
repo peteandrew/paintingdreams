@@ -52,8 +52,9 @@ class Webimage(models.Model):
         return fname
 
     def save(self, *args, **kwargs):
+        sizes = ImageResizer(self.filename()).resize()
+        logger.debug(sizes)
         super(Webimage, self).save(*args, **kwargs)
-        ImageResizer(self.filename()).resize()
 
     def original_image(self):
         url = '/original_image/' + self.filename()
@@ -65,16 +66,16 @@ class Webimage(models.Model):
 
 
 class ImageWebimage(Webimage):
-    image = models.ForeignKey('Image', related_name='webimages')
+    image = models.ForeignKey('Image', related_name='webimages', on_delete=models.CASCADE)
 
 
 class ProductWebimage(Webimage):
-    product = models.ForeignKey('Product', related_name='webimages')
+    product = models.ForeignKey('Product', related_name='webimages', on_delete=models.CASCADE)
 
 
 class ProductType(models.Model):
     slug = models.SlugField(unique=True)
-    parent = models.ForeignKey('self', null=True, default=None, blank=True)
+    parent = models.ForeignKey('self', null=True, default=None, blank=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     displayname = models.CharField(max_length=100, blank=True)
     inherit_displayname = models.BooleanField(default=False)
@@ -169,7 +170,7 @@ class ImageTag(models.Model):
     description = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    parent = models.ForeignKey('self', null=True, default=None, blank=True)
+    parent = models.ForeignKey('self', null=True, default=None, blank=True, on_delete=models.CASCADE)
     order = models.IntegerField(default=0)
 
     class Meta:
@@ -199,8 +200,8 @@ class ImageTag(models.Model):
 
 
 class ImageImageTag(models.Model):
-    image = models.ForeignKey(Image)
-    image_tag = models.ForeignKey(ImageTag)
+    image = models.ForeignKey(Image, on_delete=models.CASCADE)
+    image_tag = models.ForeignKey(ImageTag, on_delete=models.CASCADE)
     order = models.IntegerField(default=0)
 
     class Meta:
@@ -220,8 +221,8 @@ class ProductTag(models.Model):
 
 class Product(models.Model):
     code = models.CharField(max_length=20, blank=True)
-    image = models.ForeignKey(Image, null=True, default=None, blank=True)
-    product_type = models.ForeignKey(ProductType)
+    image = models.ForeignKey(Image, null=True, default=None, blank=True, on_delete=models.CASCADE)
+    product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE)
     sold_out = models.BooleanField(default=False)
     more_due = models.BooleanField(default=True)
     due_text = models.CharField(max_length=255, blank=True)
@@ -305,9 +306,9 @@ class Order(models.Model):
     customer_id = models.IntegerField(blank=True, null=True)
     customer_name = models.CharField(max_length=100)
     customer_email = models.EmailField()
-    billing_address = models.ForeignKey(OrderAddress, related_name='order_billing_address')
+    billing_address = models.ForeignKey(OrderAddress, related_name='order_billing_address', on_delete=models.CASCADE)
     shipping_name = models.CharField(max_length=100, blank=True, null=True)
-    shipping_address = models.ForeignKey(OrderAddress, blank=True, null=True, related_name='order_shipping_address')
+    shipping_address = models.ForeignKey(OrderAddress, blank=True, null=True, related_name='order_shipping_address', on_delete=models.CASCADE)
     # Store postage price in order record rather than calculating on the fly as postage postage_prices
     # may change and we don't want to affect historic orders
     postage_price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
@@ -346,12 +347,12 @@ class OrderLine(models.Model):
     # We store product title, price and weight here instead of just referring
     # to the product object as these values may change and we don't want to
     # affect historic orders
-    product = models.ForeignKey(Product, blank=True, null=True)
+    product = models.ForeignKey(Product, blank=True, null=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     item_price = models.DecimalField(max_digits=6, decimal_places=2)
     item_weight = models.IntegerField()
     quantity = models.SmallIntegerField()
-    order = models.ForeignKey(Order)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
 
     @property
     def line_price(self):
@@ -376,7 +377,7 @@ class OrderTransaction(models.Model):
     )
 
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    order = models.ForeignKey(Order, to_field='unique_id')
+    order = models.ForeignKey(Order, to_field='unique_id', on_delete=models.CASCADE)
     payment_processor = models.CharField(choices=PAYMENT_PROCESSOR_CHOICES, max_length=8)
     state = models.CharField(choices=STATE_CHOICES, max_length=18, default='started')
     created = models.DateTimeField(auto_now_add=True)

@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>{{ pagetitle }}</h1>
-{% if num_products = 0 %}
+{% if num_products == 0 %}
   <p>No products found</p>
 {% else %}
   {% include "product/categories_panel.html" %}

@@ -11,7 +11,7 @@ class Product(models.Model):
     code = models.CharField(max_length=20)
     title = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-    category = models.ForeignKey(Category)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     new = models.BooleanField(default=False)
     sold_out = models.BooleanField(default=False)
     min_quantity = models.SmallIntegerField(default=0)
@@ -26,5 +26,5 @@ class Special(models.Model):
 
 
 class SpecialProductRemoved(models.Model):
-    special = models.ForeignKey(Special)
-    product = models.ForeignKey(Product)
+    special = models.ForeignKey(Special, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)

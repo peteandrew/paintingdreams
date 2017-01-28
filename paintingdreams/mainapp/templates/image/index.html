@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>{{ pagetitle }}</h1>
-{% if num_images = 0 %}
+{% if num_images == 0 %}
   <p>No images found</p>
 {% else %}
   {% include "image/categories_panel.html" %}

@@ -1,8 +1,8 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 
 from mainapp import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^gallery/(.+)$', views.image_index, name='image_index'),
     url(r'^image/(.+)$', views.image_detail, name='image_detail'),
     url(r'^products/(.+)$', views.product_index, name='product_index'),
@@ -17,8 +17,8 @@ urlpatterns = patterns('',
     url(r'^order-complete$', views.order_transaction_complete, name='order-transaction-complete'),
     url(r'^order-complete-test$', views.order_transaction_complete_test),
     url(r'^paypal-cancel$', views.paypal_cancel, name='paypal-cancel'),
-    (r'^paypal-ipn$', include('paypal.standard.ipn.urls')),
-    (r'^cardsave-result', include('cardsave.urls')),
+    url(r'^paypal-ipn$', include('paypal.standard.ipn.urls')),
+    url(r'^cardsave-result', include('cardsave.urls')),
     url(r'^artist-info$', views.artist_info),
     url(r'^shows$', views.shows),
     url(r'^feedback$', views.feedback),
@@ -38,4 +38,4 @@ urlpatterns = patterns('',
     url(r'^api/search$', views.api_search),
 
     url(r'^$', views.home)
-)
+]

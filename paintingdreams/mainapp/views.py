@@ -172,7 +172,10 @@ def product_detail(request, slug):
     pagetitle += product.product_type.displayname_final
 
     context = {'product': product, 'pagetitle': pagetitle}
-    return render(request, 'product/detail.html', context)
+    if request.GET.get('new'):
+        return render(request, 'product/detail2.html', context)
+    else:
+        return render(request, 'product/detail.html', context)
 
 
 def search(request):

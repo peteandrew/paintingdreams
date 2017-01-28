@@ -3,11 +3,13 @@ from django.conf import settings
 import os
 import math
 
+# import logging
+# logger = logging.getLogger('django')
+
 class ImageResizer:
 
     def __init__(self, image_filename):
         self.image_filename = image_filename
-
 
 
     @staticmethod
@@ -72,20 +74,23 @@ class ImageResizer:
 
 
     def resize(self):
+        sizes = {}
+
         for img_type in settings.IMAGE_SIZES.keys():
             img_full_path = ImageResizer.build_full_path('original', self.image_filename)
             self.img_original = Image.open(img_full_path)
-            print(img_type)
 
             longest_side_max_length = settings.IMAGE_SIZES[img_type]['longest_side']
             new_size = ImageResizer.calc_new_size(self.img_original.size, longest_side_max_length)
-            print(new_size)
             new_img = self.img_original.resize(new_size, Image.BICUBIC)
 
             if settings.IMAGE_SIZES[img_type]['watermark']:
-                print('add watermark')
                 fontsize_base = settings.IMAGE_SIZES[img_type]['watermark_base_size']
                 ImageResizer.add_watermark(new_img, longest_side_max_length, fontsize_base)
 
             img_full_path = ImageResizer.build_full_path(settings.IMAGE_SIZES[img_type]['path'], self.image_filename)
             new_img.save(img_full_path, 'jpeg', quality=85)
+
+            sizes[img_type] = new_size
+
+        return sizes

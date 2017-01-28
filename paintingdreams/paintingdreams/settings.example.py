@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'cardsave',
     'django_countries',
     'wholesale',
-    'debug_toolbar',
     'rest_framework',
 )
 
