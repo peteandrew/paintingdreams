@@ -1,4 +1,5 @@
 import os
+import json
 
 from uuid import uuid4
 
@@ -171,11 +172,14 @@ def product_detail(request, slug):
         pagetitle += product.image.title + ' '
     pagetitle += product.product_type.displayname_final
 
-    context = {'product': product, 'pagetitle': pagetitle}
-    if request.GET.get('new'):
-        return render(request, 'product/detail2.html', context)
-    else:
-        return render(request, 'product/detail.html', context)
+    max_image_height = 0
+    for webimage in product.webimages.all():
+        sizes = json.loads(webimage.sizes)
+        if sizes['standard'][1] > max_image_height:
+            max_image_height = sizes['standard'][1]
+
+    context = {'product': product, 'pagetitle': pagetitle, 'max_image_height': max_image_height}
+    return render(request, 'product/detail.html', context)
 
 
 def search(request):
