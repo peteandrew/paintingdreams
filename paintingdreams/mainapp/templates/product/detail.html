@@ -39,7 +39,7 @@
   box-shadow: none;
   padding: 0;
   background-color: transparent;
-  border: 1px solid rgb(100,100,100);
+  border: 3px solid rgba(255,255,255,0.9);
 }
 .enlargement-text {
   font-size: 0.95em;
@@ -71,7 +71,7 @@
   {% with webimages=product.webimages.all %}
   <div class="col-md-6">
     <div id="product-webimages" class="carousel slide" data-interval="false">
-      <div style="height: {{ max_image_height }}px">
+      <div style="height: {{ max_image_height|add:"6" }}px">
         <div class="carousel-inner" role="listbox" >
         {% for webimage in webimages %}
           <div class="item{% if forloop.first %} active{% endif %}">
