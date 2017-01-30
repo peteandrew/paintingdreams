@@ -1,0 +1,298 @@
+@font-face {
+    font-family: 'Lancelot';
+    src: url('/static/fonts/Lancelot-Regular.ttf');
+}
+@font-face {
+    font-family: 'Amethysta';
+    src: url('/static/fonts/Amethysta-Regular.ttf');
+}
+@font-face {
+    font-family: 'Open Sans';
+    src: url('/static/fonts/OpenSans-Regular.ttf');
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0 auto;
+  height: 100%;
+  font-family: 'Open Sans', sans-serif;
+  background-image: url(/static/concrete.jpg);
+}
+.wrapper {
+  position: relative;
+  /*background-image: url(/static/new-stars.png);*/
+  height: auto;
+  min-height: 100%;
+}
+.container {
+  position: relative;
+  z-index: 2;
+}
+h1 {
+    font-family: 'Amethysta';
+}
+
+.main-content {
+    margin-bottom: 60px;
+}
+
+nav.navbar.navbar-default.navbar-static-top {
+    font-size: 1.2em;
+  position: relative;
+  z-index: 3;
+}
+a.navbar-brand {
+    font-family: 'Lancelot';
+    font-size: 3.2em;
+    width: 500px;
+    height: 95px;
+    padding: 0;
+    line-height: normal;
+    position: relative;
+}
+ul.nav.navbar-nav {
+    margin-top: 45px;
+}
+.navbar-brand>img {
+    display: inline-block;
+    position: absolute;
+    bottom: 12px;
+}
+span.brand-text {
+    display: inline-block;
+    position: absolute;
+    bottom: 0;
+    left: 120px;
+}
+
+.page-header {
+    margin-top: 20px;
+}
+#image-webimages,
+#product-webimages {
+    margin-top: 20px;
+}
+.image-description,
+.product-description {
+    font-size: 1.3em;
+    margin-top: 10px;
+    line-height: 200%;
+}
+#image-webimages img,
+#product-webimages img {
+    box-shadow: 2px 2px 5px rgba(255,255,255,0.5);
+    padding: 15px;
+    background-color: rgba(255,255,255,0.9);
+}
+.thumnail {
+  background-color: transparent;
+}
+.gallery .thumbnail {
+    background-color: rgba(21,18,51,0.4);
+    min-height: 230px;
+    text-align: center;
+    position: relative;
+    padding: 0;
+}
+.gallery .thumbnail img {
+    position: relative;
+    top: 15px;
+    padding: 3px;
+    background-color: rgba(255,255,255,0.9);
+}
+.gallery .thumbnail .caption {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+
+.products .thumbnail {
+  background-color: transparent;
+}
+.products .thumbnail>img {
+  margin-left: 0;
+  margin-right: 0;
+  padding-top: 9px;
+  padding-left: 9px;
+}
+.thumbnail .caption p {
+  margin: 0;
+}
+.thumbnail .caption {
+    color:#9999FF ;
+}
+
+.navbar {
+  margin-bottom: 50px;
+  min-height: 120px;
+}
+.navbar-default {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+.navbar-default .navbar-brand,
+.navbar-default .navbar-nav>li>a,
+.navbar-default .navbar-link {
+  color: #9999FF;
+}
+.navbar-default .navbar-link:hover {
+  color: #aaa;
+  text-decoration: none;
+}
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover,
+.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
+  color: #aaa;
+}
+.footer {
+  position: absolute;
+  z-index: 4;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  /*background: rgba(255,255,255,0.6);*/
+  background: transparent;
+}
+.footer .container {
+    top: 33%;
+    position: relative;
+}
+.footer p {
+    color: #8e71a6;
+    /*color: #333;*/
+    color: ;
+    text-align: center;
+    margin-bottom: 0;
+}
+.lighter .lighter-overlay {
+    background: rgba(0, 0, 0, 0.9);
+}
+#wholesale-container p.step-num {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+#wholesale-container p.postage-info {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-top: 1.5em;
+    margin-bottom: 0;
+}
+#wholesale-container .btn {
+    margin-top: 1.5em;
+    font-size: 1.4em;
+    padding: 0.5em 1em;
+    margin-right: 1.5em;
+}
+#wholesale-container form {
+    margin-top: 2em;
+}
+#wholesale-container h3 {
+    margin-top: 1.5em;
+}
+label.control-label {
+    font-size: 1.1em;
+}
+table.wholesale_products {
+    width: 100%;
+}
+table.wholesale_products tr {
+    line-height: 3em;
+}
+table.wholesale_products td {
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: #777777;
+}
+table.wholesale_products tr:nth-child(even) td {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+table.wholesale_products th {
+    font-size: 1.2em;
+    font-weight: bold;
+    padding-bottom: 0.5em;
+}
+table.wholesale_products th.colCode,
+table.wholesale_products th.colPrice,
+table.wholesale_products th.colQuantity,
+table.wholesale_products th.colTotal {
+    width: 10%;
+}
+table.wholesale_products th.colTitle {
+    width: 60%;
+}
+table.wholesale_products input.quantity {
+    width: 80%;
+}
+table.wholesale_products span.new,
+table.wholesale_products span.soldout {
+    color: red;
+    margin-left: 10px;
+    font-size: 0.9em;
+}
+
+.carousel-fade .carousel-inner .item {
+  -webkit-transition-property: opacity;
+  transition-property: opacity;
+}
+.carousel-fade .carousel-inner .item,
+.carousel-fade .carousel-inner .active.left,
+.carousel-fade .carousel-inner .active.right {
+  opacity: 0;
+}
+.carousel-fade .carousel-inner .active,
+.carousel-fade .carousel-inner .next.left,
+.carousel-fade .carousel-inner .prev.right {
+  opacity: 1;
+}
+.carousel-fade .carousel-inner .next,
+.carousel-fade .carousel-inner .prev,
+.carousel-fade .carousel-inner .active.left,
+.carousel-fade .carousel-inner .active.right {
+  left: 0;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+
+.homepage-images {
+    margin-bottom: 50px;
+}
+
+.homepage-images .carousel-inner>.item>a>img {
+    margin: 0 auto;
+    height: 500px;
+    padding: 8px;
+    background-color: rgba(255,255,255,0.9);
+}
+
+/*@media (min-width: 768px) {
+  .navbar-nav>li>a {
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+}*/
+
+.dropdown-menu>li>a {
+  color: #555;
+}
+
+.dropdown-menu>li>a:focus,
+.dropdown-menu>li>a:hover {
+  color: #000;
+}
+
+@media (max-width: @screen-sm-max) {
+    .navbar-right {
+        float: left !important;
+    }
+    ul.nav.navbar-nav {
+        margin-top: 0;
+    }
+    .navbar-right .dropdown-menu {
+        left: 0;
+        right: auto;
+    }
+}
