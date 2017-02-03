@@ -118,7 +118,14 @@ def image_index(request, slug):
 def image_detail(request, slug):
     image = get_object_or_404(Image, slug=slug)
     products = Product.objects.filter(image=image)
-    context = {'image': image, 'products': products, 'pagetitle': image.title}
+
+    max_image_height = 0
+    for webimage in image.webimages.all():
+        sizes = json.loads(webimage.sizes)
+        if sizes['standard'][1] > max_image_height:
+            max_image_height = sizes['standard'][1]
+
+    context = {'image': image, 'products': products, 'pagetitle': image.title, 'max_image_height': max_image_height}
     return render(request, 'image/detail.html', context)
 
 
