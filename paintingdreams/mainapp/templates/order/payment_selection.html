@@ -28,40 +28,54 @@
 </div>
 <div class="panel panel-default order-addresses">
   <div class="panel-body">
-    <p>{{ order.customer_name }}</p>
-    <p>{{ order.customer_email }}</p>
-    <h4>Billing address</h4>
-    <p>{{ order.billing_address.address1 }}</p>
-    <p>{{ order.billing_address.address2 }}</p>
-    <p>{{ order.billing_address.address3 }}</p>
-    <p>{{ order.billing_address.address4 }}</p>
-    <p>{{ order.billing_address.city }}</p>
-    <p>{{ order.billing_address.state }}</p>
-    <p>{{ order.billing_address.post_code }}</p>
-    <p>{{ order.billing_address.country.name }}</p>
-    <h4>Delivery address</h4>
-    {% if order.shipping_address %}
-    <p>{{ order.shipping_name }}</p>
-    <p>{{ order.shipping_address.address1 }}</p>
-    <p>{{ order.shipping_address.address2 }}</p>
-    <p>{{ order.shipping_address.address3 }}</p>
-    <p>{{ order.shipping_address.address4 }}</p>
-    <p>{{ order.shipping_address.city }}</p>
-    <p>{{ order.shipping_address.state }}</p>
-    <p>{{ order.shipping_address.post_code }}</p>
-    <p>{{ order.shipping_address.country.name }}</p>
-    {% else %}
-    <p>{{ order.customer_name }}</p>
-    <p>{{ order.billing_address.address1 }}</p>
-    <p>{{ order.billing_address.address2 }}</p>
-    <p>{{ order.billing_address.address3 }}</p>
-    <p>{{ order.billing_address.address4 }}</p>
-    <p>{{ order.billing_address.city }}</p>
-    <p>{{ order.billing_address.state }}</p>
-    <p>{{ order.billing_address.post_code }}</p>
-    <p>{{ order.billing_address.country.name }}</p>
-    {% endif %}
-    <p><a href="/order-start" class="btn btn-default" role="button">Change these details</a></p>
+    <div class="row">
+      <div class="col-md-12">
+        <p>{{ order.customer_name }}</p>
+        <p>{{ order.customer_email }}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <h4>Billing address</h4>
+        <p>{{ order.billing_address.address1 }}</p>
+        <p>{{ order.billing_address.address2 }}</p>
+        <p>{{ order.billing_address.address3 }}</p>
+        <p>{{ order.billing_address.address4 }}</p>
+        <p>{{ order.billing_address.city }}</p>
+        <p>{{ order.billing_address.state }}</p>
+        <p>{{ order.billing_address.post_code }}</p>
+        <p>{{ order.billing_address.country.name }}</p>
+      </div>
+      <div class="col-md-6">
+        <h4>Delivery address</h4>
+        {% if order.shipping_address %}
+        <p>{{ order.shipping_name }}</p>
+        <p>{{ order.shipping_address.address1 }}</p>
+        <p>{{ order.shipping_address.address2 }}</p>
+        <p>{{ order.shipping_address.address3 }}</p>
+        <p>{{ order.shipping_address.address4 }}</p>
+        <p>{{ order.shipping_address.city }}</p>
+        <p>{{ order.shipping_address.state }}</p>
+        <p>{{ order.shipping_address.post_code }}</p>
+        <p>{{ order.shipping_address.country.name }}</p>
+        {% else %}
+        <p>{{ order.customer_name }}</p>
+        <p>{{ order.billing_address.address1 }}</p>
+        <p>{{ order.billing_address.address2 }}</p>
+        <p>{{ order.billing_address.address3 }}</p>
+        <p>{{ order.billing_address.address4 }}</p>
+        <p>{{ order.billing_address.city }}</p>
+        <p>{{ order.billing_address.state }}</p>
+        <p>{{ order.billing_address.post_code }}</p>
+        <p>{{ order.billing_address.country.name }}</p>
+        {% endif %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p><a href="/order-start" class="btn btn-default" role="button">Change these details</a></p>
+      </div>
+    </div>
   </div>
 </div>
 <div>
