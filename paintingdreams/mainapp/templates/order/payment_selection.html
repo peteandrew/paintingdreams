@@ -68,20 +68,6 @@
 {% if transaction %}
   <a name="payment"></a>
   <h2>Make payment</h2>
-  <div class="panel panel-default" id="selected-payment">
-    <div class="panel-body">
-      <p>Your selected payment method is: <span class="text-warning larger-text"><strong>
-        {% if transaction.payment_processor == 'paypal' %}PayPal{% endif %}
-        {% if transaction.payment_processor == 'cardsave' %}Cardsave Gateway from Worldpay{% endif %}
-      </strong></span></p>
-      <form method="POST" action="/order-payment#payment">
-        {% csrf_token %}
-        <input type="hidden" name="cancel-current-trans" value="true" />
-        <button type="submit" class="btn btn-default btn-sm">Change payment method</button>
-      </form>
-      <p><span class="text-danger"><strong>Only change payment method if you haven't already submitted payment</strong></span></p>
-    </div>
-  </div>
   {{ transaction.form|safe }}
 {% else %}
   <h2>Choose payment method</h2>

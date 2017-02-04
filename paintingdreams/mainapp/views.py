@@ -335,25 +335,18 @@ def order_payment(request):
     }
 
     order_transaction_list_view = OrderTransactionListView()
-    get_current_transaction = False
+    get_current_transaction = True
 
     if request.method == 'POST':
-        # Cancel current transaction if there is one and user has chosen to cancel it
-        if order.current_transaction:
-            if request.POST.get('cancel-current-trans', False):
-                trans = order.current_transaction
-                trans.state = 'cancelled'
-                trans.save()
-            else:
-                get_current_transaction = True
-        else:
+        if not order.current_transaction:
+            get_current_transaction = False
             api_request = APIRequest(request, (FormParser(),))
             response = order_transaction_list_view.post(api_request, order_id)
             # if response.status_code == 204:
             ctx['transaction'] = response.data
-    else:
-        get_current_transaction = True
 
+    # We have to get the transaction from the order transaction API in order to
+    # to get the payment processor form
     if get_current_transaction:
         get_copy = request.GET.copy()
         get_copy['current'] = 'true'
@@ -362,10 +355,6 @@ def order_payment(request):
         response = order_transaction_list_view.get(api_request, order_id)
         if response.status_code == 200:
             ctx['transaction'] = response.data
-
-    # Need to output most recent current transactions in template with prompt to
-    # change payment method. In change payment method box need to display warning not
-    # to change method if already successfully submitted payment.
 
     return render(request, 'order/payment_selection.html', ctx)
 
