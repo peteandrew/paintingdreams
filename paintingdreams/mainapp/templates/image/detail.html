@@ -15,36 +15,6 @@
   margin-left:auto;
   margin-right:auto;
 }
-#image-webimages, #product-webimages {
-  padding: 15px 0 0;
-  background-color: rgba(0,0,0,.2);
-  border: 2px solid rgba(255,255,255,.1);
-  border-radius: 4px;
-}
-#image-webimages img, #product-webimages img {
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  padding: 0;
-  background-color: transparent;
-  border: 3px solid rgba(255,255,255,0.9);
-}
-.enlargement-text {
-  font-size: 0.95em;
-  text-align: center;
-  margin-top: 6px;
-}
-.details-webimages-thumbnails {
-  margin-top: 20px;
-}
-.details-webimages-thumbnails>div {
-  cursor: pointer;
-  height: 160px;
-}
-.details-webimages-thumbnails img {
-  max-height: 140px;
-  padding: 1px;
-  background-color: rgba(255,255,255,.9);
-}
 </style>
 {% endblock %}
 
@@ -53,7 +23,7 @@
 
   {% with webimages=image.webimages.all %}
   <div class="col-md-6">
-    <div id="image-webimages" class="carousel slide" data-interval="false">
+    <div id="details-webimages" class="carousel slide" data-interval="false">
       <div style="height: {{ max_image_height|add:"6" }}px">
         <div class="carousel-inner" role="listbox" >
         {% for webimage in webimages %}
@@ -68,7 +38,7 @@
     {% if webimages|length > 1 %}
       <div class="details-webimages-thumbnails">
       {% for webimage in webimages %}
-        <div data-target="#image-webimages" data-slide-to="{{ forloop.counter0 }}" class="col-md-3 {% if forloop.first %}active{% endif %}">
+        <div data-target="#details-webimages" data-slide-to="{{ forloop.counter0 }}" class="col-md-3 {% if forloop.first %}active{% endif %}">
           <img src="/media/images/thumbnail/{{ webimage.filename }}" class="img-responsive center-block">
         </div>
       {% endfor %}
