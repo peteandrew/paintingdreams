@@ -87,17 +87,25 @@
   <h2>Choose payment method</h2>
   <form method="POST" id="payment-selection" action="/order-payment#payment">
     {% csrf_token %}
-    <div class="radio">
-      <label>
-        <input type="radio" name="payment_processor" value="paypal"><span class="paypal-button">PayPal</span>
-      </label>
+    <div class="row">
+      <div class="radio col-md-6">
+        <label>
+          <input type="radio" name="payment_processor" value="paypal"><span class="paypal-button">PayPal</span>
+        </label>
+      </div>
     </div>
-    <div class="radio">
-      <label>
-        <input type="radio" name="payment_processor" value="cardsave"><span class="cardsave-button">Cardsave</span>
-      </label>
+    <div class="row">
+      <div class="radio col-md-6">
+        <label>
+          <input type="radio" name="payment_processor" value="cardsave"><span class="cardsave-button">Cardsave</span>
+        </label>
+      </div>
     </div>
-    <button type="submit" class="btn btn-primary">Continue</button>
+    <div class="row">
+      <div class="col-md-6">
+        <button type="submit" class="btn btn-primary btn-lg">Continue</button>
+      </div>
+    </div>
   </form>
 {% endif %}
 </div>

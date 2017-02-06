@@ -67,7 +67,11 @@ class OrderDetailsForm(forms.Form):
                 'shipping_post_code',
                 'shipping_country'
             ),
-            FormActions(
-                Submit('submit', 'Continue')
+            Div(
+                Div(
+                    Submit('submit', 'Continue', css_class='btn btn-primary, btn-lg',),
+                    css_class='col-sm-12',
+                ),
+                css_class='row',
             )
         )

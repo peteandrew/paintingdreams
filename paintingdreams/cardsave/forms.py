@@ -73,7 +73,7 @@ class CardsavePaymentForm(forms.Form):
 
     def render(self):
         return mark_safe(
-            u"""<form method="post" action="%s">%s<button type="submit" class="btn btn-primary">Continue</button></form>""" % (
+            u"""<form method="post" action="%s">%s<button type="submit" class="btn btn-primary btn-lg">Continue to Cardsave</button></form>""" % (
                 settings.CARDSAVE_REQUEST_URL, self.as_p()))
 
 

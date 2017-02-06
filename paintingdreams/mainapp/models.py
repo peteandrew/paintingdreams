@@ -403,5 +403,8 @@ class PostagePrice(models.Model):
     max_weight = models.PositiveSmallIntegerField(blank=True, null=True)
     price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
 
+    class Meta:
+        ordering = ['destination', 'min_weight']
+
     def __str__(self):
         return self.destination + ' (' + str(self.min_weight) + ' - ' + str(self.max_weight) + ')'

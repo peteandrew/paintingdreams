@@ -337,7 +337,7 @@ def order_payment(request):
     order_transaction_list_view = OrderTransactionListView()
     get_current_transaction = True
 
-    if request.method == 'POST':
+    if request.method == 'POST' and request.POST.get('payment_processor'):
         if not order.current_transaction:
             get_current_transaction = False
             api_request = APIRequest(request, (FormParser(),))
