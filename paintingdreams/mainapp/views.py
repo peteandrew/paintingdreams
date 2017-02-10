@@ -97,7 +97,7 @@ def terms_and_conditions(request):
 
 def image_index(request, slug):
     base_imagetag = get_object_or_404(ImageTag, slug=slug)
-    images = Image.objects.prefetch_related('webimages').filter(tags=base_imagetag)
+    images = Image.objects.prefetch_related('webimages').filter(tags=base_imagetag).order_by('imageimagetag__order')
     num_images = len(images)
     imagetag_images = [{'tag': base_imagetag, 'images': images}]
 

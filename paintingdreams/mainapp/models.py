@@ -208,7 +208,7 @@ class ImageImageTag(models.Model):
     order = models.IntegerField(default=0)
 
     class Meta:
-        ordering = ['order',]
+        ordering = ['image_tag', 'order',]
 
 
 class ProductTag(models.Model):
