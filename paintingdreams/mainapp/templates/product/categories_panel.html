@@ -1,24 +1,13 @@
 {% if disp_categories %}
 <div class="panel panel-primary categories">
   <div class="panel-body">
-    <div class="row">
-      <ul class="col-md-6 list-unstyled">
-        {% for product_type in product_type_products|slice:":7" %}
-          {% if forloop.counter > 1 and not product_type.producttype.subproduct_hide %}
-            <li><a href="{% url 'product_index' product_type.producttype.slug %}">{{ product_type.producttype.title }}s</a></li>
-          {% endif %}
-        {% endfor %}
-      </ul>
-      {% if product_type_products|length > 7 %}
-        <ul class="col-md-6 list-unstyled">
-          {% for product_type in product_type_products|slice:"6:" %}
-            {% if forloop.counter > 1 and not product_type.producttype.subproduct_hide %}
-              <li><a href="{% url 'product_index' product_type.producttype.slug %}">{{ product_type.producttype.title }}s</a></li>
-            {% endif %}
-          {% endfor %}
-        </ul>
-      {% endif %}
-    </div>
+    <ul class="row list-unstyled">
+      {% for product_type in product_type_products|slice:"1:" %}
+        {% if not product_type.producttype.subproduct_hide %}
+          <li class="col-md-6"><a href="{% url 'product_index' product_type.producttype.slug %}">{{ product_type.producttype.title }}s</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
   </div>
 </div>
 {% endif %}
