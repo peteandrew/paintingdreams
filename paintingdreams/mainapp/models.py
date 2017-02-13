@@ -24,9 +24,16 @@ def get_webimage_path(instance, filename):
 
 
 class Image(models.Model):
+    ORIGINAL_CHOICES = (
+        ('notavailable', 'Not available'),
+        ('available', 'Available'),
+        ('sold', 'Sold'),
+    )
+
     slug = models.SlugField(unique=True)
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
+    original = models.CharField(choices=ORIGINAL_CHOICES, max_length=15, default='notavailable')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     products = models.ManyToManyField('ProductType', through='Product')

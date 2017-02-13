@@ -49,13 +49,18 @@
 
     <div class="page-header2 col-md-6">
         <h1>{{ image.title }}</h1>
-        <p>Galleries: {% for tag in image.tags.all %}
-            {% if tag.slug != 'home' %}
-                <a href="{% url 'image_index' tag.slug %}">{{ tag.name }}</a>
-            {% endif %}
-        {% endfor %}</p>
+        <p>Galleries: {% for tag in image.tags.all %}{% if forloop.counter > 1 %}, {% endif %}{% if tag.slug != 'home' %}<a href="{% url 'image_index' tag.slug %}">{{ tag.name }}</a>{% endif %}{% endfor %}</p>
     </div>
     <div class="col-md-6 image-description">{{ image.description|safe }}</div>
+    {% if image.original != 'notavailable' %}
+    <div class="col-md-6">
+      {% if image.original == 'available' %}
+        <p>If you are interested in buying this painting please contact Wendy info@paintingdreams.co.uk</p>
+      {% else %}
+        <p class="original-sold">Original sold</p>
+      {% endif %}
+    </div>
+    {% endif %}
 
     {% if products.all|length > 0 %}
     <div class="col-md-6 products">
@@ -74,7 +79,8 @@
                             {% if product.image %}{{ product.image.title }} - {% endif %}
                             {{ product.product_type.displayname_final }}
                         </p>
-                    </div>            {% with webimage=product.webimages.first %}
+                    </div>
+                    {% with webimage=product.webimages.first %}
                     <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ webimage.filename }}" alt="{{ webimage.name }}" />
             {% endwith %}
 
