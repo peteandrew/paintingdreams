@@ -707,7 +707,9 @@ def api_search(request):
         return APIResponse({"error": "No search query"})
 
     query = query.replace('-','')
+    query = query.lower()
     query_words = query.split(' ')
+
     products_word_matches = {}
     for product in Product.objects.all():
         displayname = product.displayname
