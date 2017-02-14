@@ -51,7 +51,6 @@
         <h1>{{ image.title }}</h1>
         <p>Galleries: {% for tag in image.tags.all %}{% if forloop.counter > 1 %}, {% endif %}{% if tag.slug != 'home' %}<a href="{% url 'image_index' tag.slug %}">{{ tag.name }}</a>{% endif %}{% endfor %}</p>
     </div>
-    <div class="col-md-6 image-description">{{ image.description|safe }}</div>
     {% if image.original != 'notavailable' %}
     <div class="col-md-6">
       {% if image.original == 'available' %}
@@ -61,6 +60,7 @@
       {% endif %}
     </div>
     {% endif %}
+    <div class="col-md-6 image-description">{{ image.description|safe }}</div>
 
     {% if products.all|length > 0 %}
     <div class="col-md-6 products">
