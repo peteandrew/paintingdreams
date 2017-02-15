@@ -31,7 +31,7 @@ from paypal.standard.ipn.signals import valid_ipn_received
 
 import cardsave.signals
 
-from mainapp.models import Image, Product, ProductType, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, ImageTag, ImageImageTag
+from mainapp.models import Image, Product, ProductType, ProductTag, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, ImageTag, ImageImageTag
 from mainapp.forms import OrderDetailsForm
 from mainapp.email import send_order_complete_email, send_payment_failed_email
 from mainapp import postage_prices
@@ -706,8 +706,11 @@ def api_search(request):
     if not query:
         return APIResponse({"error": "No search query"})
 
-    query = query.replace('-','')
-    query = query.lower()
+    query = query.replace('-','').lower()
+
+    if len(query) < 3:
+        return APIResponse({"error": "Query too short"})
+
     query_words = query.split(' ')
 
     products_word_matches = {}
@@ -757,10 +760,11 @@ def api_search(request):
     for image in images:
         image_exact_match, image_matches = add_image_match(query, image, image_exact_match, image_matches)
 
-    # for product in Product.objects.filter(tags__name__icontains=query):
-        # product_tag_list.append(product.displayname)
-    # for image in Image.objects.filter(tags__name__icontains=query):
-        # image_tag_list.append(str(image))
+    for product in Product.objects.filter(tags__in=ProductTag.objects.filter(name__icontains=query)):
+        _, product_matches = add_product_match(query, product, None, product_matches)
+
+    for image in Image.objects.filter(tags__in=ImageTag.objects.filter(name__icontains=query)):
+        _, image_matches = add_image_match(query, image, None, image_matches)
 
     return APIResponse({
         "product_exact_match": product_exact_match,
