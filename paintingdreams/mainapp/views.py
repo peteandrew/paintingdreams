@@ -680,7 +680,8 @@ def add_product_match(query, product, product_exact_match, product_matches):
     if product.displayname.lower() == query.lower():
         product_exact_match = product_match
     else:
-        product_matches.append(product_match)
+        if product_match not in product_matches:
+            product_matches.append(product_match)
 
     return product_exact_match, product_matches
 
@@ -695,7 +696,8 @@ def add_image_match(query, image, image_exact_match, image_matches):
     if str(image).lower() == query.lower():
         image_exact_match = image_match
     else:
-        image_matches.append(image_match)
+        if image_match not in image_matches:
+            image_matches.append(image_match)
 
     return image_exact_match, image_matches
 
