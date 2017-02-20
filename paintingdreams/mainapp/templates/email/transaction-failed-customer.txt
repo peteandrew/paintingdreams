@@ -3,7 +3,7 @@ Thank you for placing an order on Painting Dreams.
 **Unfortunately payment for your order has failed.**
 
 You may attempt payment again by following this link:
-{{ site_base_url }}/basket
+{{ site_base_url }}/order-payment
 
 The details of your order are below. Please contact info@paintingdreams.co.uk for more information.
 

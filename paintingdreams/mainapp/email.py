@@ -24,7 +24,7 @@ def send_order_complete_email(order):
 
 
 def send_payment_failed_email(order):
-    msg_plain_customer = render_to_string('email/transaction-complete-customer.txt', {'order': order, 'site_base_url': settings.BASE_URL})
+    msg_plain_customer = render_to_string('email/transaction-failed-customer.txt', {'order': order, 'site_base_url': settings.BASE_URL})
 
     # Mail customer
     mail.send_mail(
