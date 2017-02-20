@@ -1,4 +1,4 @@
-Thank you for placing an order on Painting Dreams. The details of your order are below. Please contact orders@paintindreams.co.uk if any of these details are incorrect.
+Thank you for placing an order on Painting Dreams. The details of your order are below. Please contact info@paintingdreams.co.uk if any of these details are incorrect.
 
 **Order ID: {{ order.unique_id }}**
 Transaction ID: {{ order.last_transaction.unique_id }}
@@ -15,26 +15,13 @@ Total: {{ order.total_price }}
 **{{ order.customer_email }}**
 
 **Billing address**
-{{ order.billing_address.address1 }}
-{{ order.billing_address.address2 }}
-{{ order.billing_address.address3 }}
-{{ order.billing_address.address4 }}
-{{ order.billing_address.city }}
-{{ order.billing_address.state }}
-{{ order.billing_address.post_code }}
-{{ order.billing_address.country.name }}
+{{ order.billing_address }}
 
 **Delivery address**
 {% if order.shipping_address %}
 {{ order.shipping_name }}
-{{ order.shipping_address.address1 }}
-{{ order.shipping_address.address2 }}
-{{ order.shipping_address.address3 }}
-{{ order.shipping_address.address4 }}
-{{ order.shipping_address.city }}
-{{ order.shipping_address.state }}
-{{ order.shipping_address.post_code }}
-{{ order.shipping_address.country.name }}
+{{ order.shipping_address }}
 {% else %}
-As above
+{{ order.customer_name }}
+{{ order.billing_address }}
 {% endif %}
