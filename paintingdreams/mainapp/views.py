@@ -380,6 +380,12 @@ def order_transaction_complete(request):
         except:
             pass
 
+    if not order.shipping_name:
+        order.shipping_name = order.customer_name
+
+    if not order.shipping_address:
+        order.shipping_address = order.billing_address
+
     ctx = {
         'order': order
     }
