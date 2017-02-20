@@ -30,13 +30,13 @@
   <div class="panel-body">
     <div class="row">
       <div class="col-md-12">
-        <p>{{ order.customer_name }}</p>
-        <p>{{ order.customer_email }}</p>
+        <p>Email: {{ order.customer_email }}</p>
       </div>
     </div>
     <div class="row">
       <div class="col-md-6">
         <h4>Billing address</h4>
+        <p>{{ order.customer_name }}</p>
         <p>{{ order.billing_address.address1 }}</p>
         <p>{{ order.billing_address.address2 }}</p>
         <p>{{ order.billing_address.address3 }}</p>
