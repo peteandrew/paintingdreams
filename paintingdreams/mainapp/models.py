@@ -390,6 +390,7 @@ class OrderTransaction(models.Model):
     order = models.ForeignKey(Order, to_field='unique_id', on_delete=models.CASCADE)
     payment_processor = models.CharField(choices=PAYMENT_PROCESSOR_CHOICES, max_length=8)
     state = models.CharField(choices=STATE_CHOICES, max_length=18, default='started')
+    message = models.CharField(max_length=512, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

@@ -2,6 +2,8 @@ Thank you for placing an order on Painting Dreams.
 
 **Unfortunately payment for your order has failed.**
 
+{% if order.last_transaction.message %}The reason given by the payment processor was: **{{ order.last_transaction.message }}**{% endif %}
+
 You may attempt payment again by following this link:
 {{ site_base_url }}/order-payment
 
@@ -11,8 +13,7 @@ The details of your order are below. Please contact info@paintingdreams.co.uk fo
 Transaction ID: {{ order.last_transaction.unique_id }}
 Payment processor: {{ order.last_transaction.payment_processor }}
 
-{% for item in order.orderline_set.all %}
-**{{ item.quantity}} x {{ item.title }} - {{ item.line_price }}**
+{% for item in order.orderline_set.all %}**{{ item.quantity}} x {{ item.title }} - {{ item.line_price }}**
 {% endfor %}
 Sub total: {{ order.sub_total_price }}
 Postage: {{ order.postage_price }}
@@ -24,11 +25,9 @@ Total: {{ order.total_price }}
 **Billing address**
 {{ order.billing_address }}
 
-**Delivery address**
-{% if order.shipping_address %}
+**Delivery address**{% if order.shipping_address %}
 {{ order.shipping_name }}
 {{ order.shipping_address }}
-{% else %}
-{{ order.customer_name }}
+{% else %}{{ order.customer_name }}
 {{ order.billing_address }}
 {% endif %}

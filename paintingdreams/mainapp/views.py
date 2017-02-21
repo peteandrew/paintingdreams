@@ -520,6 +520,7 @@ def cardsave_payment_unsuccessful_handler(sender, **kwargs):
 
     # Update order transaction state
     transaction.state = 'failed'
+    transaction.message = sender.message
     transaction.save()
 
     # Send emails
