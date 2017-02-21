@@ -19,6 +19,7 @@ Total: {{ order.total_price }}
 **Delivery address**{% if order.shipping_address %}
 {{ order.shipping_name }}
 {{ order.shipping_address }}
-{% else %}{{ order.customer_name }}
+{% else %}
+{{ order.customer_name }}
 {{ order.billing_address }}
 {% endif %}
