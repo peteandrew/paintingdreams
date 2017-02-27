@@ -222,14 +222,6 @@ def basket_change_quantity(request):
         return redirect('/basket')
 
 
-def basket_change_destination(request):
-    destination = request.POST['destination']
-    if destination in ['GB','EUROPE','WORLD']:
-        request.session['destination'] = destination
-
-    return redirect('/basket')
-
-
 def calc_postage(destination, items):
     # Calculate order total weight and shipping price
     weight = 0
@@ -245,19 +237,9 @@ def calc_postage(destination, items):
 def basket_show(request):
     cart = Cart(request.session)
 
-    if not request.session.get('destination'):
-        request.session['destination'] = 'GB'
-
-    postage = calc_postage(request.session['destination'], cart.items)
-    order_total = cart.total + postage['price']
-
     context = {
         'pagetitle': 'Shopping basket',
-        'cart': cart,
-        'weight': postage['weight'],
-        'destination': request.session['destination'],
-        'postage_price': postage['price'],
-        'order_total': order_total
+        'cart': cart
     }
     return render(request, 'basket/index.html', context)
 
