@@ -114,6 +114,22 @@
 {% block javascript %}
 <script type="text/javascript">
 $(function() {
+  function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = jQuery.trim(cookies[i]);
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+  }
+
   var continueClicked = false;
 
   var dispError = function() {
@@ -136,7 +152,7 @@ $(function() {
 
     var orderNumber = $('#order-number').text();
     var paymentProcessor = $('input[name=payment_processor]:checked').val();
-    var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
+    var csrfToken = getCookie('csrftoken');
 
     var url = '/api/orders/' + orderNumber + '/transactions';
 
@@ -144,6 +160,7 @@ $(function() {
       method: "POST",
       url: url,
       contentType: 'application/json',
+      headers: { 'X-CSRFToken': csrfToken },
       data: JSON.stringify({ csrfmiddlewaretoken: csrfToken, payment_processor: paymentProcessor })
     })
     .done(function(res) {
