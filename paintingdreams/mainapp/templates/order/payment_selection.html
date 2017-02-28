@@ -103,7 +103,7 @@
     </div>
     <div class="row">
       <div class="col-md-6">
-        <button type="submit" id="payment-selection-button" class="btn btn-primary btn-lg">Continue</button>
+        <button type="submit" id="payment-selection-button" class="btn btn-primary btn-lg">Continue to payment processor</button>
       </div>
     </div>
   </form>
@@ -114,14 +114,29 @@
 {% block javascript %}
 <script type="text/javascript">
 $(function() {
+  var continueClicked = false;
+
+  var dispError = function() {
+    var errorElement = '<div class="col-md-12"><p class="text-danger payment-selection-error">Unfortunately an error has occurred while transferring you to the payment processor.</p></div>';
+    $('#payment-selection-button').parent().after(errorElement);
+  };
+
   $('#payment-selection input').click(function() {
     $('#payment-selection-button').show();
   });
 
   $('#payment-selection-button').click(function(evt) {
     evt.preventDefault();
+
+    if (continueClicked) return;
+
+    $('#payment-selection-button').text('Transferring to payment processor...');
+
+    continueClicked = true;
+
     var orderNumber = $('#order-number').text();
     var paymentProcessor = $('input[name=payment_processor]:checked').val();
+    var csrfToken = $('input[name=csrfmiddlewaretoken]').val();
 
     var url = '/api/orders/' + orderNumber + '/transactions';
 
@@ -129,15 +144,19 @@ $(function() {
       method: "POST",
       url: url,
       contentType: 'application/json',
-      data: JSON.stringify({ payment_processor: paymentProcessor })
+      data: JSON.stringify({ csrfmiddlewaretoken: csrfToken, payment_processor: paymentProcessor })
     })
     .done(function(res) {
-      // Check that res is an object and that form property exists. Display error if not.
+      if (typeof res != 'object' || !res.form) {
+        dispError();
+        return;
+      }
       $('#payment-selection').after('<div style="display:none" id="payment-processor-form">' + res.form + '</div>');
       $('#payment-processor-form form').submit();
     })
     .fail(function() {
-      // Need to display error stating that redirecting to payment processor has failed
+      dispError();
+      return;
     });
   });
 

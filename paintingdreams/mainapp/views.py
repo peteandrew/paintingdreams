@@ -40,7 +40,6 @@ from mainapp.serializers import ImageSerializer, OrderSerializer, OrderTransacti
 
 logger = logging.getLogger('django')
 
-
 def session_order(request):
     return HttpResponse(request.session.get('order_id'))
 
