@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>Order summary / payment</h1>
-<p>Order number: {{ order.unique_id }}</p>
+<p>Order number: <span id="order-number">{{ order.unique_id }}</span></p>
 <div class="panel panel-default order-panel">
   <div class="panel-body">
     <table class="table">
@@ -103,10 +103,45 @@
     </div>
     <div class="row">
       <div class="col-md-6">
-        <button type="submit" class="btn btn-primary btn-lg">Continue</button>
+        <button type="submit" id="payment-selection-button" class="btn btn-primary btn-lg">Continue</button>
       </div>
     </div>
   </form>
 {% endif %}
 </div>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+$(function() {
+  $('#payment-selection input').click(function() {
+    $('#payment-selection-button').show();
+  });
+
+  $('#payment-selection-button').click(function(evt) {
+    evt.preventDefault();
+    var orderNumber = $('#order-number').text();
+    var paymentProcessor = $('input[name=payment_processor]:checked').val();
+
+    var url = '/api/orders/' + orderNumber + '/transactions';
+
+    $.ajax({
+      method: "POST",
+      url: url,
+      contentType: 'application/json',
+      data: JSON.stringify({ payment_processor: paymentProcessor })
+    })
+    .done(function(res) {
+      // Check that res is an object and that form property exists. Display error if not.
+      $('#payment-selection').after('<div style="display:none" id="payment-processor-form">' + res.form + '</div>');
+      $('#payment-processor-form form').submit();
+    })
+    .fail(function() {
+      // Need to display error stating that redirecting to payment processor has failed
+    });
+  });
+
+  $('#payment-selection-button').hide();
+});
+</script>
 {% endblock %}
