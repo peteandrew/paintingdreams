@@ -49,7 +49,9 @@
 
     <div class="page-header2 col-md-6">
         <h1>{{ image.title }}</h1>
+        {% if image.tags.all|length > 0 %}
         <p>Galleries: {% for tag in image.tags.all %}{% if forloop.counter > 1 %}, {% endif %}{% if tag.slug != 'home' %}<a href="{% url 'image_index' tag.slug %}">{{ tag.name }}</a>{% endif %}{% endfor %}</p>
+        {% endif %}
     </div>
     {% if image.original != 'notavailable' %}
     <div class="col-md-6">
