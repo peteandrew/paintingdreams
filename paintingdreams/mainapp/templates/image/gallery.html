@@ -6,12 +6,12 @@
   <p>No images found</p>
 {% else %}
   {% include "image/categories_panel.html" %}
-  {% for image_tag in image_tag_images %}
+  {% for gallery in gallery_images %}
     {% if forloop.counter > 1 %}
-      <h2>{{ image_tag.tag.name }}</h2>
+      <h2>{{ gallery.gallery.name }}</h2>
     {% endif %}
     <div class="row gallery">
-    {% for image in image_tag.images %}
+    {% for image in gallery.images %}
         <div class="col-md-3"><a class="thumbnail" href="{% url 'image_detail' image.slug %}">
             {% with webimage=image.webimages.first %}
                 <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ webimage.filename }}" alt="{{ webimage.name }}" />

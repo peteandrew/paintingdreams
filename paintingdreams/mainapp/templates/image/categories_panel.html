@@ -1,9 +1,9 @@
-{% if image_tag_images|length > 1 %}
+{% if gallery_images|length > 1 %}
 <div class="panel panel-primary categories">
   <div class="panel-body">
     <ul class="row list-unstyled">
-      {% for image_tag in image_tag_images|slice:"1:" %}
-        <li class="col-md-6"><a href="{% url 'image_index' image_tag.tag.slug %}">{{ image_tag.tag.name }}</a></li>
+      {% for gallery in gallery_images|slice:"1:" %}
+        <li class="col-md-6"><a href="{% url 'image_index' gallery.gallery.slug %}">{{ gallery.gallery.name }}</a></li>
       {% endfor %}
     </ul>
   </div>

@@ -37,7 +37,7 @@ class Image(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     products = models.ManyToManyField('ProductType', through='Product')
-    tags = models.ManyToManyField('ImageTag', through='ImageImageTag')
+    galleries = models.ManyToManyField('Gallery', through='ImageGallery')
 
     class Meta:
         ordering = ['title',]
@@ -174,7 +174,7 @@ class ProductType(models.Model):
             return self.shipping_weight
 
 
-class ImageTag(models.Model):
+class Gallery(models.Model):
     slug = models.SlugField(unique=True)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
@@ -189,33 +189,33 @@ class ImageTag(models.Model):
     def __str__(self):
         return self.name
 
-    def children(self, image_tags=None, parent=None, level=1):
-        if not image_tags:
-            image_tags = list(ImageTag.objects.all().order_by('parent_id', 'order'))
-            if len(image_tags) == 0:
+    def children(self, galleries=None, parent=None, level=1):
+        if not galleries:
+            galleries = list(Gallery.objects.all().order_by('parent_id', 'order'))
+            if len(galleries) == 0:
                 return []
         if not parent:
             parent = self
 
         children = []
-        for image_tag in image_tags:
-            if image_tag.parent_id == parent.id:
-                image_tag_children = self.children(image_tags, image_tag, level + 1)
-                branch_ids = [image_tag.id]
-                for child in image_tag_children:
+        for gallery in galleries:
+            if gallery.parent_id == parent.id:
+                gallery_children = self.children(galleries, gallery, level + 1)
+                branch_ids = [gallery.id]
+                for child in gallery_children:
                     branch_ids += child['branch_ids']
-                children += [{'image_tag': image_tag, 'children': image_tag_children, 'branch_ids': branch_ids}]
+                children += [{'gallery': gallery, 'children': gallery_children, 'branch_ids': branch_ids}]
 
         return children
 
 
-class ImageImageTag(models.Model):
+class ImageGallery(models.Model):
     image = models.ForeignKey(Image, on_delete=models.CASCADE)
-    image_tag = models.ForeignKey(ImageTag, on_delete=models.CASCADE)
+    gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE)
     order = models.IntegerField(default=0)
 
     class Meta:
-        ordering = ['image_tag', 'order',]
+        ordering = ['gallery', 'order',]
 
 
 class ProductTag(models.Model):

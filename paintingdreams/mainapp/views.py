@@ -31,7 +31,7 @@ from paypal.standard.ipn.signals import valid_ipn_received
 
 import cardsave.signals
 
-from mainapp.models import Image, Product, ProductType, ProductTag, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, ImageTag, ImageImageTag
+from mainapp.models import Image, Product, ProductType, ProductTag, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, Gallery, ImageGallery
 from mainapp.forms import OrderDetailsForm
 from mainapp.email import send_order_complete_email, send_payment_failed_email
 from mainapp import postage_prices
@@ -94,24 +94,24 @@ def terms_and_conditions(request):
     return render(request, 'terms_and_conditions.html', ctx)
 
 
-def image_index(request, slug):
-    base_imagetag = get_object_or_404(ImageTag, slug=slug)
-    images = Image.objects.prefetch_related('webimages').filter(tags=base_imagetag).order_by('imageimagetag__order')
+def gallery(request, slug):
+    base_gallery = get_object_or_404(Gallery, slug=slug)
+    images = Image.objects.prefetch_related('webimages').filter(galleries=base_gallery).order_by('imagegallery__order')
     num_images = len(images)
-    imagetag_images = [{'tag': base_imagetag, 'images': images}]
+    gallery_images = [{'gallery': base_gallery, 'images': images}]
 
-    imagetag_children = base_imagetag.children()
-    for child in imagetag_children:
-        images = Image.objects.prefetch_related('webimages').filter(tags__in=child['branch_ids']).order_by('tags__imagetag__order', 'tags')
+    gallery_children = base_gallery.children()
+    for child in gallery_children:
+        images = Image.objects.prefetch_related('webimages').filter(galleries__in=child['branch_ids']).order_by('galleries__gallery__order', 'galleries')
         if len(images) == 0:
             continue
         num_images += len(images)
-        imagetag_images.append({'tag': child['image_tag'], 'images': images})
+        gallery_images.append({'gallery': child['gallery'], 'images': images})
 
-    pagetitle = base_imagetag.name
-    context = {'image_tag_images': imagetag_images, 'num_images': num_images, 'pagetitle': pagetitle}
+    pagetitle = base_gallery.name
+    context = {'gallery_images': gallery_images, 'num_images': num_images, 'pagetitle': pagetitle}
 
-    return render(request, 'image/index.html', context)
+    return render(request, 'image/gallery.html', context)
 
 
 def image_detail(request, slug):
@@ -753,7 +753,7 @@ def api_search(request):
     for product in Product.objects.filter(tags__in=ProductTag.objects.filter(name__icontains=query)):
         _, product_matches = add_product_match(query, product, None, product_matches)
 
-    for image in Image.objects.filter(tags__in=ImageTag.objects.filter(name__icontains=query)):
+    for image in Image.objects.filter(galleries__in=Gallery.objects.filter(name__icontains=query)):
         _, image_matches = add_image_match(query, image, None, image_matches)
 
     return APIResponse({

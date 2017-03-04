@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from mainapp import views
 
 urlpatterns = [
-    url(r'^gallery/(.+)$', views.image_index, name='image_index'),
+    url(r'^gallery/(.+)$', views.gallery, name='image_index'),
     url(r'^image/(.+)$', views.image_detail, name='image_detail'),
     url(r'^products/(.+)$', views.product_index, name='product_index'),
     url(r'^product/(.+)$', views.product_detail, name='product_detail'),
