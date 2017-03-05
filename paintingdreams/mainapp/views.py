@@ -31,7 +31,7 @@ from paypal.standard.ipn.signals import valid_ipn_received
 
 import cardsave.signals
 
-from mainapp.models import Image, Product, ProductType, ProductTag, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, Gallery, ImageGallery
+from mainapp.models import Image, ImageTag, Product, ProductType, ProductTag, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, Gallery, ImageGallery
 from mainapp.forms import OrderDetailsForm
 from mainapp.email import send_order_complete_email, send_payment_failed_email
 from mainapp import postage_prices

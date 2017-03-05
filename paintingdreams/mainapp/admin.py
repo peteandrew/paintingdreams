@@ -1,5 +1,5 @@
 from django.contrib import admin
-from mainapp.models import Image, ImageWebimage, ProductType, Gallery, ImageGallery, ProductTag, Product, ProductWebimage, PostagePrice
+from mainapp.models import Image, ImageTag, ImageWebimage, ProductType, Gallery, ImageGallery, ProductTag, Product, ProductWebimage, PostagePrice
 
 
 class ImageWebimageInline(admin.TabularInline):
@@ -53,4 +53,4 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(Gallery, GalleryAdmin)
 admin.site.register(ImageGallery, ImageGalleryAdmin)
 admin.site.register(ProductType, ProductTypeAdmin)
-admin.site.register([ProductTag, PostagePrice])
+admin.site.register([ImageTag, ProductTag, PostagePrice])
