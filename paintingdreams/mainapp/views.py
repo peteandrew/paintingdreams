@@ -756,6 +756,9 @@ def api_search(request):
     for image in Image.objects.filter(galleries__in=Gallery.objects.filter(name__icontains=query)):
         _, image_matches = add_image_match(query, image, None, image_matches)
 
+    for image in Image.objects.filter(tags__in=ImageTag.objects.filter(name__icontains=query)):
+        _, image_matches = add_image_match(query, image, None, image_matches)
+
     return APIResponse({
         "product_exact_match": product_exact_match,
         "product_matches": product_matches,
