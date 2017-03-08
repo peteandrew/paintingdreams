@@ -20,6 +20,12 @@
 
 {% block content %}
 <div class="row">
+  <div class="page-header2 hidden-md hidden-lg">
+      <h1>{{ image.title }}</h1>
+      {% if image.galleries.all|length > 0 %}
+      <p>Galleries: {% for gallery in image.galleries.all %}{% if forloop.counter > 1 %}, {% endif %}{% if gallery.slug != 'home' %}<a href="{% url 'image_index' gallery.slug %}">{{ gallery.name }}</a>{% endif %}{% endfor %}</p>
+      {% endif %}
+  </div>
 
   {% with webimages=image.webimages.all %}
   <div class="col-md-6">
@@ -47,7 +53,7 @@
   </div>
   {% endwith %}
 
-    <div class="page-header2 col-md-6">
+    <div class="page-header2 col-md-6 hidden-xs hidden-sm">
         <h1>{{ image.title }}</h1>
         {% if image.galleries.all|length > 0 %}
         <p>Galleries: {% for gallery in image.galleries.all %}{% if forloop.counter > 1 %}, {% endif %}{% if gallery.slug != 'home' %}<a href="{% url 'image_index' gallery.slug %}">{{ gallery.name }}</a>{% endif %}{% endfor %}</p>
