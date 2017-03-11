@@ -20,17 +20,17 @@
 
 {% block content %}
 <div class="row">
-  <div class="page-header2 hidden-md hidden-lg">
-      <h1>{{ image.title }}</h1>
-      {% if image.galleries.all|length > 0 %}
-      <p>Galleries: {% for gallery in image.galleries.all %}{% if forloop.counter > 1 %}, {% endif %}{% if gallery.slug != 'home' %}<a href="{% url 'image_index' gallery.slug %}">{{ gallery.name }}</a>{% endif %}{% endfor %}</p>
-      {% endif %}
+  <div class="page-header2 col-md-6 pull-right col-xs-12">
+    <h1>{{ image.title }}</h1>
+    {% if image.galleries.all|length > 0 %}
+    <p>Galleries: {% for gallery in image.galleries.all %}{% if forloop.counter > 1 %}, {% endif %}{% if gallery.slug != 'home' %}<a href="{% url 'image_index' gallery.slug %}">{{ gallery.name }}</a>{% endif %}{% endfor %}</p>
+    {% endif %}
   </div>
 
   {% with webimages=image.webimages.all %}
-  <div class="col-md-6">
+  <div class="col-md-6 col-xs-12">
     <div id="details-webimages" class="carousel slide" data-interval="false">
-      <div style="height: {{ max_image_height|add:"6" }}px">
+      <div style="max-height: {{ max_image_height|add:"6" }}px">
         <div class="carousel-inner" role="listbox" >
         {% for webimage in webimages %}
           <div class="item{% if forloop.first %} active{% endif %}">
@@ -53,51 +53,44 @@
   </div>
   {% endwith %}
 
-    <div class="page-header2 col-md-6 hidden-xs hidden-sm">
-        <h1>{{ image.title }}</h1>
-        {% if image.galleries.all|length > 0 %}
-        <p>Galleries: {% for gallery in image.galleries.all %}{% if forloop.counter > 1 %}, {% endif %}{% if gallery.slug != 'home' %}<a href="{% url 'image_index' gallery.slug %}">{{ gallery.name }}</a>{% endif %}{% endfor %}</p>
-        {% endif %}
-    </div>
-    {% if image.original != 'notavailable' %}
-    <div class="col-md-6">
-      {% if image.original == 'available' %}
-        <p>If you are interested in buying this painting please contact Wendy info@paintingdreams.co.uk</p>
-      {% else %}
-        <p class="original-sold">Original sold</p>
+  {% if image.original != 'notavailable' %}
+  <div class="col-md-6 col-xs-12">
+    {% if image.original == 'available' %}
+      <p>If you are interested in buying this painting please contact Wendy info@paintingdreams.co.uk</p>
+    {% else %}
+      <p class="original-sold">Original sold</p>
+    {% endif %}
+  </div>
+  {% endif %}
+  <div class="col-md-6 image-description col-xs-12">{{ image.description|safe }}</div>
+
+  {% if products.all|length > 0 %}
+  <div class="col-md-6 products pull-right col-xs-12">
+    <h2>Products</h2>
+    <div class="row">
+    {% for product in products.all %}
+      <div class="col-md-6">
+      {% if product.image %}
+        <a class="thumbnail thumbnail2" href="{% url 'product_detail' product.image.slug %}__{{ product.product_type.slug }}">
       {% endif %}
+      {% if not product.image %}
+        <a class="thumbnail thumbnail2" href="{% url 'product_detail' product.product_type.slug %}">
+      {% endif %}
+          <div class="caption">
+            <p>
+              {% if product.image %}{{ product.image.title }} - {% endif %}
+              {{ product.product_type.displayname_final }}
+            </p>
+          </div>
+          {% with webimage=product.webimages.first %}
+          <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ webimage.filename }}" alt="{{ webimage.name }}" />
+          {% endwith %}
+        </a>
+      </div>
+    {% endfor %}
     </div>
-    {% endif %}
-    <div class="col-md-6 image-description">{{ image.description|safe }}</div>
-
-    {% if products.all|length > 0 %}
-    <div class="col-md-6 products">
-        <h2>Products</h2>
-        <div class="row">
-        {% for product in products.all %}
-            <div class="col-md-6">
-            {% if product.image %}
-                <a class="thumbnail thumbnail2" href="{% url 'product_detail' product.image.slug %}__{{ product.product_type.slug }}">
-            {% endif %}
-            {% if not product.image %}
-                <a class="thumbnail thumbnail2" href="{% url 'product_detail' product.product_type.slug %}">
-            {% endif %}
-                    <div class="caption">
-                        <p>
-                            {% if product.image %}{{ product.image.title }} - {% endif %}
-                            {{ product.product_type.displayname_final }}
-                        </p>
-                    </div>
-                    {% with webimage=product.webimages.first %}
-                    <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ webimage.filename }}" alt="{{ webimage.name }}" />
-            {% endwith %}
-
-                </a>
-            </div>
-        {% endfor %}
-        </div>
-    </div>
-    {% endif %}
+  </div>
+  {% endif %}
 
 </div>
 {% endblock %}
