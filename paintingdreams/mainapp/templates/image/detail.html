@@ -1,26 +1,8 @@
 {% extends "mainapp_base.html" %}
 
-{% block css %}
-<style type="text/css">
-.products h2 {
-  font-size: 1.8em;
-}
-.thumbnail .caption {
-  text-align: center;
-}
-.products .thumbnail>img {
-  padding-top:0;
-  padding-bottom:9px;
-  padding-left:0;
-  margin-left:auto;
-  margin-right:auto;
-}
-</style>
-{% endblock %}
-
 {% block content %}
 <div class="row">
-  <div class="page-header2 col-md-6 pull-right col-xs-12">
+  <div class="page-header col-md-6 pull-right col-xs-12">
     <h1>{{ image.title }}</h1>
     {% if image.galleries.all|length > 0 %}
     <p>Galleries: {% for gallery in image.galleries.all %}{% if forloop.counter > 1 %}, {% endif %}{% if gallery.slug != 'home' %}<a href="{% url 'image_index' gallery.slug %}">{{ gallery.name }}</a>{% endif %}{% endfor %}</p>

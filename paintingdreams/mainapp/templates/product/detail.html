@@ -1,40 +1,8 @@
 {% extends "mainapp_base.html" %}
 
-{% block css %}
-<style type="text/css">
-.product-purchase {
-  background-color: rgba(0,0,0,.2);
-  border: 2px solid rgba(255,255,255,.1);
-  border-radius: 4px;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  margin-left: 15px;
-  margin-bottom: 0.5em;
-}
-.product-purchase .price {
-  font-size: 1.5em;
-  color: #ccc;
-}
-.product-purchase .form-group {
-  padding-left: 0;
-}
-.product-purchase .control-label {
-    font-size: 1em;
-    line-height: 2.4em;
-    padding-top: 0;
-    padding-left: 0;
-    width: 50%;
-    color: #bbb;
-}
-.product-purchase .form-control {
-  width: 50%;
-}
-</style>
-{% endblock %}
-
 {% block content %}
 <div class="row">
-  <div class="page-header2 col-md-6 pull-right col-xs-12">
+  <div class="page-header col-md-6 pull-right col-xs-12">
     <h1>
     {% if product.image %}
         {{ product.image.title }}<br />
