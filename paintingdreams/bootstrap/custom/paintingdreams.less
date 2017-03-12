@@ -347,7 +347,7 @@ table.wholesale_subtotal td:nth-child(1) {
 
 .homepage-images .carousel-inner>.item>a>img {
     margin: 0 auto;
-    height: 500px;
+    // height: 500px;
     padding: 8px;
     background-color: rgba(255,255,255,0.9);
 }
@@ -533,21 +533,44 @@ p.original-sold:after {
 }
 
 @media (max-width: @screen-sm-max) {
-    .navbar-right {
-        float: left !important;
-    }
-    ul.nav.navbar-nav {
-        margin-top: 0;
-    }
-    .navbar-right .dropdown-menu {
-        left: 0;
-        right: auto;
-    }
-    #search-box {
-        float: right !important;
-        margin-top: 25px;
-    }
+  .navbar-right {
+    float: left !important;
+  }
+  ul.nav.navbar-nav {
+    margin-top: 0;
+  }
+  .navbar-right .dropdown-menu {
+    left: 0;
+    right: auto;
+  }
+  #search-box {
+    float: right !important;
+    margin-top: 25px;
+  }
 }
+
+@media (max-width: @screen-xs-max) {
+  .navbar {
+    min-height: auto;
+  }
+  a.navbar-brand {
+    width: 100%;
+    position: absolute;
+    height: 35px;
+    top: 10px;
+  }
+  .navbar-brand>img {
+    width: 70px;
+    top: 0;
+  }
+  span.brand-text {
+    font-size: 0.4em;
+    left: 80px;
+    bottom: -3px;
+    height: auto;
+  }
+}
+
 #search-box {
   clear: right;
 }
