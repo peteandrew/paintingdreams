@@ -23,3 +23,10 @@ ln -sf ../../../custom/paintingdreams.less paintingdreams.less
 
 cd ..
 grunt dist
+
+ts=`date +%s`
+cd dist/css
+mv bootstrap.css bootstrap.$ts.css
+mv bootstrap.css.map bootstrap.$ts.css.map
+mv bootstrap.min.css bootstrap.$ts.min.css
+mv bootstrap.min.css.map bootstrap.$ts.min.css.map
