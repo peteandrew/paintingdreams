@@ -7133,8 +7133,15 @@ table.wholesale_subtotal td:nth-child(1) {
 .basket-subtotal {
   font-size: 1.3em;
 }
-.basket-total {
-  font-size: 1.4em;
+.basket-subtotal p {
+  margin-bottom: 1em;
+}
+.basket-subtotal form {
+  margin-bottom: .5em;
+  font-size: .9em;
+}
+.basket-subtotal form .form-control {
+  margin-bottom: .5em;
 }
 .panel {
   background-color: transparent;

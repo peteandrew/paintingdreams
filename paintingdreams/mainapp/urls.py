@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^search$', views.search),
     url(r'^basket-add$', views.basket_add),
     url(r'^basket-change-quantity$', views.basket_change_quantity),
+    url(r'^basket-change-destination$', views.basket_change_destination),
     url(r'^basket$', views.basket_show),
     url(r'^order-start$', views.order_start),
     url(r'^order-payment$', views.order_payment),
