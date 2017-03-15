@@ -7140,9 +7140,6 @@ table.wholesale_subtotal td:nth-child(1) {
   margin-bottom: .5em;
   font-size: .9em;
 }
-.basket-subtotal form .form-control {
-  margin-bottom: .5em;
-}
 .panel {
   background-color: transparent;
 }
@@ -7364,6 +7361,9 @@ p.original-sold:after {
   }
   .basket-subtotal {
     font-size: 1.1em;
+  }
+  .basket-subtotal form .form-control {
+    margin-bottom: .5em;
   }
   .larger-text {
     font-size: 1.1em;
