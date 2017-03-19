@@ -9,11 +9,13 @@
             <div class="carousel-inner" role="listbox">
             {% for image in homepage_images %}
                 <div class="item {% if forloop.first %}active{% endif %}">
-                    <a class="image" href="{% url 'image_detail' image.slug %}">
-                    {% with webimage=image.webimages.first %}
-                        <img src="/media/images/standard/{{ webimage.filename }}" alt="{{ webimage.name }}" />
-                    {% endwith %}
+                  {% if image.link %}
+                    <a class="image" href="{{ image.link }}">
+                  {% endif %}
+                    <img src="/media/images/standard/{{ image.filename }}" alt="{{ image.name }}" />
+                  {% if image.link %}
                     </a>
+                  {% endif %}
                 </div>
             {% endfor %}
             </div>

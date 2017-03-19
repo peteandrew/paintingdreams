@@ -98,6 +98,11 @@ class ProductWebimage(Webimage):
     product = models.ForeignKey('Product', related_name='webimages', on_delete=models.CASCADE)
 
 
+class HomePageWebimage(Webimage):
+    link = models.CharField(max_length=50, blank=True)
+    enabled = models.BooleanField(default=True)
+
+
 class ProductType(models.Model):
     slug = models.SlugField(unique=True)
     parent = models.ForeignKey('self', null=True, default=None, blank=True, on_delete=models.CASCADE)

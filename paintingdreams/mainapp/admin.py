@@ -1,5 +1,5 @@
 from django.contrib import admin
-from mainapp.models import Image, ImageTag, ImageWebimage, ProductType, Gallery, ImageGallery, ProductTag, Product, ProductWebimage, PostagePrice
+from mainapp.models import Image, ImageTag, ImageWebimage, ProductType, Gallery, ImageGallery, ProductTag, Product, ProductWebimage, PostagePrice, HomePageWebimage
 
 
 class ImageWebimageInline(admin.TabularInline):
@@ -48,9 +48,16 @@ class ProductTypeAdmin(admin.ModelAdmin):
     list_display = ['slug', 'title', 'parent', 'order']
 
 
+class HomePageWebimageAdmin(admin.ModelAdmin):
+    list_display = ['name', 'order', 'enabled']
+
+    exclude = ('sizes',)
+
+
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Gallery, GalleryAdmin)
 admin.site.register(ImageGallery, ImageGalleryAdmin)
 admin.site.register(ProductType, ProductTypeAdmin)
+admin.site.register(HomePageWebimage, HomePageWebimageAdmin)
 admin.site.register([ImageTag, ProductTag, PostagePrice])

@@ -31,7 +31,7 @@ from paypal.standard.ipn.signals import valid_ipn_received
 
 import cardsave.signals
 
-from mainapp.models import Image, ImageTag, Product, ProductType, ProductTag, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, Gallery, ImageGallery
+from mainapp.models import Image, ImageTag, Product, ProductType, ProductTag, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, Gallery, ImageGallery, HomePageWebimage
 from mainapp.forms import OrderDetailsForm
 from mainapp.email import send_order_complete_email, send_payment_failed_email
 from mainapp import postage_prices
@@ -45,7 +45,8 @@ def session_order(request):
 
 
 def home(request):
-    homepage_images = Image.objects.filter(tags__slug__exact='home')
+    # homepage_images = Image.objects.filter(tags__slug__exact='home')
+    homepage_images = HomePageWebimage.objects.filter(enabled=True).order_by('order')
     homepage_products = Product.objects.filter(tags__slug__exact='home')
     context = {'homepage_images': homepage_images, 'homepage_products': homepage_products}
     return render(request, 'home.html', context)
