@@ -119,6 +119,8 @@ class ProductType(models.Model):
     inherit_price = models.BooleanField(default=True)
     shipping_weight = models.IntegerField(default=0)
     inherit_shipping_weight = models.BooleanField(default=False)
+    shipping_weight_multiple = models.IntegerField(default=0)
+    inherit_shipping_weight_multiple = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     order = models.IntegerField(default=0)
@@ -192,6 +194,15 @@ class ProductType(models.Model):
             return self.parent.shipping_weight_final
         else:
             return self.shipping_weight
+
+    @property
+    def shipping_weight_multiple_final(self):
+        if self.inherit_shipping_weight_multiple and self.parent:
+            return self.parent.shipping_weight_multiple_final
+        elif self.shipping_weight_multiple > 0:
+            return self.shipping_weight_multiple
+        else:
+            return self.shipping_weight_final
 
 
 class Gallery(models.Model):
