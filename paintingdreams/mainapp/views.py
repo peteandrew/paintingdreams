@@ -234,7 +234,11 @@ def calc_postage(destination, items):
     # Calculate order total weight and shipping price
     weight = 0
     for item in items:
-        item_weight = item.product.product_type.shipping_weight_final
+        if item.quantity > 1:
+            item_weight = item.product.product_type.shipping_weight_multiple_final
+        else:
+            item_weight = item.product.product_type.shipping_weight_final
+
         weight += item.quantity * item_weight
 
     price = postage_prices.calculate(destination, weight)
