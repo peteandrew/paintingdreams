@@ -12,7 +12,7 @@
     {% endif %}
     <div class="row gallery">
     {% for image in gallery.images %}
-        <div class="col-md-3"><a class="thumbnail" href="{% url 'image_detail' image.slug %}">
+        <div class="col-xs-6 col-md-3"><a class="thumbnail" href="{% url 'image_detail' image.slug %}">
             {% with webimage=image.webimages.first %}
                 <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ webimage.filename }}" alt="{{ webimage.name }}" />
             {% endwith %}
