@@ -28,7 +28,7 @@
         <h1>Selected products</h1>
         <div class="homepage-products row gallery">
         {% for product in homepage_products %}
-            <div class="col-md-3">
+            <div class="col-md-3 col-xs-6">
             {% if product.image %}
                 <a class="thumbnail" href="{% url 'product_detail' product.image.slug %}__{{ product.product_type.slug }}">
             {% endif %}
