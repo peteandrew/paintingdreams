@@ -28,8 +28,8 @@
     {% if webimages|length > 1 %}
       <div class="details-webimages-thumbnails">
       {% for webimage in webimages %}
-        <div data-target="#details-webimages" data-slide-to="{{ forloop.counter0 }}" class="col-md-3 {% if forloop.first %}active{% endif %}">
-          <img src="/media/images/thumbnail/{{ webimage.filename }}" class="img-responsive center-block">
+        <div data-target="#details-webimages" data-slide-to="{{ forloop.counter0 }}" class="col-md-3 col-sm-4 col-xs-6 {% if forloop.first %}active{% endif %}">
+          <img src="/media/images/thumbnail/{{ webimage.filename }}" class="img-responsive">
         </div>
       {% endfor %}
       </div>
