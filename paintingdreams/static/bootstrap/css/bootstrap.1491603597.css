@@ -6785,7 +6785,7 @@ body {
   z-index: 2;
 }
 .main-content {
-  margin-bottom: 185px;
+  margin-bottom: 210px;
 }
 .ontop {
   z-index: 200;
@@ -6930,7 +6930,7 @@ h1 {
   z-index: 4;
   width: 100%;
   /* Set the fixed height of the footer here */
-  height: 160px;
+  height: 200px;
   background-color: rgba(0, 0, 0, .2);
   border-top: 2px solid rgba(255, 255, 255, .1);
 }
@@ -6946,6 +6946,9 @@ h1 {
 }
 .footer p.text-center {
   text-align: center;
+}
+.footer .row {
+  margin-bottom: 15px;
 }
 .lighter .lighter-overlay {
   background: rgba(0, 0, 0, .9);
