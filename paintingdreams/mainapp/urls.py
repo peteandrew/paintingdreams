@@ -15,7 +15,6 @@ urlpatterns = [
     url(r'^order-start$', views.order_start),
     url(r'^order-payment$', views.order_payment),
     url(r'^order-complete$', views.order_transaction_complete, name='order-transaction-complete'),
-    url(r'^order-complete-test$', views.order_transaction_complete_test),
     url(r'^paypal-cancel$', views.paypal_cancel, name='paypal-cancel'),
     url(r'^paypal-ipn', include('paypal.standard.ipn.urls')),
     url(r'^cardsave-result', include('cardsave.urls')),
@@ -25,11 +24,7 @@ urlpatterns = [
     url(r'^wholesale-info$', views.wholesale_info),
     url(r'^delivery-info$', views.delivery_info),
     url(r'^terms-and-conditions$', views.terms_and_conditions),
-    url(r'^mail-test$', views.mailtest),
     url(r'^original_image/(.+)$', views.original_file_serve),
-
-    url(r'^session-order$', views.session_order),
-    url(r'^complete-order-transaction$', views.temp_complete_order_transaction),
 
     url(r'^api/images/$', views.ImageListView.as_view()),
     url(r'^api/orders/$', views.OrderListView.as_view()),

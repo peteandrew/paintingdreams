@@ -7,17 +7,3 @@ urlpatterns = [
     url(r'^wholesale_order/', include('wholesale.urls')),
     url(r'^', include('mainapp.urls')),
 ]
-
-# if settings.DEBUG:
-#     urlpatterns += patterns('',
-#         url(r'^media/(.*)$', 'django.views.static.serve', {
-#             'document_root': settings.MEDIA_ROOT,
-#             'show_indexes': True
-#         }),
-#     )
-#     urlpatterns += patterns('',
-#         url(r'^static/(.*)$', 'django.views.static.serve', {
-#             'document_root': settings.STATIC_ROOT,
-#             'show_indexes': True
-#         }),
-#     )
