@@ -488,11 +488,6 @@ def cardsave_payment_unsuccessful_handler(sender, **kwargs):
     send_payment_failed_email(transaction.order)
 
 
-def mailtest(request):
-    logger.debug(request.__dict__)
-    #send_mail('test mail', 'A test email', settings.DEFAULT_FROM_EMAIL, ['peteandrew101@gmail.com'])
-
-
 class ImageListView(generics.ListAPIView):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
