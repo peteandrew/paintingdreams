@@ -8,11 +8,11 @@ Transaction ID: {{ order.last_transaction.unique_id }}<br />
 Payment processor: {{ order.last_transaction.payment_processor }}</p>
 <p>
 {% for item in order.orderline_set.all %}
-<strong>{{ item.quantity}} x {{ item.title }} - {{ item.line_price|floatformat:2 }}</strong><br />
+<strong>{{ item.quantity}} x {{ item.title }} - £{{ item.line_price|floatformat:2 }}</strong><br />
 {% endfor %}
-Sub total: {{ order.sub_total_price|floatformat:2 }}<br />
-Postage: {{ order.postage_price|floatformat:2 }}<br />
-Total: {{ order.total_price|floatformat:2 }}</p>
+Sub total: £{{ order.sub_total_price|floatformat:2 }}<br />
+Postage: £{{ order.postage_price|floatformat:2 }}<br />
+Total: £{{ order.total_price|floatformat:2 }}</p>
 <p><strong>{{ order.customer_name }}</strong></p>
 <p><strong>{{ order.customer_email }}</strong></p>
 <p><strong>Billing address</strong><br />{{ order.billing_address }}</p>
