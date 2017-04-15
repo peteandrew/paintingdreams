@@ -13,11 +13,11 @@ The details of your order are below. Please contact info@paintingdreams.co.uk fo
 Transaction ID: {{ order.last_transaction.unique_id }}
 Payment processor: {{ order.last_transaction.payment_processor }}
 
-{% for item in order.orderline_set.all %}*{{ item.quantity}} x {{ item.title }} - {{ item.line_price|floatformat:2 }}*
+{% for item in order.orderline_set.all %}*{{ item.quantity}} x £{{ item.title }} - {{ item.line_price|floatformat:2 }}*
 {% endfor %}
-Sub total: {{ order.sub_total_price|floatformat:2 }}
-Postage: {{ order.postage_price|floatformat:2 }}
-Total: {{ order.total_price|floatformat:2 }}
+Sub total: £{{ order.sub_total_price|floatformat:2 }}
+Postage: £{{ order.postage_price|floatformat:2 }}
+Total: £{{ order.total_price|floatformat:2 }}
 
 *{{ order.customer_name }}*
 *{{ order.customer_email }}*
