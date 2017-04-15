@@ -17,12 +17,22 @@ def send_order_complete_email(order):
         recipient_list=[settings.ORDERS_ADMIN_EMAIL],
         html_message=msg_html_admin)
 
+    mail.mail_admins(
+        subject='Order received',
+        message=msg_plain_admin,
+        html_message=msg_html_admin)
+
     # Mail customer
     mail.send_mail(
         subject='Painting Dreams Order',
         message=msg_plain_customer,
         from_email=settings.ORDERS_FROM_EMAIL,
         recipient_list=[order.customer_email],
+        html_message=msg_html_customer)
+
+    mail.mail_admins(
+        subject='Painting Dreams Order',
+        message=msg_plain_customer,
         html_message=msg_html_customer)
 
 
@@ -36,4 +46,9 @@ def send_payment_failed_email(order):
         message=msg_plain_customer,
         from_email=settings.ORDERS_FROM_EMAIL,
         recipient_list=[order.customer_email],
+        html_message=msg_html_customer)
+
+    mail.mail_admins(
+        subject='Painting Dreams Order Payment Failed',
+        message=msg_plain_customer,
         html_message=msg_html_customer)
