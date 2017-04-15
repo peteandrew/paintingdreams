@@ -1,0 +1,25 @@
+<p>Thank you for placing an order on Painting Dreams.</p>
+<p><strong>Unfortunately payment for your order has failed.</strong></p>
+<p>{% if order.last_transaction.message %}The reason given by the payment processor was: <strong>{{ order.last_transaction.message }}</strong>{% endif %}</p>
+<p>You may attempt payment again by following this link: <a href="{{ site_base_url }}/order-payment">{{ site_base_url }}/order-payment</a></p>
+<p>The details of your order are below. Please contact info@paintingdreams.co.uk for more information.</p>
+<p><strong>Order ID: {{ order.unique_id }}</strong><br />
+Transaction ID: {{ order.last_transaction.unique_id }}<br />
+Payment processor: {{ order.last_transaction.payment_processor }}</p>
+<p>
+{% for item in order.orderline_set.all %}
+<strong>{{ item.quantity}} x {{ item.title }} - {{ item.line_price|floatformat:2 }}</strong><br />
+{% endfor %}
+Sub total: {{ order.sub_total_price|floatformat:2 }}<br />
+Postage: {{ order.postage_price|floatformat:2 }}<br />
+Total: {{ order.total_price|floatformat:2 }}</p>
+<p><strong>{{ order.customer_name }}</strong></p>
+<p><strong>{{ order.customer_email }}</strong></p>
+<p><strong>Billing address</strong><br />{{ order.billing_address }}</p>
+<p><strong>Delivery address</strong><br />
+{% if order.shipping_address %}
+{{ order.shipping_name }}<br />{{ order.shipping_address }}
+{% else %}
+{{ order.customer_name }}<br />{{ order.billing_address }}
+{% endif %}
+</p>
