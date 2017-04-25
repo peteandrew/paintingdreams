@@ -324,7 +324,7 @@ class OrderAddress(models.Model):
 
     def __addAttribute(self, ret, attr):
         if attr != '':
-            ret += ', ' + attr
+            ret += ', ' + str(attr)
         return ret
 
     def __str__(self):
