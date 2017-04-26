@@ -23,3 +23,7 @@ Delivery address{% if order.shipping_address %}
 {{ order.customer_name }}
 {{ order.billing_address }}
 {% endif %}
+
+Your order will be on its way very soon.
+Brightest blessings
+Wendy
