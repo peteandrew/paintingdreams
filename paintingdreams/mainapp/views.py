@@ -431,25 +431,7 @@ def paypal_ipn_handler(sender, **kwargs):
 
 @csrf_exempt
 def paypal_cancel(request):
-    # Check that we have a valid order in the session. Redirect to home page
-    # if we don't
-    order_id = request.session.get('order_id')
-    if not order_id:
-        return redirect('/')
-
-    try:
-        order = Order.objects.get(unique_id=order_id)
-    except:
-        return redirect('/')
-
-    if order.last_transaction.payment_processor != 'paypal':
-        return redirect('/')
-
-    transaction = order.last_transaction
-    transaction.state = 'cancelled'
-    transaction.save()
-
-    return redirect('/order-complete')
+    return redirect('/')
 
 
 @receiver(cardsave.signals.payment_successful)
