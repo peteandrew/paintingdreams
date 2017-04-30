@@ -7186,6 +7186,7 @@ span.cardsave-button {
 }
 .larger-text {
   font-size: 1.2em;
+  line-height: 2.5em;
 }
 .categories {
   background-color: rgba(0, 0, 0, .2);
