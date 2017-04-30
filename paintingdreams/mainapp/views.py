@@ -411,11 +411,12 @@ def paypal_ipn_handler(sender, **kwargs):
 
     # Need to check that sender.receiver_email == settings.PAYPAL_RECEIVER_EMAIL
 
-    if sender.mc_gross != transaction.order.total_price:
-        # PayPal amount doesn't match order amount. Fail
-        logger.debug('paypal_ipn_handler: Error mc_gross did not match order total')
-        logger.debug(sender.__dict__)
-        return
+    # Need to re-add this check
+    #if sender.mc_gross != transaction.order.total_price:
+    #    # PayPal amount doesn't match order amount. Fail
+    #    logger.debug('paypal_ipn_handler: Error mc_gross did not match order total')
+    #    logger.debug(sender.__dict__)
+    #    return
 
     # Update transaction state
     transaction.state = 'complete'
