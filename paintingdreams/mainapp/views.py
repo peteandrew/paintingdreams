@@ -192,6 +192,7 @@ def search(request):
 
     ctx = response.data
     ctx['query'] = request.GET.get('query', '')
+    ctx['pagetitle'] = 'Search results'
     return render(request, 'search.html', ctx)
 
 
