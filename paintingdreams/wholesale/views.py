@@ -3,7 +3,7 @@ from collections import OrderedDict
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
-from django.core.mail import send_mail
+from django.core.mail import send_mail, mail_admins
 
 from wholesale.forms import ProductsForm
 from wholesale.models import Product, Category, Special, SpecialProductRemoved
@@ -125,7 +125,6 @@ def start(request, special_name):
 
 def send_emails(ctx):
 
-    order_email = 'peteandrew101@gmail.com'
     subject = 'Painting Dreams Wholesale Order'
     headers = ("Content-Type: text/plain; charset = \"UTF-8\";\n"
                "Content-Transfer-Encoding: 8bit")
@@ -162,7 +161,9 @@ def send_emails(ctx):
     email_body += contact_details + "\r\n\r\n"
     email_body += product_details
 
-    send_mail(subject, email_body, settings.DEFAULT_FROM_EMAIL, [order_email])
+    send_mail(subject, email_body, settings.DEFAULT_FROM_EMAIL, [settings.WHOLESALE_ADMIN_EMAIL])
+
+    mail_admins(subject, message=email_body)
 
     # Customer email
     email_body =  'Dear ' + ctx['contact']['name'] + ",\r\n\r\n"
