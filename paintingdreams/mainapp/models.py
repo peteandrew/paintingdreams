@@ -450,3 +450,18 @@ class PostagePrice(models.Model):
 
     def __str__(self):
         return self.destination + ' (' + str(self.min_weight) + ' - ' + str(self.max_weight) + ')'
+
+
+class HolidayMessage(models.Model):
+    start = models.DateTimeField()
+    end = models.DateTimeField()
+    website_message = models.TextField(blank=True)
+    email_message = models.TextField(blank=True)
+    wholesale_message = models.TextField(blank=True)
+
+    class Meta:
+        index_together = [
+            ['start', 'end'],
+        ]
+
+        ordering = ['-start', '-end']
