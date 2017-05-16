@@ -7298,6 +7298,7 @@ p.original-sold:after {
   width: 50%;
 }
 .holiday-message {
+  margin-bottom: 1.5em;
   font-weight: bold;
   line-height: 1.8em;
   color: #c7c712;
