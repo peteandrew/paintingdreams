@@ -4,6 +4,7 @@
 {% block content %}
 <h1>Wholesale Order</h1>
 <div id="wholesale-container">
+  {% if holiday_messages.wholesale %}<p class="holiday-message">{{ holiday_messages.wholesale }}</p>{% endif %}
   {% if product_errors|length > 0 %}
     <div class="product-errors">
       <h3>The following problems were found with your order</h3>

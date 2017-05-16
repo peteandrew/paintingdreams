@@ -16,7 +16,7 @@ def basket(request):
 def holiday_messages(request):
     message_objects = HolidayMessage.objects.filter(start__lte=datetime.datetime.now(tz=pytz.utc)).filter(end__gt=datetime.datetime.now(tz=pytz.utc))
 
-    messages = {'website': None, 'email': None, 'wholesale': None}
+    messages = {}
     for message_object in message_objects:
         if message_object.website_message:
             messages['website'] = message_object.website_message

@@ -7009,6 +7009,9 @@ p.wholesale-order-info {
   margin-left: 10px;
   font-size: 1.3em;
 }
+#wholesale-container .holiday-message {
+  font-size: 1.2em;
+}
 .product-errors {
   padding: 1em 0;
   margin-top: 1em;
@@ -7293,6 +7296,11 @@ p.original-sold:after {
 }
 .product-purchase .form-control {
   width: 50%;
+}
+.holiday-message {
+  font-weight: bold;
+  line-height: 1.8em;
+  color: #c7c712;
 }
 @media (max-width: 991px) {
   .navbar-right {
