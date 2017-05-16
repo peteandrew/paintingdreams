@@ -1,4 +1,4 @@
-{% if holiday_messages.email %}<p style="color: #c7c712">{{ holiday_messages.email }}</p>{% endif %}
+{% if holiday_message %}<p><strong>{{ holiday_message }}</strong></p>{% endif %}
 <p>Thank you for placing an order on Painting Dreams. The details of your order are below. Please contact info@paintingdreams.co.uk if any of these details are incorrect.</p>
 <p><strong>Order ID: {{ order.unique_id }}</strong><br />
 Transaction ID: {{ order.last_transaction.unique_id }}<br />

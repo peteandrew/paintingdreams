@@ -1,13 +1,23 @@
+import datetime
+import pytz
+
 from django.conf import settings
 from django.core import mail
 from django.template.loader import render_to_string
+from mainapp.models import HolidayMessage
 
 
 def send_order_complete_email(order):
+    message_objects = HolidayMessage.objects.filter(start__lte=datetime.datetime.now(tz=pytz.utc)).filter(end__gt=datetime.datetime.now(tz=pytz.utc))
+    holiday_message = None
+    for message_object in message_objects:
+        if message_object.email_message:
+            holiday_message = message_object.email_message
+
     msg_plain_admin = render_to_string('email/transaction-complete-admin.txt', {'order': order})
     msg_html_admin = render_to_string('email/transaction-complete-admin.html', {'order': order})
-    msg_plain_customer = render_to_string('email/transaction-complete-customer.txt', {'order': order})
-    msg_html_customer = render_to_string('email/transaction-complete-customer.html', {'order': order})
+    msg_plain_customer = render_to_string('email/transaction-complete-customer.txt', {'order': order, 'holiday_message': holiday_message})
+    msg_html_customer = render_to_string('email/transaction-complete-customer.html', {'order': order, 'holiday_message': holiday_message})
 
     # Mail site orders administrator
     mail.send_mail(

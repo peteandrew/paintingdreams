@@ -1,3 +1,5 @@
+{% if holiday_message %}{{ holiday_message }}{% endif %}
+
 Thank you for placing an order on Painting Dreams. The details of your order are below. Please contact info@paintingdreams.co.uk if any of these details are incorrect.
 
 Order ID: {{ order.unique_id }}
