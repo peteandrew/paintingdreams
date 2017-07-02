@@ -7107,7 +7107,7 @@ table.wholesale_subtotal td:nth-child(1) {
 .homepage-images {
   margin-bottom: 50px;
 }
-.homepage-images .carousel-inner > .item > a > img {
+.homepage-images .carousel-inner .item img {
   padding: 8px;
   margin: 0 auto;
   background-color: rgba(255, 255, 255, .9);
