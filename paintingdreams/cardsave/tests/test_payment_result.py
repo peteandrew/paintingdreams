@@ -20,7 +20,7 @@ from cardsave.signals import payment_successful, payment_unsuccessful
 class PaymentResultTest(TestCase):
 
     RESULT_POST_PARAMS = {
-        "HashDigest": 'd9df4c72d4c0a33112ccdd5a4d9374adb0369121',
+        "HashDigest": 'e8d9beccde7b4f1c96c203546059242a270519f7',
         "MerchantID": settings.CARDSAVE_MERCHANT_ID,
         "StatusCode": 0,
         "Message": 'Test message',
@@ -74,7 +74,6 @@ class PaymentResultTest(TestCase):
         signal.connect(handle_signal)
 
         response = self.do_post(post_params)
-
         self.assertTrue(response.content.startswith(b'StatusCode=0'))
 
         payment_results = PaymentResult.objects.all()
@@ -90,7 +89,7 @@ class PaymentResultTest(TestCase):
         result_post_params['HashDigest'] = 'InvalidHash'
         response = self.do_post(result_post_params)
         self.assertTrue(response.content.startswith(b'StatusCode=30'))
-    
+
 
     def test_payment_successful_signal_received(self):
         self.assert_got_signal(payment_successful, self.RESULT_POST_PARAMS)
@@ -99,5 +98,12 @@ class PaymentResultTest(TestCase):
     def test_payment_unsuccessful_signal_received(self):
         result_post_params = deepcopy(self.RESULT_POST_PARAMS)
         result_post_params['StatusCode'] = 4
-        result_post_params['HashDigest'] = '776c5a1c0a16f3b6af0f65ec8db1440b1be8cea8'
+        result_post_params['HashDigest'] = 'b036c86ce4ad38f3282603a688510cdd47b18849'
         self.assert_got_signal(payment_unsuccessful, result_post_params)
+
+
+    def test_payment_successful_transaction_datetime_offset(self):
+        result_post_params = deepcopy(self.RESULT_POST_PARAMS)
+        result_post_params['TransactionDateTime'] = '2017-07-18 19:30:00 +01:00'
+        result_post_params['HashDigest'] = '3aaf42f7db2b9c8d495fc49c7f446b54b0e8795b'
+        self.assert_got_signal(payment_successful, result_post_params)

@@ -77,5 +77,4 @@ class CardsavePaymentFormTestCase(TestCase):
         self.assertIn('name="ResultDeliveryMethod"', form_html)
         self.assertIn('name="ServerResultURL"', form_html)
         self.assertIn('name="PaymentFormDisplaysResult"', form_html)
-        self.assertIn('<input type="submit" value="Cardsave payment" />', form_html)
         self.assertTrue(form_html.endswith('</form>'))

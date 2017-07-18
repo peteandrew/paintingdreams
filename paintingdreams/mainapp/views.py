@@ -438,6 +438,8 @@ def paypal_cancel(request):
 
 @receiver(cardsave.signals.payment_successful)
 def cardsave_payment_successful_handler(sender, **kwargs):
+    logger.debug(sender.__dict__)
+
     try:
         transaction = OrderTransaction.objects.get(unique_id=sender.order_id)
     except:
@@ -457,6 +459,8 @@ def cardsave_payment_successful_handler(sender, **kwargs):
 
 @receiver(cardsave.signals.payment_unsuccessful)
 def cardsave_payment_unsuccessful_handler(sender, **kwargs):
+    logger.debug(sender.__dict__)
+    
     try:
         transaction = OrderTransaction.objects.get(unique_id=sender.order_id)
     except:

@@ -45,6 +45,10 @@ def cardsave_result(request):
     if form.cleaned_data['HashDigest'] != correct_result_hash:
         return cardsave_response(30, 'Unable to process Cardsave result. Hashes do not match')
 
+    # Remove UTC offset
+    transaction_timestamp = time.mktime(
+        time.strptime(form.cleaned_data['TransactionDateTime'][:-7], '%Y-%m-%d %H:%M:%S'))
+
     payment_result = PaymentResult(
         status_code = form.cleaned_data['StatusCode'],
         message = form.cleaned_data['Message'],
@@ -53,9 +57,8 @@ def cardsave_result(request):
         cross_reference = form.cleaned_data['CrossReference'],
         order_id = form.cleaned_data['OrderID'],
         transaction_type = form.cleaned_data['TransactionType'],
-        transaction_datetime = datetime.datetime.fromtimestamp(time.mktime(
-            time.strptime(form.cleaned_data['TransactionDateTime'],
-                          '%Y-%m-%d %H:%M:%S +00:00')), datetime.timezone.utc)
+        transaction_datetime = datetime.datetime.fromtimestamp(
+            transaction_timestamp, datetime.timezone.utc)
     )
     payment_result.save()
 
