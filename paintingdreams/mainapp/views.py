@@ -44,7 +44,7 @@ logger = logging.getLogger('django')
 def home(request):
     # homepage_images = Image.objects.filter(tags__slug__exact='home')
     homepage_images = HomePageWebimage.objects.filter(enabled=True).order_by('order')
-    homepage_products = Product.objects.filter(tags__slug__exact='home')
+    homepage_products = Product.objects.filter(tags__slug__exact='home').order_by('-updated')
     context = {'homepage_images': homepage_images, 'homepage_products': homepage_products}
     return render(request, 'home.html', context)
 
@@ -460,7 +460,7 @@ def cardsave_payment_successful_handler(sender, **kwargs):
 @receiver(cardsave.signals.payment_unsuccessful)
 def cardsave_payment_unsuccessful_handler(sender, **kwargs):
     logger.debug(sender.__dict__)
-    
+
     try:
         transaction = OrderTransaction.objects.get(unique_id=sender.order_id)
     except:
