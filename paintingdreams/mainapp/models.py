@@ -99,7 +99,7 @@ class ProductWebimage(Webimage):
 
 
 class HomePageWebimage(Webimage):
-    link = models.CharField(max_length=50, blank=True)
+    link = models.CharField(max_length=100, blank=True)
     enabled = models.BooleanField(default=True)
 
 
