@@ -1,0 +1,15 @@
+{% extends "mainapp_base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% if not subscribed %}
+  <script src='https://www.google.com/recaptcha/api.js'></script>
+  <h1>Subscribe to the mailing list</h1>
+  {% crispy form %}
+{% else %}
+  <h1>Subscribed</h1>
+  <div class="info-text">
+    <p class="text-center">Thank you. You have been successfully subscribed to the mailing list.</p>
+  </div>
+{% endif %}
+{% endblock %}

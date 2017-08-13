@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^wholesale-info$', views.wholesale_info),
     url(r'^delivery-info$', views.delivery_info),
     url(r'^terms-and-conditions$', views.terms_and_conditions),
+    url(r'^mailinglist$', views.mailinglist_subscribe),
     url(r'^original_image/(.+)$', views.original_file_serve),
 
     url(r'^api/images/$', views.ImageListView.as_view()),

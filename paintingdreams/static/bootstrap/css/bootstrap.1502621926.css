@@ -7303,6 +7303,25 @@ p.original-sold:after {
   line-height: 1.8em;
   color: #c7c712;
 }
+form.mailinglist {
+  margin-top: 25px;
+}
+form.mailinglist div.alert {
+  margin-bottom: 30px;
+}
+form.mailinglist input.form-control {
+  width: 80%;
+}
+form.mailinglist div.form-group {
+  margin-bottom: 25px;
+}
+form.mailinglist div.g-recaptcha {
+  margin-left: 17%;
+}
+form.mailinglist input.btn {
+  margin-top: 20px;
+  margin-left: 17%;
+}
 @media (max-width: 991px) {
   .navbar-right {
     float: left !important;
@@ -7317,6 +7336,15 @@ p.original-sold:after {
   #search-box {
     float: right !important;
     margin-top: 25px;
+  }
+  form.mailinglist input.btn {
+    margin-left: 0;
+  }
+  form.mailinglist {
+    margin-top: 15px;
+  }
+  form.mailinglist div.g-recaptcha {
+    margin-left: 0;
   }
 }
 @media (max-width: 767px) {
@@ -7406,6 +7434,9 @@ p.original-sold:after {
   }
   .holiday-message {
     margin-bottom: 0;
+  }
+  form.mailinglist input.form-control {
+    width: 100%;
   }
 }
 #search-box {

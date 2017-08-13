@@ -75,3 +75,34 @@ class OrderDetailsForm(forms.Form):
                 css_class='row',
             )
         )
+
+
+class MailingListSubscribeForm(forms.Form):
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=False)
+    email = forms.EmailField(required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(MailingListSubscribeForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'blueForms form-horizontal mailinglist'
+        self.helper.form_method = 'post'
+        self.helper.form_action = 'mailinglist'
+        self.helper.label_class = 'col-sm-2'
+        self.helper.field_class = 'col-sm-10'
+        self.helper.layout = Layout(
+            Fieldset(
+                '',
+                'first_name',
+                'last_name',
+                'email'
+            ),
+            HTML('<div class="g-recaptcha" data-sitekey="6LcmtCwUAAAAAGqO-FTeSSi6mqrRUxfROecra4Gf"></div>'),
+            Div(
+                Div(
+                    Submit('submit', 'Subscribe', css_class='btn btn-primary, btn-lg',),
+                    css_class='col-sm-12',
+                ),
+                css_class='row',
+            )
+        )

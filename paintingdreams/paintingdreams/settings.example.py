@@ -219,3 +219,7 @@ REST_FRAMEWORK = {
        'rest_framework.parsers.JSONParser',
     )
 }
+
+GOOGLE_RECAPTCHA_SECRET_KEY = ''
+
+MAILCHIMP_APIKEY = ''

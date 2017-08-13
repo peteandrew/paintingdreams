@@ -1,5 +1,6 @@
 import os
 import json
+import requests
 
 from uuid import uuid4
 
@@ -32,11 +33,13 @@ from paypal.standard.ipn.signals import valid_ipn_received
 import cardsave.signals
 
 from mainapp.models import Image, ImageTag, Product, ProductType, ProductTag, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, Gallery, ImageGallery, HomePageWebimage
-from mainapp.forms import OrderDetailsForm
+from mainapp.forms import OrderDetailsForm, MailingListSubscribeForm
 from mainapp.email import send_order_complete_email, send_payment_failed_email
 from mainapp import postage_prices
 from mainapp import destination_classification
 from mainapp.serializers import ImageSerializer, OrderSerializer, OrderTransactionSerializer
+from mainapp.recaptcha import check_recaptcha
+from mainapp.mailchimp import mailchimp_subscribe
 
 logger = logging.getLogger('django')
 
@@ -262,6 +265,29 @@ def basket_show(request):
         'order_total': order_total
     }
     return render(request, 'basket/index.html', context)
+
+
+def mailinglist_subscribe(request):
+    if request.method != 'POST':
+        form = MailingListSubscribeForm()
+        return render(request, 'mailinglist_subscribe.html', {'form': form,})
+
+    form = MailingListSubscribeForm(request.POST)
+    ctx = {'form': form, 'subscribed': False}
+
+    if not form.is_valid():
+        return render(request, 'mailinglist_subscribe.html', ctx)
+
+    if not check_recaptcha(request):
+        form.add_error(None, 'Invalid reCAPTCHA. Please try again.')
+    else:
+        subscriber = form.cleaned_data
+        if not mailchimp_subscribe(subscriber):
+            form.add_error(None, 'Sorry, an error occurred while subscribing you to the mailing list.')
+        else:
+            ctx['subscribed'] = True
+
+    return render(request, 'mailinglist_subscribe.html', ctx)
 
 
 def order_start(request):
