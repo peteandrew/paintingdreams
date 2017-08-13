@@ -6,14 +6,15 @@ from django.conf import settings
 
 logger = logging.getLogger('django')
 
-def mailchimp_subscribe(subscriber):
+def mailchimp_subscribe(subscriber, signup_from):
     data = {
         "email_address": subscriber['email'],
         "email_type": "html",
         "status": "subscribed",
         "merge_fields": {
             "FNAME": subscriber['first_name'],
-            "LNAME": subscriber['last_name']
+            "LNAME": subscriber['last_name'],
+            "FROM": signup_from
         }
     }
     r = requests.post('https://us1.api.mailchimp.com/3.0/lists/a4cdc2ecc7/members', data=json.dumps(data), auth=('blank', settings.MAILCHIMP_APIKEY))

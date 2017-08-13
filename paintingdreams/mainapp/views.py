@@ -282,7 +282,7 @@ def mailinglist_subscribe(request):
         form.add_error(None, 'Invalid reCAPTCHA. Please try again.')
     else:
         subscriber = form.cleaned_data
-        if not mailchimp_subscribe(subscriber):
+        if not mailchimp_subscribe(subscriber, 'signupform'):
             form.add_error(None, 'Sorry, an error occurred while subscribing you to the mailing list.')
         else:
             ctx['subscribed'] = True
@@ -298,6 +298,15 @@ def order_start(request):
     if request.method == 'POST':
         form = OrderDetailsForm(request.POST)
         if form.is_valid():
+            form_data = form.cleaned_data
+            if form_data['mailinglist_subscribe']:
+                subscriber = {
+                    'email': form_data['customer_email'],
+                    'first_name': form_data['customer_name'].split(' ')[0],
+                    'last_name': ' '.join(form_data['customer_name'].split(' ')[1:])
+                }
+                mailchimp_subscribe(subscriber, 'orderform')
+
             order_list_view = OrderListView()
             api_request = APIRequest(request, (FormParser(),))
             response = order_list_view.post(api_request)

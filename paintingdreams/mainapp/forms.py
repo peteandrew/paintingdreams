@@ -28,6 +28,7 @@ class OrderDetailsForm(forms.Form):
     shipping_state = forms.CharField(label='County / state', required=False)
     shipping_post_code = forms.CharField(label='Post / zip code', required=False)
     shipping_country = forms.ChoiceField(label='Country', required=False, choices=list(countries))
+    mailinglist_subscribe = forms.BooleanField(label='Subscribe to the Painting Dreams mailing list', required=False)
 
     def __init__(self, *args, **kwargs):
         super(OrderDetailsForm, self).__init__(*args, **kwargs)
@@ -66,6 +67,11 @@ class OrderDetailsForm(forms.Form):
                 'shipping_state',
                 'shipping_post_code',
                 'shipping_country'
+            ),
+            Fieldset(
+                'Mailing list',
+                'mailinglist_subscribe',
+                css_class='order-mailinglist'
             ),
             Div(
                 Div(
