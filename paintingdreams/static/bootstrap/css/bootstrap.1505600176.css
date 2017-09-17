@@ -7333,6 +7333,11 @@ fieldset.order-mailinglist legend {
   margin-bottom: 0;
   border-bottom: 0;
 }
+.listing-message {
+  margin-bottom: 1.8em;
+  font-size: 1.2em;
+  text-align: center;
+}
 @media (max-width: 991px) {
   .navbar-right {
     float: left !important;
@@ -7356,6 +7361,10 @@ fieldset.order-mailinglist legend {
   }
   form.mailinglist div.g-recaptcha {
     margin-left: 0;
+  }
+  .listing-message {
+    margin-bottom: 1.8em;
+    font-size: 1.1em;
   }
 }
 @media (max-width: 767px) {

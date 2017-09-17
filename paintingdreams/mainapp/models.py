@@ -113,6 +113,7 @@ class ProductType(models.Model):
     index_inline = models.BooleanField(default=False)
     description = models.TextField(blank=True)
     inherit_description = models.BooleanField(default=False)
+    product_listing_message = models.TextField(blank=True)
     stand_alone = models.BooleanField(default=False)
     inherit_stand_alone = models.BooleanField(default=True)
     price = models.DecimalField(blank=True, max_digits=6, decimal_places=2, default=0)

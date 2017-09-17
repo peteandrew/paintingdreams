@@ -2,6 +2,9 @@
 
 {% block content %}
 <h1>{{ pagetitle }}</h1>
+{% if listing_message %}
+  <p class="listing-message">{{ listing_message }}</p>
+{% endif %}
 {% if num_products == 0 %}
   <p>No products found</p>
 {% else %}
