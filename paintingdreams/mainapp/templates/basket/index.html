@@ -21,7 +21,7 @@
                 <img src="/media/images/thumbnail/{{ webimage.filename }}" alt="{{ webimage.name }}" />
               {% endwith %}
             </td>
-            <td>{{ item.product.displayname }}</td>
+            <td>{{ item.product.displayname }} {% if item.product.sold_out %} - sold out{% endif %}</td>
             <td>&pound;{{ item.product.product_type.price_final }}</td>
             <td>
                 <form action="/basket-change-quantity" method="POST" class="form-inline">

@@ -2,6 +2,8 @@ import os
 import json
 import requests
 
+from decimal import Decimal
+
 from uuid import uuid4
 
 from PIL import Image as PILImage, ImageDraw, ImageFont
@@ -235,6 +237,9 @@ def calc_postage(destination, items):
     # Calculate order total weight and shipping price
     weight = 0
     for item in items:
+        if item.product.sold_out:
+            continue
+
         if item.quantity > 1:
             item_weight = item.product.product_type.shipping_weight_multiple_final
         else:
@@ -253,8 +258,15 @@ def basket_show(request):
     if not request.session.get('destination'):
         request.session['destination'] = 'GB'
 
+    items_total = Decimal(0)
+    for item in cart.items:
+        product = Product.objects.get(pk=item.product.id)
+        item.product.sold_out = product.sold_out
+        if not product.sold_out:
+            items_total += item.subtotal
+
     postage = calc_postage(request.session['destination'], cart.items)
-    order_total = cart.total + postage['price']
+    order_total = items_total + postage['price']
 
     context = {
         'pagetitle': 'Shopping basket',
