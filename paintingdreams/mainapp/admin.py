@@ -12,6 +12,7 @@ from mainapp.models import (
     PostagePrice,
     HomePageWebimage,
     HolidayMessage,
+    ProductTypeAdditionalProduct,
 )
 
 
@@ -71,6 +72,10 @@ class HolidayMessageAdmin(admin.ModelAdmin):
     list_display = ['start', 'end']
 
 
+class ProductTypeAdditionalProductAdmin(admin.ModelAdmin):
+    list_display = ['product_type', 'product']
+
+
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Gallery, GalleryAdmin)
@@ -78,4 +83,5 @@ admin.site.register(ImageGallery, ImageGalleryAdmin)
 admin.site.register(ProductType, ProductTypeAdmin)
 admin.site.register(HomePageWebimage, HomePageWebimageAdmin)
 admin.site.register(HolidayMessage, HolidayMessageAdmin)
+admin.site.register(ProductTypeAdditionalProduct, ProductTypeAdditionalProductAdmin)
 admin.site.register([ImageTag, ProductTag, PostagePrice])

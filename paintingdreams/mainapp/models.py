@@ -301,6 +301,11 @@ class Product(models.Model):
         return string
 
 
+class ProductTypeAdditionalProduct(models.Model):
+    product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+
 # class UserAddress(models.Model):
 #     user = models.ForeignKey(User, blank=True, null=True)
 #     address1 = models.CharField(max_length=255)

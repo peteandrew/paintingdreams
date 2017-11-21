@@ -24,6 +24,8 @@ from rest_framework.response import Response as APIResponse
 from rest_framework import status as APIStatus
 from rest_framework.parsers import JSONParser, FormParser
 
+from itertools import chain
+
 from carton.cart import Cart
 
 from paypal.standard.forms import PayPalPaymentsForm
@@ -32,7 +34,7 @@ from paypal.standard.ipn.signals import valid_ipn_received
 
 import cardsave.signals
 
-from mainapp.models import Image, ImageTag, Product, ProductType, ProductTag, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, Gallery, ImageGallery, HomePageWebimage
+from mainapp.models import Image, ImageTag, Product, ProductType, ProductTag, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, Gallery, ImageGallery, HomePageWebimage, ProductTypeAdditionalProduct
 from mainapp.forms import OrderDetailsForm, MailingListSubscribeForm
 from mainapp.email import send_order_complete_email, send_payment_failed_email
 from mainapp import postage_prices
@@ -131,8 +133,12 @@ def image_detail(request, slug):
 
 def product_index(request, slug):
     base_product_type = get_object_or_404(ProductType, slug=slug)
-    products = Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').filter(product_type=base_product_type).order_by('product_type_order')
+    products = list(Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').filter(product_type=base_product_type).order_by('product_type_order'))
     num_products = len(products)
+    additional_products = ProductTypeAdditionalProduct.objects.select_related('product__image').prefetch_related('product__image__webimages').prefetch_related('product__webimages').filter(product_type=base_product_type)
+    num_products += len(additional_products)
+    for product in additional_products:
+        products.append(product.product)
     producttype_products = [{'producttype': base_product_type, 'products': products}]
     disp_categories = False
 
