@@ -7283,6 +7283,11 @@ p.original-sold:after {
   font-size: 1.5em;
   color: #ccc;
 }
+.product-purchase .old-price {
+  margin-bottom: 3px;
+  font-size: 1.2em;
+  color: #aaa;
+}
 .product-purchase .form-group {
   padding-left: 0;
 }
