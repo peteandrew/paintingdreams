@@ -46,6 +46,7 @@ class OrderDetailsForm(forms.Form):
             ),
             Fieldset(
                 'Billing address',
+                HTML('<p class="larger-text">Please ensure that address is entered on separate lines and that post / zip code is entered in the correct field</p>'),
                 'billing_address1',
                 'billing_address2',
                 'billing_address3',
