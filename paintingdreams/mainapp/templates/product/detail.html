@@ -43,7 +43,7 @@
       <div class="clearfix">
         {% if product.product_type.old_price %}<p class="old-price">Original price: &pound;{{ product.product_type.old_price }}</p>{% endif %}
         <p class="price">{% if product.product_type.old_price %}Sale price: {% endif %}&pound;{{ product.product_type.price_final }} </p>
-        {% if not product.sold_out %}
+        {% if not product.sold_out and not product.temporarily_unavailable %}
           <form action="/basket-add" method="POST" class="form-inline">
               {% csrf_token %}
               <input type="hidden" name="product_id" value="{{ product.id }}">
@@ -54,14 +54,19 @@
               <button type="submit" class="btn btn-default col-sm-5">Add to basket</button>
           </form>
         {% else %}
-          <p class="sold-out">
-          {% if product.more_due %}
-              Sorry, currently sold out.
-              {% if product.due_text|length > 0 %}More are due {{ product.due_text|safe }}.{% endif %}
-          {% else %}
-              Sorry, sold out.
+          {% if product.sold_out %}
+            <p class="sold-out">
+              {% if product.more_due %}
+                Sorry, currently sold out.
+                {% if product.due_text|length > 0 %}More are due {{ product.due_text|safe }}.{% endif %}
+              {% else %}
+                Sorry, sold out.
+              {% endif %}
+            </p>
           {% endif %}
-          </p>
+          {% if product.temporarily_unavailable %}
+            <p>Sorry, this product is temporarily unavailable</p>
+          {% endif %}
         {% endif %}
       </div>
     </div>

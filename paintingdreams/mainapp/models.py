@@ -277,6 +277,7 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField('ProductTag', default=None, blank=True)
     product_type_order = models.IntegerField(default=0)
+    temporarily_unavailable = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ("image", "product_type")
