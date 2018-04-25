@@ -20,7 +20,7 @@ def send_order_complete_email(order):
         subject='Order received',
         message=msg_plain_admin,
         from_email=settings.ORDERS_FROM_EMAIL,
-        recipient_list=[settings.ORDERS_ADMIN_EMAIL],
+        recipient_list=settings.ORDERS_ADMIN_EMAILS,
         html_message=msg_html_admin)
 
     mail.mail_admins(

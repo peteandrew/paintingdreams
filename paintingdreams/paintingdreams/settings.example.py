@@ -24,6 +24,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['srvr.paintingdreams.co.uk']
 
+ADMINS = [('Admin1', 'admin1@admin.com')]
+
 
 # Application definition
 
@@ -86,12 +88,21 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': '/var/log/gunicorn/django_debug.log',
         },
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
     },
     'loggers': {
         'django': {
             'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True,
+        },
+        'django.template': {
+            'handlers': ['null'],  # Quiet by default!
+            'propagate': False,
+            'level': 'DEBUG',
         },
     },
 }
@@ -112,8 +123,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = '/tmp/app-messages'
@@ -157,7 +166,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'mainapp.context_processors.basket'
+                'mainapp.context_processors.basket',
+                'mainapp.context_processors.holiday_messages',
             ]
         }
     }
@@ -208,8 +218,10 @@ COUNTRIES_OVERRIDE = {
     'GB': 'United Kingdom'
 }
 
-ORDERS_ADMIN_EMAIL = ''
+ORDERS_ADMIN_EMAILS = ['']
 ORDERS_FROM_EMAIL = ''
+
+WHOLESALE_ADMIN_EMAILS = ['']
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (

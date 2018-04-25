@@ -161,7 +161,7 @@ def send_emails(ctx):
     email_body += contact_details + "\r\n\r\n"
     email_body += product_details
 
-    send_mail(subject, email_body, settings.DEFAULT_FROM_EMAIL, [settings.WHOLESALE_ADMIN_EMAIL])
+    send_mail(subject, email_body, settings.DEFAULT_FROM_EMAIL, settings.WHOLESALE_ADMIN_EMAILS)
 
     mail_admins(subject, message=email_body)
 
