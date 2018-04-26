@@ -15,6 +15,7 @@ class Product(models.Model):
     new = models.BooleanField(default=False)
     sold_out = models.BooleanField(default=False)
     min_quantity = models.SmallIntegerField(default=0)
+    temporarily_unavailable = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

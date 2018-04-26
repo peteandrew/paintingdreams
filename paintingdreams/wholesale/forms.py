@@ -24,13 +24,14 @@ def products_table():
                         {{ product.title }}
                         {% if product.sold_out %}<span class="soldout">Currently sold out</span>{% endif %}
                         {% if product.new %}<span class="new">New</span>{% endif %}
+                        {% if product.temporarily_unavailable %}<span class="soldout">Temporarily unavailable</span>{% endif %}
                     </td>
                     <td>&pound;{{ product.price }}</td>
-                    <td>{% if not product.sold_out %}
+                    <td>{% if not product.sold_out and not product.temporarily_unavailable %}
                         <input class="textinput textInput form-control quantity" type="text" name="quantity_{{ product.code }}" min="0" value="{{ product.quantity }}">
                         <span style="display:none">{{ product.min_quantity }}</span>
                     {% endif %}</td>
-                    <td>{% if not product.sold_out %}&pound{{ product.total }}{% endif %}</td>
+                    <td>{% if not product.sold_out and not product.temporarily_unavailable %}&pound{{ product.total }}{% endif %}</td>
                 </tr>
             {% endfor %}
             </table>
