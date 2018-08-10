@@ -57,7 +57,7 @@ def start(request, special_name):
 
     for cat_products in categories_products.values():
         for product in cat_products:
-            if product.sold_out:
+            if product.sold_out or product.temporarily_unavailable:
                 continue
 
             key = 'quantity_' + product.code
