@@ -29,3 +29,26 @@ class Special(models.Model):
 class SpecialProductRemoved(models.Model):
     special = models.ForeignKey(Special, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+
+class Order(models.Model):
+    shop_name = models.CharField(max_length=200)
+    shop_address = models.TextField()
+    contact_name = models.CharField(max_length=200)
+    contact_email = models.EmailField()
+    contact_tel = models.CharField(max_length=100)
+    special_name = models.CharField(max_length=30)
+    postage_option = models.CharField(max_length=10)
+    created = models.DateTimeField(auto_now_add=True)
+
+
+class OrderLine(models.Model):
+    code = models.CharField(max_length=20)
+    title = models.CharField(max_length=255)
+    item_price = models.DecimalField(max_digits=6, decimal_places=2)
+    quantity = models.SmallIntegerField()
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+    @property
+    def line_price(self):
+        return self.item_price * self.quantity

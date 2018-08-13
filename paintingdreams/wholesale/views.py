@@ -6,7 +6,7 @@ from django.http import HttpResponse, Http404
 from django.core.mail import send_mail, mail_admins
 
 from wholesale.forms import ProductsForm
-from wholesale.models import Product, Category, Special, SpecialProductRemoved
+from wholesale.models import Product, Category, Special, SpecialProductRemoved, Order, OrderLine
 
 def get_categories_products(products_removed):
     categories_products = OrderedDict()
@@ -178,6 +178,28 @@ def send_emails(ctx):
     send_mail(subject, email_body, settings.DEFAULT_FROM_EMAIL, [customer_email])
 
 
+def store_order(ctx):
+    order = Order.objects.create(
+        shop_name = ctx['shop']['name'],
+        shop_address = ctx['shop']['address'],
+        contact_name = ctx['contact']['name'],
+        contact_email = ctx['contact']['email'],
+        contact_tel = ctx['contact']['tel'],
+        special_name = ctx['special_name'],
+        postage_option = ctx['postage_option'])
+    # order.save()
+
+    for product in ctx['products']:
+        OrderLine.objects.create(
+            order = order,
+            code = product['code'],
+            title = product['title'],
+            item_price = product['price'],
+            quantity = product['quantity']
+        )
+        # line.save()
+
+
 def build_order(request, special_name='', complete=False):
     postage_option = 'std'
     special = None
@@ -240,6 +262,7 @@ def build_order(request, special_name='', complete=False):
 
         if complete:
             send_emails(ctx)
+            store_order(ctx)
             ctx['complete'] = True
             del request.session['wholesale_order']
 
