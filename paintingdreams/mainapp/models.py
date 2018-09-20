@@ -269,6 +269,7 @@ class Product(models.Model):
     code = models.CharField(max_length=20, blank=True)
     image = models.ForeignKey(Image, null=True, default=None, blank=True, on_delete=models.CASCADE)
     product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE)
+    hidden = models.BooleanField(default=False)
     sold_out = models.BooleanField(default=False)
     more_due = models.BooleanField(default=True)
     due_text = models.CharField(max_length=255, blank=True)

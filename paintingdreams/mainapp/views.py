@@ -133,9 +133,9 @@ def image_detail(request, slug):
 
 def product_index(request, slug):
     base_product_type = get_object_or_404(ProductType, slug=slug)
-    products = list(Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').filter(product_type=base_product_type).order_by('product_type_order'))
+    products = list(Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').filter(product_type=base_product_type).filter(hidden=False).order_by('product_type_order'))
     num_products = len(products)
-    additional_products = ProductTypeAdditionalProduct.objects.select_related('product__image').prefetch_related('product__image__webimages').prefetch_related('product__webimages').filter(product_type=base_product_type)
+    additional_products = ProductTypeAdditionalProduct.objects.select_related('product__image').prefetch_related('product__image__webimages').prefetch_related('product__webimages').filter(product_type=base_product_type).filter(product__hidden=False)
     num_products += len(additional_products)
     for product in additional_products:
         products.append(product.product)
@@ -146,7 +146,7 @@ def product_index(request, slug):
     for child in product_type_children:
         if not child['product_type'].subproduct_hide:
             disp_categories = True
-        products = Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').filter(product_type_id__in=child['branch_ids']).order_by('product_type__order', 'product_type_order')
+        products = Product.objects.prefetch_related('product_type').select_related('image').prefetch_related('image__webimages').prefetch_related('webimages').filter(product_type_id__in=child['branch_ids']).filter(hidden=False).order_by('product_type__order', 'product_type_order')
         if len(products) == 0:
             continue
         num_products += len(products)
