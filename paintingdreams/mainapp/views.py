@@ -47,10 +47,9 @@ logger = logging.getLogger('django')
 
 
 def home(request):
-    #homepage_images = HomePageWebimage.objects.filter(enabled=True).order_by('order')
+    homepage_images = HomePageWebimage.objects.filter(enabled=True).order_by('order')
     homepage_products = Product.objects.filter(tags__slug__exact='home').order_by('-updated')
-    #context = {'homepage_images': homepage_images, 'homepage_products': homepage_products}
-    context = {'homepage_products': homepage_products}
+    context = {'homepage_images': homepage_images, 'homepage_products': homepage_products}
     return render(request, 'home.html', context)
 
 
