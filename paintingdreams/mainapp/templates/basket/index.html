@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>Shopping Basket</h1>
-{% if holiday_messages.website %}<p class="holiday-message">{{ holiday_messages.website }}</p>{% endif %}
+{% if holiday_messages.website %}<p class="holiday-message">{{ holiday_messages.website|safe }}</p>{% endif %}
 <table class="table basket">
     <thead>
         <tr>

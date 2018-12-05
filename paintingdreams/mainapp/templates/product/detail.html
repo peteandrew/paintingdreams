@@ -37,7 +37,7 @@
   </div>
   {% endwith %}
 
-    {% if holiday_messages.website %}<div class="col-md-6 col-xs-12"><p class="holiday-message">{{ holiday_messages.website }}</p></div>{% endif %}
+    {% if holiday_messages.website %}<div class="col-md-6 col-xs-12"><p class="holiday-message">{{ holiday_messages.website|safe }}</p></div>{% endif %}
 
     <div class="product-purchase col-md-4 col-xs-12">
       <div class="clearfix">
