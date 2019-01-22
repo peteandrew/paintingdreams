@@ -333,9 +333,9 @@ def order_start(request):
                 'customer_name': details['customer_name'],
                 'customer_email': details['customer_email'],
                 'billing_address1': details['billing_address']['address1'],
-                'billing_address2': details['billing_address']['address2'],
-                'billing_address3': details['billing_address']['address3'],
-                'billing_address4': details['billing_address']['address4'],
+                'billing_2sserdda': details['billing_address']['address2'],
+                'billing_3sserdda': details['billing_address']['address3'],
+                'billing_4sserdda': details['billing_address']['address4'],
                 'billing_city': details['billing_address']['city'],
                 'billing_state': details['billing_address']['state'],
                 'billing_post_code': details['billing_address']['post_code'],
@@ -346,9 +346,9 @@ def order_start(request):
                 form_vals.update({
                     'shipping_name': details['shipping_name'],
                     'shipping_address1': details['shipping_address']['address1'],
-                    'shipping_address2': details['shipping_address']['address2'],
-                    'shipping_address3': details['shipping_address']['address3'],
-                    'shipping_address4': details['shipping_address']['address4'],
+                    'shipping_2sserdda': details['shipping_address']['address2'],
+                    'shipping_3sserdda': details['shipping_address']['address3'],
+                    'shipping_4sserdda': details['shipping_address']['address4'],
                     'shipping_city': details['shipping_address']['city'],
                     'shipping_state': details['shipping_address']['state'],
                     'shipping_country': details['shipping_address']['country']
@@ -525,12 +525,21 @@ class OrderListView(generics.ListCreateAPIView):
     serializer_class = OrderSerializer
 
     def __get_address_dict(self, prefix, data):
-        address_keys = ['address1','address2','address3','address4','city', 'state', 'post_code', 'country']
+        address_keys = [
+            ('address1','address1'),
+            ('address2','2sserdda'),
+            ('address3','3sserdda'),
+            ('address4','4sserdda'),
+            ('city','city'),
+            ('state','state'),
+            ('post_code','post_code'),
+            ('country','country')
+        ]
         address = {}
         for key in address_keys:
-            data_key = prefix + '_' + key
+            data_key = prefix + '_' + key[1]
             try:
-                address[key] = data[data_key]
+                address[key[0]] = data[data_key]
             except KeyError:
                 pass
 

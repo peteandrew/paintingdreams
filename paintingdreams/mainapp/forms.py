@@ -11,9 +11,9 @@ class OrderDetailsForm(forms.Form):
     customer_name = forms.CharField(required=True)
     customer_email = forms.EmailField(required=True)
     billing_address1 = forms.CharField(label='Line 1', required=True)
-    billing_address2 = forms.CharField(label='Line 2', required=False)
-    billing_address3 = forms.CharField(label='Line 3', required=False)
-    billing_address4 = forms.CharField(label='Line 4', required=False)
+    billing_2sserdda = forms.CharField(label='Line 2', required=False)
+    billing_3sserdda = forms.CharField(label='Line 3', required=False)
+    billing_4sserdda = forms.CharField(label='Line 4', required=False)
     billing_city = forms.CharField(label='City', required=False)
     billing_state = forms.CharField(label='County / state', required=False)
     billing_post_code = forms.CharField(label='Post / zip code', required=False)
@@ -21,9 +21,9 @@ class OrderDetailsForm(forms.Form):
     shipping_same = forms.BooleanField(label='Same as above', required=False)
     shipping_name = forms.CharField(label='Name', required=False)
     shipping_address1 = forms.CharField(label='Line 1', required=False)
-    shipping_address2 = forms.CharField(label='Line 2', required=False)
-    shipping_address3 = forms.CharField(label='Line 3', required=False)
-    shipping_address4 = forms.CharField(label='Line 4', required=False)
+    shipping_2sserdda = forms.CharField(label='Line 2', required=False)
+    shipping_3sserdda = forms.CharField(label='Line 3', required=False)
+    shipping_4sserdda = forms.CharField(label='Line 4', required=False)
     shipping_city = forms.CharField(label='City', required=False)
     shipping_state = forms.CharField(label='County / state', required=False)
     shipping_post_code = forms.CharField(label='Post / zip code', required=False)
@@ -48,9 +48,9 @@ class OrderDetailsForm(forms.Form):
                 'Billing address',
                 HTML('<p class="larger-text">Please ensure that address is entered on separate lines and that post / zip code is entered in the correct field</p>'),
                 'billing_address1',
-                'billing_address2',
-                'billing_address3',
-                'billing_address4',
+                'billing_2sserdda',
+                'billing_3sserdda',
+                'billing_4sserdda',
                 'billing_city',
                 'billing_state',
                 'billing_post_code',
@@ -61,9 +61,9 @@ class OrderDetailsForm(forms.Form):
                 HTML('<p>If different from above</p>'),
                 'shipping_name',
                 'shipping_address1',
-                'shipping_address2',
-                'shipping_address3',
-                'shipping_address4',
+                'shipping_2sserdda',
+                'shipping_3sserdda',
+                'shipping_4sserdda',
                 'shipping_city',
                 'shipping_state',
                 'shipping_post_code',
