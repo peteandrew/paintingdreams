@@ -254,7 +254,7 @@ def build_order(request, special_name='', complete=False):
         ctx['order_sub_total'] = order_total
 
         ctx['delivery_charge'] = 0
-        if postage_option == 'std' and order_total < 125:
+        if postage_option == 'std' and order_total < 100:
             ctx['delivery_charge'] = 8
             order_total += 8
 

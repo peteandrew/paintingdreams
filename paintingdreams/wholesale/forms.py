@@ -49,11 +49,12 @@ def products_table():
 
 def info():
     html = """
-        <p class="wholesale-order-info">Cards have a minimum order quantity of 3.</p>
-        <p class="wholesale-order-info">A3 prints have a minimum order quantity of 2.</p>
-        <p class="wholesale-order-info">The minimum order amount is £50.</p>
-        {% if postage_option == 'std' %}<p class="postage-info">For orders under £125 there is a delivery charge of £8. For orders of £125 and over there is no delivery charge.</p><p class="postage-info">For international orders, postage will be calculated depending on the weight of the order.</p>{% endif %}
-        {% if postage_option == 'wghtcalc' %}<p class="postage-info">The carriage cost will be calculated depending on weight and you will be notified of the total cost before dispatch. Please confirm you are happy to proceed with the order once you have received the notification.</p>{% endif %}"""
+        <p class="wholesale-order-info">Please note that all greetings card orders can now be placed via 'Love From The Artist'. Here is a link to my page on their website: <a href="https://www.lovefromtheartist.com/Artists/west-knoyle/painting-dreams" target="_blank">https://www.lovefromtheartist.com/Artists/west-knoyle/painting-dreams</a></p>
+        <p class="wholesale-order-info">For all other items your order can be placed via this order form.</p>
+        <p class="wholesale-order-info">Please contact me if you have any questions about the new ordering arrangement. info@paintingdreams.co.uk</p>
+        <p class="wholesale-order-info">The minimum order is £50.</p>
+        {% if postage_option == 'std' %}<p class="wholesale-order-info">For orders under £100 there is a delivery charge of £8.</p><p class="wholesale-order-info">For international orders, postage will be calculated depending on the weight of the order.</p>{% endif %}
+        {% if postage_option == 'wghtcalc' %}<p class="wholesale-order-info">The carriage cost will be calculated depending on weight and you will be notified of the total cost before dispatch. Please confirm you are happy to proceed with the order once you have received the notification.</p>{% endif %}"""
 
     return html
 
