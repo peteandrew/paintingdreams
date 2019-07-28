@@ -237,6 +237,12 @@ def basket_change_destination(request):
 
 
 def calc_postage(destination, items):
+
+    # For each item, get product type with shipping weight and shipping weight multiple (with product type inherited from)
+    # Find items where quantity is 1 and where product type for shipping weight multiple doesn't exist in any of the other items
+    # For other items, use shipping weight multiple
+
+
     # Calculate order total weight and shipping price
     weight = 0
     for item in items:

@@ -192,6 +192,7 @@ class ProductType(models.Model):
 
     @property
     def shipping_weight_final(self):
+        # Return inherited from type here
         if self.inherit_shipping_weight and self.parent:
             return self.parent.shipping_weight_final
         else:

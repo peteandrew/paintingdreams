@@ -42,7 +42,7 @@
     <div class="product-purchase col-md-4 col-xs-12">
       <div class="clearfix">
         {% if product.product_type.old_price %}<p class="old-price">Original price: &pound;{{ product.product_type.old_price }}</p>{% endif %}
-        <p class="price">{% if product.product_type.old_price %}Sale price: {% endif %}&pound;{{ product.product_type.price_final }} </p>
+        <p class="price">{% if product.product_type.old_price %}<span style="color: #C7C725">Sale price: {% endif %}&pound;{{ product.product_type.price_final }}{% if product.product_type.old_price %}</span>{% endif %}</p>
         {% if not product.sold_out and not product.temporarily_unavailable %}
           <form action="/basket-add" method="POST" class="form-inline">
               {% csrf_token %}
