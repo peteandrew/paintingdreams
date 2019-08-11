@@ -34,7 +34,7 @@ from paypal.standard.ipn.signals import valid_ipn_received
 
 import cardsave.signals
 
-from mainapp.models import Image, ImageTag, Product, ProductType, ProductTag, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, Gallery, ImageGallery, HomePageWebimage, ProductTypeAdditionalProduct
+from mainapp.models import Image, ImageTag, Product, ProductType, ProductTag, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, Gallery, ImageGallery, HomePageWebimage, ProductTypeAdditionalProduct, CartProduct
 from mainapp.forms import OrderDetailsForm, MailingListSubscribeForm
 from mainapp.email import send_order_complete_email, send_payment_failed_email
 from mainapp import postage_prices
@@ -204,10 +204,31 @@ def search(request):
     return render(request, 'search.html', ctx)
 
 
+def get_cart_product(request):
+    product = Product.objects.get(pk=request.POST.get('product_id'))
+    secondary_type = False
+    if product.secondary_product_type_enabled and request.POST.get('secondary_type', 0) == 1:
+        secondary_type = True
+
+    cart_product = CartProduct.objects.get(product=product, secondary_type=secondary_type)
+    if cart_product is None:
+        cart_product = CartProduct(product=product, secondary_type=secondary_type)
+        cart_product.save()
+
+    return cart_product
+
+
 def basket_add(request):
-    product = Product.objects.get(pk=request.POST['product_id'])
+    cart_product = get_cart_product(request)
+
+    price = 0.00
+    if cart_product.secondary_type:
+        price = product.product_type.secondary_type_price_final
+    else:
+        price = product.product_type.price_final
+
     cart = Cart(request.session)
-    cart.add(product, price=product.product_type.price_final, quantity=request.POST['quantity'])
+    cart.add(cart_product, price=price, quantity=request.POST['quantity'])
 
     if request.is_ajax():
         return HttpResponse()
@@ -217,9 +238,10 @@ def basket_add(request):
 
 
 def basket_change_quantity(request):
-    product = Product.objects.get(pk=request.POST['product_id'])
+    cart_product = get_cart_product(request)
+
     cart = Cart(request.session)
-    cart.set_quantity(product, quantity=request.POST['quantity'])
+    cart.set_quantity(cart_product, quantity=request.POST['quantity'])
 
     if request.is_ajax():
         return HttpResponse()
@@ -247,9 +269,15 @@ def calc_postage(destination, items):
     weight = 0
     for item in items:
         if item.quantity > 1:
-            item_weight = item.product.product_type.shipping_weight_multiple_final
+            if item.product.secondary_type:
+                item_weight = item.product.product.product_type.secondary_type_shipping_weight_multiple_final
+            else:    
+                item_weight = item.product.product.product_type.shipping_weight_multiple_final
         else:
-            item_weight = item.product.product_type.shipping_weight_final
+            if item.product.secondary_type:
+                item_weight = item.product.product.product_type.secondary_type_shipping_weight_final
+            else:
+                item_weight = item.product.product.product_type.shipping_weight_final
 
         weight += item.quantity * item_weight
 
@@ -574,13 +602,24 @@ class OrderListView(generics.ListCreateAPIView):
 
         order_lines = []
         for cart_item in cart.items:
-            order_lines.append({
-                "product": cart_item.product.id,
-                "title": cart_item.product.displayname,
-                "item_price": cart_item.product.product_type.price_final,
-                "item_weight": cart_item.product.product_type.shipping_weight_final,
-                "quantity": cart_item.quantity
-            })
+            if cart_item.product.secondary_type:
+                order_lines.append({
+                    "product": cart_item.product.product.id,
+                    "secondary_type": True,
+                    "title": cart_item.product.product.secondary_type_displayname_final,
+                    "item_price": cart_item.product.product.product_type.secondary_type_price_final,
+                    "item_weight": cart_item.product.product.product_type.secondary_type_shipping_weight_final,
+                    "quantity": cart_item.quantity
+                })
+            else:
+                order_lines.append({
+                    "product": cart_item.product.product.id,
+                    "secondary_type": False,
+                    "title": cart_item.product.product.displayname_final,
+                    "item_price": cart_item.product.product.product_type.price_final,
+                    "item_weight": cart_item.product.product.product_type.shipping_weight_final,
+                    "quantity": cart_item.quantity
+                })
 
         # Need to allow for addresses as flat structure (as will be the case with form posted data)
         # and addresses as sub objects (as will be the case with JSON posted data)

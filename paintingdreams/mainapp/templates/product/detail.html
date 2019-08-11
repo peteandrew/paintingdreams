@@ -69,6 +69,39 @@
           {% endif %}
         {% endif %}
       </div>
+      <div>
+        {% if product.secondary_type_enabled and product.product_type.secondary_type_title != "" %}
+          <p>{{ product.product_type.secondary_type_displayname_final }}</p>
+          <p class="price">Price: {% if product.product_type.secondary_type_old_price %}<del>{{ product.product_type.secondary_type_old_price }}{% endif %}</p>
+          {% if product.product_type.old_price %}<p class="old-price">Original price: &pound;{{ product.product_type.old_price }}</p>{% endif %}
+          <p class="price">{% if product.product_type.old_price %}<span style="color: #C7C725">Sale price: {% endif %}&pound;{{ product.product_type.price_final }}{% if product.product_type.old_price %}</span>{% endif %}</p>
+          {% if not product.sold_out and not product.temporarily_unavailable %}
+            <form action="/basket-add" method="POST" class="form-inline">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <div class="form-group col-sm-5">
+                   <label for="quantity" class="control-label col-sm-6">Quantity</label>
+                   <input type="number" class="form-control col-sm-6" id="quantity" name="quantity" min="1" value="1">
+                </div>
+                <button type="submit" class="btn btn-default col-sm-5">Add to basket</button>
+            </form>
+          {% else %}
+            {% if product.sold_out %}
+              <p class="sold-out">
+                {% if product.more_due %}
+                  Sorry, currently sold out.
+                  {% if product.due_text|length > 0 %}More are due {{ product.due_text|safe }}.{% endif %}
+                {% else %}
+                  Sorry, sold out.
+                {% endif %}
+              </p>
+            {% endif %}
+            {% if product.temporarily_unavailable %}
+              <p>Sorry, this product is temporarily unavailable</p>
+            {% endif %}
+          {% endif %}
+        {% endif %}
+      </div>
     </div>
 
     <div class="col-md-6 product-description col-xs-12">

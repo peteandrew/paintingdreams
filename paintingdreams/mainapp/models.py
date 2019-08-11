@@ -127,6 +127,18 @@ class ProductType(models.Model):
     updated = models.DateTimeField(auto_now=True)
     order = models.IntegerField(default=0)
 
+    # Secondary type
+    secondary_type_title = models.CharField(max_length=100, blank=True)
+    secondary_type_displayname = models.CharField(max_length=100, blank=True)
+    secondary_type_inherit_displayname = models.BooleanField(default=False)
+    secondary_type_old_price = models.DecimalField(blank=True, max_digits=6, decimal_places=2, default=0)
+    secondary_type_price = models.DecimalField(blank=True, max_digits=6, decimal_places=2, default=0)
+    secondary_type_inherit_price = models.BooleanField(default=True)
+    secondary_type_shipping_weight = models.IntegerField(default=0)
+    secondary_type_inherit_shipping_weight = models.BooleanField(default=False)
+    secondary_type_shipping_weight_multiple = models.IntegerField(default=0)
+    secondary_type_inherit_shipping_weight_multiple = models.BooleanField(default=False)
+
     class Meta:
         ordering = ['title',]
 
@@ -170,6 +182,16 @@ class ProductType(models.Model):
                 return self.displayname
 
     @property
+    def secondary_type_displayname_final(self):
+        if self.secondary_type_inherit_displayname and self.parent:
+            return self.parent.secondary_type_displayname_final
+        else:
+            if not self.secondary_type_displayname.strip():
+                return self.secondary_type_title
+            else:
+                return self.secondary_type_displayname
+
+    @property
     def description_final(self):
         if self.inherit_description and self.parent:
             return self.parent.description_final
@@ -191,12 +213,25 @@ class ProductType(models.Model):
             return self.price
 
     @property
+    def secondary_type_price_final(self):
+        if self.secondary_type_inherit_price and self.parent:
+            return self.parent.secondary_type_price_final
+        else:
+            return self.secondary_type_price
+
+    @property
     def shipping_weight_final(self):
-        # Return inherited from type here
         if self.inherit_shipping_weight and self.parent:
             return self.parent.shipping_weight_final
         else:
             return self.shipping_weight
+
+    @property
+    def secondary_type_shipping_weight_final(self):
+        if self.secondary_type_inherit_shipping_weight and self.parent:
+            return self.parent.secondary_type_shipping_weight_final
+        else:
+            return self.secondary_type_shipping_weight
 
     @property
     def shipping_weight_multiple_final(self):
@@ -206,6 +241,15 @@ class ProductType(models.Model):
             return self.shipping_weight_multiple
         else:
             return self.shipping_weight_final
+
+    @property
+    def secondary_type_shipping_weight_multiple_final(self):
+        if self.secondary_type_inherit_shipping_weight_multiple and self.parent:
+            return self.parent.secondary_type_shipping_weight_multiple_final
+        elif self.secondary_type_shipping_weight_multiple > 0:
+            return self.secondary_type_shipping_weight_multiple
+        else:
+            return self.secondary_type_shipping_weight_final
 
 
 class Gallery(models.Model):
@@ -275,6 +319,7 @@ class Product(models.Model):
     more_due = models.BooleanField(default=True)
     due_text = models.CharField(max_length=255, blank=True)
     extra_description = models.TextField(blank=True)
+    secondary_product_type_enabled = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField('ProductTag', default=None, blank=True)
@@ -303,6 +348,12 @@ class Product(models.Model):
             string += str(self.image) + " - "
         string += self.product_type.displayname_final
         return string
+
+
+# Model specifically for adding to cart that allows specifying whether secondary product type was selected
+class CartProduct(models.Model):
+    product = models.ForeignKey(Product, blank=True, null=True)
+    secondary_type = models.BooleanField(default=False)
 
 
 class ProductTypeAdditionalProduct(models.Model):
@@ -401,7 +452,8 @@ class OrderLine(models.Model):
     # We store product title, price and weight here instead of just referring
     # to the product object as these values may change and we don't want to
     # affect historic orders
-    product = models.ForeignKey(Product, blank=True, null=True, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, blank=True, null=True)
+    secondary_type = models.BooleanField(default=False)
     title = models.CharField(max_length=255)
     item_price = models.DecimalField(max_digits=6, decimal_places=2)
     item_weight = models.IntegerField()
