@@ -13,6 +13,7 @@ from mainapp.models import (
     HomePageWebimage,
     HolidayMessage,
     ProductTypeAdditionalProduct,
+    ProductAdditionalProduct,
 )
 
 
@@ -38,6 +39,12 @@ class ImageGalleryInline(admin.TabularInline):
     extra = 1
 
 
+class ProductAdditionalProductInline(admin.TabularInline):
+    model = ProductAdditionalProduct
+    fk_name = "product"
+    extra = 1
+
+
 class ImageAdmin(admin.ModelAdmin):
     inlines = [ImageWebimageInline, ProductInline, ImageGalleryInline]
 
@@ -45,7 +52,7 @@ class ImageAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    inlines = [ProductWebimageInline]
+    inlines = [ProductWebimageInline, ProductAdditionalProductInline]
 
     list_display = ['image', 'product_type', 'product_type_order']
 

@@ -305,6 +305,11 @@ class Product(models.Model):
         return string
 
 
+class ProductAdditionalProduct(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    additional_product = models.ForeignKey(Product, related_name="additional_product", on_delete=models.CASCADE)
+
+
 class ProductTypeAdditionalProduct(models.Model):
     product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

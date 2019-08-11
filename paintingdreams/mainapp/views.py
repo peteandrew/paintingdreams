@@ -34,7 +34,7 @@ from paypal.standard.ipn.signals import valid_ipn_received
 
 import cardsave.signals
 
-from mainapp.models import Image, ImageTag, Product, ProductType, ProductTag, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, Gallery, ImageGallery, HomePageWebimage, ProductTypeAdditionalProduct
+from mainapp.models import Image, ImageTag, Product, ProductType, ProductTag, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, Gallery, ImageGallery, HomePageWebimage, ProductTypeAdditionalProduct, ProductAdditionalProduct
 from mainapp.forms import OrderDetailsForm, MailingListSubscribeForm
 from mainapp.email import send_order_complete_email, send_payment_failed_email
 from mainapp import postage_prices
@@ -190,7 +190,10 @@ def product_detail(request, slug):
         if sizes['standard'][1] > max_image_height:
             max_image_height = sizes['standard'][1]
 
-    context = {'product': product, 'pagetitle': pagetitle, 'max_image_height': max_image_height}
+    product_additional_products = ProductAdditionalProduct.objects.filter(product=product)
+    additional_products = [product_additional_product.additional_product for product_additional_product in product_additional_products]
+
+    context = {'product': product, 'pagetitle': pagetitle, 'max_image_height': max_image_height, 'additional_products': additional_products}
     return render(request, 'product/detail.html', context)
 
 
@@ -676,8 +679,10 @@ class OrderTransactionListView(APIView):
 def add_product_match(query, product, product_exact_match, product_matches):
     product_match = {
         'title': product.displayname,
-        'thumbnail': product.webimages.first().filename()
+        'slug': ''
     }
+    if len(product.webimages.all()) > 0:
+        product_match['thumbnail'] = product.webimages.first().filename()
     if product.image:
         product_match['slug'] = product.image.slug + '__' + product.product_type.slug
     else:
@@ -723,6 +728,9 @@ def api_search(request):
 
     products_word_matches = {}
     for product in Product.objects.all():
+        if product.hidden:
+            continue
+
         displayname = product.displayname
         words_matched = 0
 

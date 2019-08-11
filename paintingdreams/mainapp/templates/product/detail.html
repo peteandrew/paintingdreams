@@ -39,37 +39,14 @@
 
     {% if holiday_messages.website %}<div class="col-md-6 col-xs-12"><p class="holiday-message">{{ holiday_messages.website|safe }}</p></div>{% endif %}
 
-    <div class="product-purchase col-md-4 col-xs-12">
-      <div class="clearfix">
-        {% if product.product_type.old_price %}<p class="old-price">Original price: &pound;{{ product.product_type.old_price }}</p>{% endif %}
-        <p class="price">{% if product.product_type.old_price %}<span style="color: #C7C725">Sale price: {% endif %}&pound;{{ product.product_type.price_final }}{% if product.product_type.old_price %}</span>{% endif %}</p>
-        {% if not product.sold_out and not product.temporarily_unavailable %}
-          <form action="/basket-add" method="POST" class="form-inline">
-              {% csrf_token %}
-              <input type="hidden" name="product_id" value="{{ product.id }}">
-              <div class="form-group col-sm-5">
-                 <label for="quantity" class="control-label col-sm-6">Quantity</label>
-                 <input type="number" class="form-control col-sm-6" id="quantity" name="quantity" min="1" value="1">
-              </div>
-              <button type="submit" class="btn btn-default col-sm-5">Add to basket</button>
-          </form>
-        {% else %}
-          {% if product.sold_out %}
-            <p class="sold-out">
-              {% if product.more_due %}
-                Sorry, currently sold out.
-                {% if product.due_text|length > 0 %}More are due {{ product.due_text|safe }}.{% endif %}
-              {% else %}
-                Sorry, sold out.
-              {% endif %}
-            </p>
-          {% endif %}
-          {% if product.temporarily_unavailable %}
-            <p>Sorry, this product is temporarily unavailable</p>
-          {% endif %}
-        {% endif %}
-      </div>
-    </div>
+    {% if additional_products %}
+      {% include "product/add_to_basket.html" with product=product output_name=True display_sale_price=True %}
+      {% for additional_product in additional_products %}
+        {% include "product/add_to_basket.html" with product=additional_product output_name=True display_sale_price=False %}
+      {% endfor %}
+    {% else %}
+      {% include "product/add_to_basket.html" with product=product output_name=False display_sale_price=True %}
+    {% endif %}
 
     <div class="col-md-6 product-description col-xs-12">
         <div>{{ product.product_type.description_final|safe }}{{ product.extra_description|safe }}</div>
