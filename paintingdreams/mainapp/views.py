@@ -118,7 +118,7 @@ def gallery(request, slug):
 
 def image_detail(request, slug):
     image = get_object_or_404(Image, slug=slug)
-    products = Product.objects.filter(image=image)
+    products = Product.objects.filter(image=image, hidden=False)
 
     max_image_height = 0
     for webimage in image.webimages.all():
