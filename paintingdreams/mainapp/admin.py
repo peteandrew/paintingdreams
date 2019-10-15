@@ -42,7 +42,7 @@ class ImageGalleryInline(admin.TabularInline):
 class ProductAdditionalProductInline(admin.TabularInline):
     model = ProductAdditionalProduct
     fk_name = "product"
-    extra = 1
+    extra = 0
 
 
 class ImageAdmin(admin.ModelAdmin):
