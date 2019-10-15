@@ -210,7 +210,7 @@ def search(request):
 def basket_add(request):
     product = Product.objects.get(pk=request.POST['product_id'])
     cart = Cart(request.session)
-    cart.add(product, price=product.product_type.price_final, quantity=request.POST['quantity'])
+    cart.add(product, price=product.price, quantity=request.POST['quantity'])
 
     if request.is_ajax():
         return HttpResponse()
@@ -580,7 +580,7 @@ class OrderListView(generics.ListCreateAPIView):
             order_lines.append({
                 "product": cart_item.product.id,
                 "title": cart_item.product.displayname,
-                "item_price": cart_item.product.product_type.price_final,
+                "item_price": cart_item.product.price,
                 "item_weight": cart_item.product.product_type.shipping_weight_final,
                 "quantity": cart_item.quantity
             })

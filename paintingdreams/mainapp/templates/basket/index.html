@@ -22,7 +22,7 @@
               {% endwith %}
             </td>
             <td>{{ item.product.displayname }}</td>
-            <td>&pound;{{ item.product.product_type.price_final }}</td>
+            <td>&pound;{{ item.product.price }}</td>
             <td>
                 <form action="/basket-change-quantity" method="POST" class="form-inline">
                     {% csrf_token %}

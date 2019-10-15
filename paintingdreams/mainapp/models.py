@@ -280,6 +280,7 @@ class Product(models.Model):
     tags = models.ManyToManyField('ProductTag', default=None, blank=True)
     product_type_order = models.IntegerField(default=0)
     temporarily_unavailable = models.BooleanField(default=False)
+    overridden_price = models.DecimalField(blank=True, max_digits=6, decimal_places=2, default=0)
 
     class Meta:
         unique_together = ("image", "product_type")
@@ -303,6 +304,13 @@ class Product(models.Model):
             string += str(self.image) + " - "
         string += self.product_type.displayname_final
         return string
+
+    @property
+    def price(self):
+        if self.overridden_price:
+            return self.overridden_price
+        else:
+            return self.product_type.price_final
 
 
 class ProductAdditionalProduct(models.Model):
