@@ -53,6 +53,11 @@ class ImageAdmin(admin.ModelAdmin):
 
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductWebimageInline, ProductAdditionalProductInline]
+    readonly_fields = ('product_type_price',)
+    fields = ('image', 'product_type', ('product_type_price', 'overridden_price',),)
+
+    def product_type_price(self, instance):
+        return instance.product_type.price_final
 
     list_display = ['image', 'product_type', 'product_type_order']
 
