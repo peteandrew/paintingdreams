@@ -281,6 +281,7 @@ class Product(models.Model):
     product_type_order = models.IntegerField(default=0)
     temporarily_unavailable = models.BooleanField(default=False)
     overridden_price = models.DecimalField(blank=True, max_digits=6, decimal_places=2, default=0)
+    show_old_price = models.BooleanField(default=True)
 
     class Meta:
         unique_together = ("image", "product_type")
