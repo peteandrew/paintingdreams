@@ -3,7 +3,7 @@ django-carton==1.2.1
 django-countries==4.0
 django-crispy-forms==1.6.1
 django-paypal==0.3.3
-djangorestframework==3.5.3
+djangorestframework==3.9.1
 gunicorn==19.9.0
 olefile==0.44
 Pillow==6.2.1
