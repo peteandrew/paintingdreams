@@ -1,4 +1,4 @@
-Django==1.10.5
+Django==1.11.23
 django-carton==1.2.1
 django-countries==4.0
 django-crispy-forms==1.6.1
