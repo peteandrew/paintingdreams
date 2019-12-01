@@ -25,11 +25,6 @@ class ProductTypeFinalAttributesTestCase(TestCase):
             title="Product Type 3",
             parent=self.product_type_1)
 
-        self.product_type_4 = ProductType.objects.create(
-            slug="producttype4",
-            title="Product Type 4",
-            parent=self.product_type_2)
-
 
     def test_get_final_displayname(self):
         """If displayname is set and inherit_displayname is not set then displayname should
@@ -71,4 +66,4 @@ class ProductTypeFinalAttributesTestCase(TestCase):
 
         """If inherit_shipping_weight and parent are set then parent's final shipping_weight
         should be returned"""
-        self.assertEqual(self.product_type_4.shipping_weight_final, 100)
+        self.assertEqual(self.product_type_2.shipping_weight_final, 100)

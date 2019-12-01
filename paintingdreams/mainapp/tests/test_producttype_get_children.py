@@ -25,5 +25,8 @@ class ProductTypeChildrenTestCase(TestCase):
 
     def test_get_producttype_children(self):
         product_type_1_children = self.product_type_1.children()
-        self.assertEqual(len(product_type_1_children), 3)
-        
+        # There should be two first level children (product type 2 and 3)
+        self.assertEqual(len(product_type_1_children), 2)
+        # The first child (product type 2) should have one child (product type 4)
+        product_type_2_children = product_type_1_children[0]['children']
+        self.assertEqual(len(product_type_2_children), 1)

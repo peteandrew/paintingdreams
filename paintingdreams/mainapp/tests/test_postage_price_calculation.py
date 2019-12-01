@@ -15,13 +15,13 @@ class PostagePriceTestCase(TestCase):
 
         PostagePrice.objects.create(
             destination='GB',
-            min_weight=500,
+            min_weight=501,
             max_weight=1000,
             price=4)
 
         PostagePrice.objects.create(
             destination='GB',
-            min_weight=1000,
+            min_weight=1001,
             max_weight=3000,
             price=10)
 
@@ -31,12 +31,19 @@ class PostagePriceTestCase(TestCase):
 
 
     def test_get_postage_price_medium(self):
-        self.assertEqual(postage_prices.calculate('GB', 500), 4)
+        self.assertEqual(postage_prices.calculate('GB', 501), 4)
 
 
     def test_get_postage_price_large(self):
-        self.assertEqual(postage_prices.calculate('GB', 2999), 10)
+        self.assertEqual(postage_prices.calculate('GB', 3000), 10)
 
 
     def test_get_postage_price_greater_than_large(self):
-        self.assertIsNone(postage_prices.calculate('GB', 3000))
+        self.assertIsNone(postage_prices.calculate('GB', 3001))
+
+    def test_get_postage_price_large_no_max_weight(self):
+        PostagePrice.objects.create(
+            destination='GB',
+            min_weight=3001,
+            price=20)
+        self.assertEqual(postage_prices.calculate('GB', 3001), 20)
