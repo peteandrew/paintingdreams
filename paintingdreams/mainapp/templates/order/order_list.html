@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block css %}
+<style>
+.orders-list {
+  background-color: rgba(255,255,255,0.8);
+  color: rgb(50,50,50);
+  width: 100%;
+}
+.order-details {
+  padding: 15px;
+}
+.order-details:nth-child(even) {
+  background-color: rgba(0,0,0,0.3);
+}
+td {
+  padding-right: 15px;
+}
+</style>
+{% endblock %}
+
+{% block mainnav %}
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container ontop">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="/"><img src="/static/logo.svg"><span class="brand-text">Painting Dreams</span></a>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+<h1>Recent Orders</h1>
+
+<div class="orders-list">
+  {% for order in orders %}
+    <div class="order-details">
+      <p>{{ order.updated }}</p>
+      <p>Order ID: {{ order.unique_id }}</p>
+      <p>Transaction ID: {{ order.last_transaction.unique_id }}</p>
+      <p>{{ order.customer_name }}</p>
+      <p>{{ order.customer_email }}</p>
+      <p>{{ order.billing_address }}</p>
+      {% if order.shipping_address %}<p>{{ order.shipping_address }}</p>{% endif %}
+      <table>
+        {% for item in order.orderline_set.all %}
+        <tr>
+          <td>{{ item.quantity}}</td>
+          <td>{{ item.title }}</td>
+          <td>&pound;{{ item.line_price|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td colspan="3">Sub total: &pound;{{ order.sub_total_price|floatformat:2 }}</td>
+        <tr>
+        <tr>
+          <td colspan="3">Postage: &pound;{{ order.postage_price|floatformat:2 }}</td>
+        </tr>
+        <tr>
+          <td colspan="3">Total: &pound;{{ order.total_price|floatformat:2 }}</td>
+        </tr>
+      </table>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

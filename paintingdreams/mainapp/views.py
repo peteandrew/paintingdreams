@@ -2,6 +2,8 @@ import os
 import json
 import requests
 
+from datetime import datetime, timedelta, timezone
+
 from uuid import uuid4
 
 from PIL import Image as PILImage, ImageDraw, ImageFont
@@ -13,6 +15,7 @@ from django.http import HttpResponse, HttpResponseForbidden, JsonResponse, Http4
 from django.conf import settings
 from django.dispatch import receiver
 from django.core.mail import send_mail
+from django.contrib.admin.views.decorators import staff_member_required
 
 import logging
 
@@ -442,6 +445,18 @@ def order_transaction_complete(request):
     }
 
     return render(request, 'order/complete.html', ctx)
+
+
+@staff_member_required
+def orders_list(request):
+    from_dt = datetime.now(tz=timezone.utc) - timedelta(days=30)
+    orders = Order.objects.filter(state='paid').filter(updated__gte=from_dt).order_by('-updated')
+
+    ctx = {
+        'orders': orders
+    }
+
+    return render(request, 'order/order_list.html', ctx)
 
 
 @receiver(valid_ipn_received)

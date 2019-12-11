@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^order-start$', views.order_start),
     url(r'^order-payment$', views.order_payment),
     url(r'^order-complete$', views.order_transaction_complete, name='order-transaction-complete'),
+    url(r'^orders-list$', views.orders_list),
     url(r'^paypal-cancel$', views.paypal_cancel, name='paypal-cancel'),
     url(r'^paypal-ipn', include('paypal.standard.ipn.urls')),
     url(r'^cardsave-result', include('cardsave.urls')),
