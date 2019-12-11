@@ -449,7 +449,7 @@ def order_transaction_complete(request):
 
 @staff_member_required
 def orders_list(request):
-    from_dt = datetime.now(tz=timezone.utc) - timedelta(days=30)
+    from_dt = datetime.now(tz=timezone.utc) - timedelta(days=7)
     orders = Order.objects.filter(state='paid').filter(updated__gte=from_dt).order_by('-updated')
 
     ctx = {
