@@ -13,7 +13,14 @@
 .order-details:nth-child(even) {
   background-color: rgba(0,0,0,0.3);
 }
-td {
+.detail {
+  font-weight: bold;
+}
+.order-details table {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+.order-details td {
   padding-right: 15px;
 }
 </style>
@@ -35,31 +42,24 @@ td {
 <div class="orders-list">
   {% for order in orders %}
     <div class="order-details">
-      <p>{{ order.updated }}</p>
-      <p>Order ID: {{ order.unique_id }}</p>
-      <p>Transaction ID: {{ order.last_transaction.unique_id }}</p>
-      <p>{{ order.customer_name }}</p>
-      <p>{{ order.customer_email }}</p>
-      <p>{{ order.billing_address }}</p>
-      {% if order.shipping_address %}<p>{{ order.shipping_address }}</p>{% endif %}
+      <p class="detail">{{ order.updated }}</p>
+      <p>Order ID: <span class="detail">{{ order.unique_id }}</span></p>
+      <p>Payment processor: <span class="detail">{{ order.last_transaction.payment_processor }}</span><br />Transaction ID: <span class="detail">{{ order.last_transaction.unique_id }}</span></p>
+      <p>Customer: <span class="detail">{{ order.customer_name }}</span> - <span class="detail">{{ order.customer_email }}</span></p>
+      <p>Billing address: <span class="detail">{{ order.billing_address }}</span></p>
+      {% if order.shipping_address %}<p>Shipping address: <span class="detail">{{ order.shipping_address }}</span></p>{% endif %}
       <table>
         {% for item in order.orderline_set.all %}
         <tr>
-          <td>{{ item.quantity}}</td>
-          <td>{{ item.title }}</td>
+          <td><span class="detail">{{ item.quantity}} x </span></td>
+          <td><span class="detail">{{ item.title }}</span></td>
           <td>&pound;{{ item.line_price|floatformat:2 }}</td>
         </tr>
         {% endfor %}
-        <tr>
-          <td colspan="3">Sub total: &pound;{{ order.sub_total_price|floatformat:2 }}</td>
-        <tr>
-        <tr>
-          <td colspan="3">Postage: &pound;{{ order.postage_price|floatformat:2 }}</td>
-        </tr>
-        <tr>
-          <td colspan="3">Total: &pound;{{ order.total_price|floatformat:2 }}</td>
-        </tr>
       </table>
+      <p>Sub total: &pound;{{ order.sub_total_price|floatformat:2 }}</p>
+      <p>Postage: <span class="detail">&pound;{{ order.postage_price|floatformat:2 }}</span></p>
+      <p>Total: <span class="detail">&pound;{{ order.total_price|floatformat:2 }}</span></p>
     </div>
   {% endfor %}
 </div>

@@ -450,7 +450,15 @@ def order_transaction_complete(request):
 @staff_member_required
 def orders_list(request):
     from_dt = datetime.now(tz=timezone.utc) - timedelta(days=7)
-    orders = Order.objects.filter(state='paid').filter(updated__gte=from_dt).order_by('-updated')
+    orders = (
+        Order.objects.filter(state='paid')
+        .filter(updated__gte=from_dt)
+        .select_related('billing_address')
+        .select_related('shipping_address')
+        .prefetch_related('ordertransaction_set')
+        .prefetch_related('orderline_set')
+        .order_by('-updated')
+    )
 
     ctx = {
         'orders': orders
