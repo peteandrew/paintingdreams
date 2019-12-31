@@ -6,7 +6,7 @@ Order ID: {{ order.unique_id }}
 Transaction ID: {{ order.last_transaction.unique_id }}
 Payment processor: {{ order.last_transaction.payment_processor }}
 
-{% for item in order.orderline_set.all %}{{ item.quantity}} x £{{ item.title }} - £{{ item.line_price|floatformat:2 }}
+{% for item in order.orderline_set.all %}{{ item.quantity}} x {{ item.title }} - £{{ item.line_price|floatformat:2 }}
 {% endfor %}
 Sub total: £{{ order.sub_total_price|floatformat:2 }}
 Postage: £{{ order.postage_price|floatformat:2 }}

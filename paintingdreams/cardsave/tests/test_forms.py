@@ -41,7 +41,7 @@ class CardsavePaymentFormTestCase(TestCase):
             in CardsavePaymentForm. All others are added by the Form super class. We only check that these
             exist. """
         self.assertTrue(form_html.startswith('<form method="post" action="' + settings.CARDSAVE_REQUEST_URL + '">'))
-        self.assertIn('<input id="id_HashDigest" name="HashDigest" type="hidden" value="' + testhashdigest + '" />', form_html)
+        self.assertIn('<input type="hidden" name="HashDigest" value="' + testhashdigest + '" id="id_HashDigest" />', form_html)
         self.assertIn('name="MerchantID"', form_html)
         self.assertIn('name="Amount"', form_html)
         self.assertIn('name="CurrencyCode"', form_html)

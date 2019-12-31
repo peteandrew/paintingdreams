@@ -51,7 +51,13 @@ logger = logging.getLogger('django')
 
 def home(request):
     homepage_images = HomePageWebimage.objects.filter(enabled=True).order_by('order')
-    homepage_products = Product.objects.filter(tags__slug__exact='home').order_by('-updated')
+    homepage_products = Product.objects.filter(
+        tags__slug__exact='home'
+    ).filter(
+        sold_out=False
+    ).filter(
+        temporarily_unavailable=False
+    ).order_by('-updated')
     context = {'homepage_images': homepage_images, 'homepage_products': homepage_products}
     return render(request, 'home.html', context)
 
@@ -201,8 +207,7 @@ def product_detail(request, slug):
 
 
 def search(request):
-    api_request = APIRequest(request)
-    response = api_search(api_request)
+    response = api_search(request)
 
     ctx = response.data
     ctx['query'] = request.GET.get('query', '')
@@ -700,12 +705,16 @@ class OrderTransactionListView(APIView):
 
 
 def add_product_match(query, product, product_exact_match, product_matches):
+    # Skip any products without webimages
+    if product.webimages.count() == 0:
+        return product_exact_match, product_matches
+
     product_match = {
         'title': product.displayname,
+        'thumbnail': product.webimages.first().filename(),
         'slug': ''
     }
-    if len(product.webimages.all()) > 0:
-        product_match['thumbnail'] = product.webimages.first().filename()
+
     if product.image:
         product_match['slug'] = product.image.slug + '__' + product.product_type.slug
     else:
@@ -721,6 +730,10 @@ def add_product_match(query, product, product_exact_match, product_matches):
 
 
 def add_image_match(query, image, image_exact_match, image_matches):
+    # Skip any images without webimages
+    if image.webimages.count() == 0:
+        return image_exact_match, image_matches
+
     image_match = {
         'title': str(image),
         'thumbnail': image.webimages.first().filename(),
@@ -748,6 +761,8 @@ def api_search(request):
         return APIResponse({"error": "Query too short"})
 
     query_words = query.split(' ')
+    # Remove any empty words
+    query_words = [word for word in query_words if len(word) > 0]
 
     products_word_matches = {}
     for product in Product.objects.all():
@@ -781,8 +796,6 @@ def api_search(request):
         for product in products_word_matches[key]:
             product_exact_match, product_matches = add_product_match(query, product, product_exact_match, product_matches)
 
-
-    query_words = query.split(' ')
     remove_words = []
     images = Image.objects
     for word in query_words:
