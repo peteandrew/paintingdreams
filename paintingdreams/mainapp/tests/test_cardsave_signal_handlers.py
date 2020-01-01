@@ -5,14 +5,12 @@ from unittest import mock
 from django.test import TestCase, override_settings
 from django.core import mail
 
-import mainapp.views
 from mainapp.models import Order, OrderLine, OrderTransaction, OrderAddress
 from cardsave.signals import payment_successful, payment_unsuccessful
 
 
 @override_settings(ADMINS=[])
 class PaymentHandlerTest(TestCase):
-
 
     def setUp(self):
         customer_address = OrderAddress.objects.create(

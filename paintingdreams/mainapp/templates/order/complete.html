@@ -29,7 +29,10 @@
     <h1>Order payment failed</h1>
     <div class="info-text">
       <p>Thank you for placing an order on Painting Dreams. <span class="text-danger"><strong>Unfortunately payment has failed.</strong></span></p>
-      {% if order.last_transaction.message %}<p>The reason given by the payment processor was: <span class="text-danger"><strong>{{ order.last_transaction.message }}</strong></span></p>{% endif %}
+      {% if order.last_transaction.message %}
+        <p>The reason given by the payment processor was: <span class="text-danger"><strong>{{ order.last_transaction.message }}.</strong></span>
+        <br />{{ order.last_transaction.message_info }}</p>
+      {% endif %}
       <p>If you believe that your payment did complete successfully, please email info@paintingdreams.co.uk quoting your order number.</p>
       <p>Your order number is: <span class="text-warning"><strong>{{ order.unique_id }}</strong></span></p>
       <p>You may choose to re-attempt payment by visiting the <a href="/order-payment">payment selection page</a></p>

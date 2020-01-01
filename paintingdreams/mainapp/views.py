@@ -472,6 +472,29 @@ def orders_list(request):
     return render(request, 'order/order_list.html', ctx)
 
 
+def _handle_order_transaction_success(transaction):
+    # Update transaction state
+    transaction.state = 'complete'
+    transaction.save()
+
+    # Update order state
+    transaction.order.state = 'paid'
+    transaction.order.save()
+
+    # Send emails
+    send_order_complete_email(transaction.order)
+
+
+def _handle_order_transaction_failed(transaction, message):
+    # Update order transaction state
+    transaction.state = 'failed'
+    transaction.message = message
+    transaction.save()
+
+    # Send emails
+    send_payment_failed_email(transaction.order)
+
+
 @receiver(valid_ipn_received)
 def paypal_ipn_handler(sender, **kwargs):
     logger.debug(sender.__dict__)
@@ -496,16 +519,7 @@ def paypal_ipn_handler(sender, **kwargs):
     #    logger.debug(sender.__dict__)
     #    return
 
-    # Update transaction state
-    transaction.state = 'complete'
-    transaction.save()
-
-    # Update order state
-    transaction.order.state = 'paid'
-    transaction.order.save()
-
-    # Send emails
-    send_order_complete_email(transaction.order)
+    _handle_order_transaction_success(transaction)
 
 
 @csrf_exempt
@@ -523,15 +537,7 @@ def cardsave_payment_successful_handler(sender, **kwargs):
         # This shouldn't happen as transaction is checked in Cardsave callback. Fail.
         return
 
-    # Update order transaction state
-    transaction.state = 'complete'
-    transaction.save()
-    # Update order state
-    transaction.order.state = 'paid'
-    transaction.order.save()
-
-    # Send emails
-    send_order_complete_email(transaction.order)
+    _handle_order_transaction_success(transaction)
 
 
 @receiver(cardsave.signals.payment_unsuccessful)
@@ -544,13 +550,7 @@ def cardsave_payment_unsuccessful_handler(sender, **kwargs):
         # This shouldn't happen as transaction is checked in Cardsave callback. Fail.
         return
 
-    # Update order transaction state
-    transaction.state = 'failed'
-    transaction.message = sender.message
-    transaction.save()
-
-    # Send emails
-    send_payment_failed_email(transaction.order)
+    _handle_order_transaction_failed(transaction, sender.message)
 
 
 class ImageListView(generics.ListAPIView):

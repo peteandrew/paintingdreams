@@ -2,7 +2,10 @@ Thank you for placing an order on Painting Dreams.
 
 *Unfortunately payment for your order has failed.*
 
-{% if order.last_transaction.message %}The reason given by the payment processor was: *{{ order.last_transaction.message }}*{% endif %}
+{% if order.last_transaction.message %}
+The reason given by the payment processor was: *{{ order.last_transaction.message }}*.
+{{ order.last_transaction.message_info }}
+{% endif %}
 
 You may attempt payment again by following this link:
 {{ site_base_url }}/order-payment

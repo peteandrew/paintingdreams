@@ -447,6 +447,13 @@ class OrderTransaction(models.Model):
     def total_price(self):
         return self.order.total_price
 
+    @property
+    def message_info(self):
+        if self.payment_processor == 'cardsave' and self.message == 'Card declined: AVS policy':
+            return "This means that the billing address you entered doesn't match the address your card issuer has on file. Please double check your billing address and try again."
+        else:
+            return ''
+
 
 class PostagePrice(models.Model):
     DESTINATION_CHOICES = (
