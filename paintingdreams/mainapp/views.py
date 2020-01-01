@@ -230,7 +230,11 @@ def basket_add(request):
 def basket_change_quantity(request):
     product = Product.objects.get(pk=request.POST['product_id'])
     cart = Cart(request.session)
-    cart.set_quantity(product, quantity=request.POST['quantity'])
+    try:
+        quantity = int(request.POST['quantity'])
+    except ValueError:
+        quantity = 0
+    cart.set_quantity(product, quantity=quantity)
 
     if request.is_ajax():
         return HttpResponse()
