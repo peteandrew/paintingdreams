@@ -280,6 +280,7 @@ class Product(models.Model):
     tags = models.ManyToManyField('ProductTag', default=None, blank=True)
     product_type_order = models.IntegerField(default=0)
     temporarily_unavailable = models.BooleanField(default=False)
+    stock_count = models.PositiveIntegerField(default=0)
 
     class Meta:
         unique_together = ("image", "product_type")

@@ -8,6 +8,8 @@ from uuid import uuid4
 
 from PIL import Image as PILImage, ImageDraw, ImageFont
 
+from django.db.models import F
+from django.db import IntegrityError, transaction
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -476,17 +478,36 @@ def orders_list(request):
     return render(request, 'order/order_list.html', ctx)
 
 
-def _handle_order_transaction_success(transaction):
+def _handle_order_transaction_success(order_transaction):
     # Update transaction state
-    transaction.state = 'complete'
-    transaction.save()
+    order_transaction.state = 'complete'
+    order_transaction.save()
 
     # Update order state
-    transaction.order.state = 'paid'
-    transaction.order.save()
+    order_transaction.order.state = 'paid'
+    order_transaction.order.save()
+
+    # Adjust product stock counts
+    for orderline in order_transaction.order.orderline_set.all():
+        # Skip any orderlines without products
+        if not orderline.product:
+            continue
+        orderline.product.stock_count = F('stock_count') - orderline.quantity
+        try:
+            with transaction.atomic():
+                orderline.product.save()
+        except IntegrityError:
+            with transaction.atomic():
+                orderline.product.stock_count = 0
+                orderline.product.save()
+        orderline.product.refresh_from_db()
+
+        # if orderline.product.stock_count == 0:
+        #     orderline.product.sold_out = True
+        #     orderline.product.save()
 
     # Send emails
-    send_order_complete_email(transaction.order)
+    send_order_complete_email(order_transaction.order)
 
 
 def _handle_order_transaction_failed(transaction, message):

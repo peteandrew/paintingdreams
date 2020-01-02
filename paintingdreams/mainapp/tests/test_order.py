@@ -3,7 +3,14 @@ import uuid
 from django.test import TestCase, override_settings
 from django.core import mail
 
-from mainapp.models import Order, OrderLine, OrderTransaction, OrderAddress
+from mainapp.models import (
+    ProductType,
+    Product,
+    Order,
+    OrderLine,
+    OrderTransaction,
+    OrderAddress,
+)
 from mainapp.views import _handle_order_transaction_success, _handle_order_transaction_failed
 
 
@@ -11,6 +18,16 @@ from mainapp.views import _handle_order_transaction_success, _handle_order_trans
 class OrderTestCase(TestCase):
 
     def setUp(self):
+        product_type = ProductType.objects.create(
+            slug = 'product-type1',
+            stand_alone = True,
+        )
+
+        self.product = Product.objects.create(
+            product_type = product_type,
+            stock_count = 1
+        )
+
         self.customer_address = OrderAddress.objects.create(
             address1 = 'Test address 1',
             post_code = 'TESTPSTCODE',
@@ -33,9 +50,19 @@ class OrderTestCase(TestCase):
         )
 
         self.orderline1 = OrderLine.objects.create(
+            product = self.product,
             title = 'test product',
             item_price = '12.50',
             item_weight = 100,
+            quantity = 1,
+            order = self.order
+        )
+
+        # Orderlines without products should be handled correctly
+        self.orderline2 = OrderLine.objects.create(
+            title = 'test product 2',
+            item_price = '5.50',
+            item_weight = 50,
             quantity = 1,
             order = self.order
         )
@@ -80,7 +107,8 @@ class OrderTestCase(TestCase):
             f'£{self.orderline1.item_price}'
         )
         self.assertIn(orderline_text, email_content)
-        self.assertIn(f'Sub total: £{self.orderline1.item_price}', email_content)
+        sub_total = float(self.orderline1.item_price) + float(self.orderline2.item_price)
+        self.assertIn(f'Sub total: £{sub_total}', email_content)
         self.assertIn(self.customer_name, email_content)
         self.assertIn(self.customer_email, email_content)
         self.assertIn(str(self.customer_address), email_content)
@@ -101,6 +129,10 @@ class OrderTestCase(TestCase):
         )
         self.assertIn(orderline_text, str(response.content))
 
+        # Test product stock count reduced
+        self.product.refresh_from_db()
+        self.assertEqual(self.product.stock_count, 0)
+
         # Test order complete email
         self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(mail.outbox[0].subject, 'Order received')
@@ -109,6 +141,13 @@ class OrderTestCase(TestCase):
         self.assertEqual(mail.outbox[1].subject, 'Painting Dreams Order')
         self._test_order_email_content(mail.outbox[1].body)
         self._test_order_email_content(mail.outbox[1].alternatives[0][0])
+
+        # Test that if we re-run the same transaction
+        # (where product.stock_count would be made negative)
+        # we don't get any errors
+        _handle_order_transaction_success(ot)
+        self.product.refresh_from_db()
+        self.assertEqual(self.product.stock_count, 0)
 
     def test_ordertransaction_cancelled(self):
         ot = OrderTransaction.objects.get(unique_id=self.transaction_id)
