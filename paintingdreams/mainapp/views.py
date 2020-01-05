@@ -459,6 +459,30 @@ def order_transaction_complete(request):
 
 
 @staff_member_required
+def product_stock_count_list(request):
+    if request.method == 'POST':
+        product = Product.objects.get(pk = request.POST.get('product_id'))
+        if 'stock_count' in request.POST:
+            product.stock_count = request.POST.get('stock_count')
+            product.save()
+        elif 'sold_out' in request.POST:
+            if request.POST.get('sold_out') == 'true':
+                product.sold_out = True
+            else:
+                product.sold_out = False
+            product.save()
+
+    products = Product.objects.exclude(hidden=True).all()
+    products = sorted(products, key=lambda prod: prod.displayname)
+
+    ctx = {
+        'products': products
+    }
+
+    return render(request, 'product/stock_count_list.html', ctx)
+
+
+@staff_member_required
 def orders_list(request):
     from_dt = datetime.now(tz=timezone.utc) - timedelta(days=7)
     orders = (

@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^terms-and-conditions$', views.terms_and_conditions),
     url(r'^mailinglist$', views.mailinglist_subscribe),
     url(r'^original_image/(.+)$', views.original_file_serve),
+    url(r'^product-stock-counts', views.product_stock_count_list),
 
     url(r'^api/images/$', views.ImageListView.as_view()),
     url(r'^api/orders/$', views.OrderListView.as_view()),
