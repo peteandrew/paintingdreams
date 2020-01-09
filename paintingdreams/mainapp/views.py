@@ -526,9 +526,10 @@ def _handle_order_transaction_success(order_transaction):
                 orderline.product.save()
         orderline.product.refresh_from_db()
 
-        # if orderline.product.stock_count == 0:
-        #     orderline.product.sold_out = True
-        #     orderline.product.save()
+        # Mark products with zero stock count as sold out
+        if orderline.product.stock_count == 0:
+            orderline.product.sold_out = True
+            orderline.product.save()
 
     # Send emails
     send_order_complete_email(order_transaction.order)

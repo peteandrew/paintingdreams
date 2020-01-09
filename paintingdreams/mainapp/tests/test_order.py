@@ -25,7 +25,7 @@ class OrderTestCase(TestCase):
 
         self.product = Product.objects.create(
             product_type = product_type,
-            stock_count = 1
+            stock_count = 3
         )
 
         self.customer_address = OrderAddress.objects.create(
@@ -54,7 +54,7 @@ class OrderTestCase(TestCase):
             title = 'test product',
             item_price = '12.50',
             item_weight = 100,
-            quantity = 1,
+            quantity = 2,
             order = self.order
         )
 
@@ -101,13 +101,14 @@ class OrderTestCase(TestCase):
 
     def _test_order_email_content(self, email_content):
         self.assertIn(f'Order ID: {self.order_id}', email_content)
+        orderline1_total = float(self.orderline1.item_price) * float(self.orderline1.quantity)
         orderline_text = (
             f'{self.orderline1.quantity} x '
             f'{self.orderline1.title} - '
-            f'£{self.orderline1.item_price}'
+            f'£{orderline1_total}'
         )
         self.assertIn(orderline_text, email_content)
-        sub_total = float(self.orderline1.item_price) + float(self.orderline2.item_price)
+        sub_total = float(orderline1_total) + float(self.orderline2.item_price)
         self.assertIn(f'Sub total: £{sub_total}', email_content)
         self.assertIn(self.customer_name, email_content)
         self.assertIn(self.customer_email, email_content)
@@ -122,16 +123,17 @@ class OrderTestCase(TestCase):
         self.assertIn('Order complete', str(response.content))
         self.assertIn(self.customer_name, str(response.content))
         self.assertIn(self.customer_email, str(response.content))
+        line_total = float(self.orderline1.item_price) * float(self.orderline1.quantity)
         orderline_text = (
             f'{self.orderline1.quantity} x '
             f'{self.orderline1.title} - '
-            f'&pound;{self.orderline1.item_price}'
+            f'&pound;{line_total}'
         )
         self.assertIn(orderline_text, str(response.content))
 
         # Test product stock count reduced
         self.product.refresh_from_db()
-        self.assertEqual(self.product.stock_count, 0)
+        self.assertEqual(self.product.stock_count, 1)
 
         # Test order complete email
         self.assertEqual(len(mail.outbox), 2)
@@ -148,6 +150,9 @@ class OrderTestCase(TestCase):
         _handle_order_transaction_success(ot)
         self.product.refresh_from_db()
         self.assertEqual(self.product.stock_count, 0)
+
+        # Check that product has been marked sold out
+        self.assertTrue(self.product.sold_out)
 
     def test_ordertransaction_cancelled(self):
         ot = OrderTransaction.objects.get(unique_id=self.transaction_id)
