@@ -285,6 +285,10 @@ class Product(models.Model):
     class Meta:
         unique_together = ("image", "product_type")
         ordering = ['product_type_order']
+        permissions = (
+            ("change_product_stock_count", "Can change product stock count"),
+        )
+
 
     def clean(self):
         if not self.image and not self.product_type.stand_alone:
@@ -375,6 +379,11 @@ class Order(models.Model):
     state = models.CharField(choices=STATE_CHOICES, max_length=18, default='notpaid')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        permissions = (
+            ("view_order", "Can view orders"),
+        )
 
     @property
     def current_transaction(self):

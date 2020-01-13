@@ -18,6 +18,7 @@ from django.conf import settings
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import permission_required
 
 import logging
 
@@ -458,7 +459,7 @@ def order_transaction_complete(request):
     return render(request, 'order/complete.html', ctx)
 
 
-@staff_member_required
+@permission_required('mainapp.change_product_stock_count', login_url='admin:login')
 def product_stock_count_list(request):
     if request.method == 'POST':
         product = Product.objects.get(pk = request.POST.get('product_id'))
@@ -482,7 +483,7 @@ def product_stock_count_list(request):
     return render(request, 'product/stock_count_list.html', ctx)
 
 
-@staff_member_required
+@permission_required('mainapp.view_order', login_url='admin:login')
 def orders_list(request):
     from_dt = datetime.now(tz=timezone.utc) - timedelta(days=7)
     orders = (
