@@ -13,6 +13,7 @@ from django.db import IntegrityError, transaction
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse, Http404, QueryDict
 from django.conf import settings
 from django.dispatch import receiver
@@ -40,7 +41,24 @@ from paypal.standard.ipn.signals import valid_ipn_received
 
 import cardsave.signals
 
-from mainapp.models import Image, ImageTag, Product, ProductType, ProductTag, Order, OrderAddress, OrderLine, OrderTransaction, ImageWebimage, Gallery, ImageGallery, HomePageWebimage, ProductTypeAdditionalProduct, ProductAdditionalProduct
+from mainapp.models import (
+    Image,
+    ImageTag,
+    Product,
+    ProductType,
+    ProductTag,
+    Order,
+    OrderAddress,
+    OrderLine,
+    OrderTransaction,
+    ImageWebimage,
+    Gallery,
+    ImageGallery,
+    HomePageWebimage,
+    ProductTypeAdditionalProduct,
+    ProductAdditionalProduct,
+    FestivalPage,
+)
 from mainapp.forms import OrderDetailsForm, MailingListSubscribeForm
 from mainapp.email import send_order_complete_email, send_payment_failed_email
 from mainapp import postage_prices
@@ -209,6 +227,14 @@ def product_detail(request, slug):
     return render(request, 'product/detail.html', context)
 
 
+def festival_page(request, slug):
+    page = get_object_or_404(FestivalPage, slug=slug)
+    products = page.products.prefetch_related('webimages').order_by('festivalpageproduct__order')
+
+    context = {'pagetitle': page.title, 'page': page, 'products': products}
+    return render(request, 'festival/detail.html', context)
+
+
 def search(request):
     response = api_search(request)
 
@@ -218,6 +244,7 @@ def search(request):
     return render(request, 'search.html', ctx)
 
 
+@require_POST
 def basket_add(request):
     product = Product.objects.get(pk=request.POST['product_id'])
     cart = Cart(request.session)

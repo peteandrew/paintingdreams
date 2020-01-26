@@ -1,0 +1,77 @@
+{% extends "mainapp_base.html" %}
+
+{% block css %}
+<style>
+h2 {
+  text-align: center;
+  font-family: parchment;
+  font-size: 3em;
+  color: #ddd;
+}
+.festival-dates {
+  text-align: center;
+  margin-bottom: 1.5em;
+  font-style: italic;
+  font-size: 1.3em;
+}
+.festival-details {
+  margin-bottom: 2em;
+  background-color: rgba(0,0,0,.2);
+  border: 2px solid rgba(255,255,255,.1);
+  border-radius: 4px;
+  padding: 3px 8px 0;
+}
+.passage {
+  margin: 1.5em 0;
+}
+.passage p {
+  font-style: italic;
+  margin-bottom: 0;
+}
+.passage .passage-title {
+  font-style: normal;
+  font-size: 1.3em;
+}
+.festival-details-webimages {
+  margin: 25px 0 35px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>{{ page.title }}</h1>
+<p class="festival-dates">{{ page.dates }}</p>
+<div class="info-text festival-details">
+  {{ page.details|safe }}
+  {% with webimage=page.webimages.first %}
+  <div class="festival-details-webimages">
+    <a href="/media/images/enlargement/{{ webimage.filename }}" data-lighter><img src="/media/images/enlargement/{{ webimage.filename }}" alt="{{ webimage.name }}" class="img-responsive center-block" width="650" /></a>
+  </div>
+  {% endwith %}
+</div>
+
+{% if products.count > 0 %}
+  <h2>Selection of {{ page.title }} products</h2>
+  <div class="row gallery">
+  {% for product in products %}
+    <div class="col-xs-6 col-md-3">
+    {% if product.image %}
+      <a class="thumbnail" href="{% url 'product_detail' product.image.slug %}__{{ product.product_type.slug }}">
+    {% else %}
+      <a class="thumbnail" href="{% url 'product_detail' product.product_type.slug %}">
+    {% endif %}
+        <div class="caption">
+          <p>
+            {% if product.image %}{{ product.image.title }} - {% endif %}
+            {{ product.product_type.displayname_final }}
+          </p>
+        </div>
+        {% with webimage=product.webimages.first %}
+        <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ webimage.filename }}" alt="{{ webimage.name }}" />
+        {% endwith %}
+      </a>
+    </div>
+  {% endfor %}
+  </div>
+{% endif %}
+{% endblock %}

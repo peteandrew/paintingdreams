@@ -284,7 +284,7 @@ class Product(models.Model):
 
     class Meta:
         unique_together = ("image", "product_type")
-        ordering = ['product_type_order']
+        ordering = ['image__title', 'product_type__title']
         permissions = (
             ("change_product_stock_count", "Can change product stock count"),
         )
@@ -497,3 +497,27 @@ class HolidayMessage(models.Model):
         ]
 
         ordering = ['-start', '-end']
+
+
+class FestivalPage(models.Model):
+    slug = models.CharField(max_length=30)
+    title = models.CharField(max_length=255)
+    dates = models.CharField(max_length=255, blank=True)
+    details = models.TextField(blank=True)
+    products = models.ManyToManyField('Product', through='FestivalPageProduct')
+
+    def __str__(self):
+        return self.title
+
+
+class FestivalPageWebimage(Webimage):
+    festival_page = models.ForeignKey('FestivalPage', related_name='webimages', on_delete=models.CASCADE)
+
+
+class FestivalPageProduct(models.Model):
+    festival_page = models.ForeignKey(FestivalPage, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['festival_page', 'order',]
