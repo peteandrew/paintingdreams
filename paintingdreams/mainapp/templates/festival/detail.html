@@ -33,7 +33,15 @@ h2 {
   font-size: 1.3em;
 }
 .festival-details-webimages {
-  margin: 25px 0 35px;
+  margin: 25px 0 30px;
+}
+@media (min-width: 1px) {
+  .enlargement-text {
+     display: block;
+  }
+}
+.info-text .enlargement-text {
+  font-size: 0.95em;
 }
 </style>
 {% endblock %}
@@ -45,7 +53,10 @@ h2 {
   {{ page.details|safe }}
   {% with webimage=page.webimages.first %}
   <div class="festival-details-webimages">
-    <a href="/media/images/enlargement/{{ webimage.filename }}" data-lighter><img src="/media/images/enlargement/{{ webimage.filename }}" alt="{{ webimage.name }}" class="img-responsive center-block" width="650" /></a>
+    <div>
+      <a href="/media/images/extra-large-no-watermark/{{ webimage.filename }}"><img src="/media/images/enlargement/{{ webimage.filename }}" alt="{{ webimage.name }}" class="img-responsive center-block" width="600" /></a>
+    </div>
+    <p class="enlargement-text"><i class="fa fa-search-plus" aria-hidden="true"></i> Click image for enlargement</p>
   </div>
   {% endwith %}
 </div>

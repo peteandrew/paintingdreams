@@ -73,10 +73,14 @@ class ImageResizer:
         image.paste(watermark_layer, (left,top), watermark_layer)
 
 
-    def resize(self):
+    def resize(self, optional_sizes=None):
         sizes = {}
 
         for img_type in settings.IMAGE_SIZES.keys():
+            if 'optional' in settings.IMAGE_SIZES[img_type] and settings.IMAGE_SIZES[img_type]['optional']:
+                if not optional_sizes or img_type not in optional_sizes:
+                    continue
+
             img_full_path = ImageResizer.build_full_path('original', self.image_filename)
             self.img_original = Image.open(img_full_path)
 

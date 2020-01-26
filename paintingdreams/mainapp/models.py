@@ -66,6 +66,7 @@ class Webimage(models.Model):
     name = models.CharField(max_length=100, blank=True)
     sizes = models.CharField(max_length=255, blank=True)
     order = models.PositiveSmallIntegerField(default=0, blank=True)
+    optional_sizes = None
 
     def __str__(self):
         return self.filename()
@@ -77,7 +78,7 @@ class Webimage(models.Model):
 
     def save(self, *args, **kwargs):
         super(Webimage, self).save(*args, **kwargs)
-        sizes = ImageResizer(self.filename()).resize()
+        sizes = ImageResizer(self.filename()).resize(self.optional_sizes)
         self.sizes = json.dumps(sizes)
         super(Webimage, self).save(*args, **kwargs)
 
@@ -512,6 +513,7 @@ class FestivalPage(models.Model):
 
 class FestivalPageWebimage(Webimage):
     festival_page = models.ForeignKey('FestivalPage', related_name='webimages', on_delete=models.CASCADE)
+    optional_sizes = ['extra-large-no-watermark']
 
 
 class FestivalPageProduct(models.Model):

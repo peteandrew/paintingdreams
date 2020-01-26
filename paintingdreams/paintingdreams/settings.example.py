@@ -186,6 +186,12 @@ IMAGE_SIZES = {
         'watermark': True,
         'watermark_base_size': 60
     },
+    'extra-large-no-watermark': {
+        'path': 'extra-large-no-watermark',
+        'longest_side': 1500,
+        'watermark': False,
+        'optional': True,
+    },
     'thumbnail': {
         'path': 'thumbnail',
         'longest_side': 150,
