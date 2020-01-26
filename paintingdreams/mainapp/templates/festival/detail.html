@@ -51,14 +51,16 @@ h2 {
 <p class="festival-dates">{{ page.dates }}</p>
 <div class="info-text festival-details">
   {{ page.details|safe }}
-  {% with webimage=page.webimages.first %}
-  <div class="festival-details-webimages">
-    <div>
-      <a href="/media/images/extra-large-no-watermark/{{ webimage.filename }}"><img src="/media/images/enlargement/{{ webimage.filename }}" alt="{{ webimage.name }}" class="img-responsive center-block" width="600" /></a>
+  {% if page.webimages.count > 0 %}
+    {% with webimage=page.webimages.first %}
+    <div class="festival-details-webimages">
+      <div>
+        <a href="/media/images/extra-large-no-watermark/{{ webimage.filename }}"><img src="/media/images/enlargement/{{ webimage.filename }}" alt="{{ webimage.name }}" class="img-responsive center-block" width="600" /></a>
+      </div>
+      <p class="enlargement-text"><i class="fa fa-search-plus" aria-hidden="true"></i> Click image for enlargement</p>
     </div>
-    <p class="enlargement-text"><i class="fa fa-search-plus" aria-hidden="true"></i> Click image for enlargement</p>
-  </div>
-  {% endwith %}
+    {% endwith %}
+  {% endif %}
 </div>
 
 {% if products.count > 0 %}
