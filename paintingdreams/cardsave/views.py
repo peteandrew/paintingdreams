@@ -1,6 +1,8 @@
 import time
 import datetime
 
+import logging
+
 from django.conf import settings
 from importlib import import_module
 from django.http import HttpResponse, QueryDict
@@ -12,6 +14,8 @@ from cardsave.models import PaymentResult
 from cardsave import cardsave_hash
 from cardsave.signals import payment_successful, payment_unsuccessful
 
+logger = logging.getLogger('django')
+
 
 def get_order_model():
     package, module = settings.CARDSAVE_ORDER_MODEL.rsplit('.', 1)
@@ -19,6 +23,7 @@ def get_order_model():
 
 
 def cardsave_response(status_code, message):
+    logger.debug(f'cardsave response, code: {status_code}, message: {message}')
     response = HttpResponse('StatusCode=' + str(status_code) + '&Message=' + message)
     return response
 
@@ -26,6 +31,8 @@ def cardsave_response(status_code, message):
 @require_POST
 @csrf_exempt
 def cardsave_result(request):
+    logger.debug(request.POST)
+
     form = CardsaveResultForm(request.POST)
 
     if not form.is_valid():
