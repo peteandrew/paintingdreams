@@ -2,6 +2,7 @@
 
 {% block content %}
 <h1>Order summary / payment</h1>
+{% if holiday_messages.website %}<p class="holiday-message">{{ holiday_messages.website|safe }}</p>{% endif %}
 <p>Order number: <span id="order-number">{{ order.unique_id }}</span></p>
 <div class="panel panel-default order-panel">
   <div class="panel-body">
