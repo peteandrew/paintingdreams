@@ -3,6 +3,7 @@
 {% block content %}
 <h1>Order summary / payment</h1>
 {% if holiday_messages.website %}<p class="holiday-message">{{ holiday_messages.website|safe }}</p>{% endif %}
+{% if international %}<p class="holiday-message">Please see the <a href="https://personal.help.royalmail.com/app/answers/detail/a_id/5317/~/international-incident-bulletin">Royal Mail site</a> for up-to-date international delivery information.</p>{% endif %}
 <p>Order number: <span id="order-number">{{ order.unique_id }}</span></p>
 <div class="panel panel-default order-panel">
   <div class="panel-body">

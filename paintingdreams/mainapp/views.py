@@ -423,8 +423,19 @@ def order_payment(request):
     except:
         return redirect('/')
 
+    if order.shipping_address:
+        country = order.shipping_address.country
+    else:
+        country = order.billing_address.country
+    classification = destination_classification.classify(country)
+    if classification in ('EUROPE', 'WORLD'):
+        international = True
+    else:
+        international = False
+
     ctx = {
-        'order': order
+        'order': order,
+        'international': international,
     }
 
     order_transaction_list_view = OrderTransactionListView()
