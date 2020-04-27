@@ -503,6 +503,7 @@ class HolidayMessage(models.Model):
 class FestivalPage(models.Model):
     slug = models.CharField(max_length=30)
     title = models.CharField(max_length=255)
+    short_title = models.CharField(max_length=50, blank=True)
     dates = models.CharField(max_length=255, blank=True)
     details = models.TextField(blank=True)
     products = models.ManyToManyField('Product', through='FestivalPageProduct')
