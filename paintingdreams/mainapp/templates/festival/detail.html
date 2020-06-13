@@ -40,8 +40,11 @@ h2 {
 .excerpt p {
   font-style: italic;
 }
-.festival-details-webimages {
-  margin: 25px 0 30px;
+.festival-details-webimage {
+  margin: 25px 0;
+}
+.festival-details-webimage img {
+  border: 1px solid rgba(255,255,255,.2);
 }
 @media (min-width: 1px) {
   .enlargement-text {
@@ -58,17 +61,7 @@ h2 {
 <h1>{{ page.title }}</h1>
 <p class="festival-dates">{{ page.dates }}</p>
 <div class="info-text festival-details">
-  {{ page.details|safe }}
-  {% if page.webimages.count > 0 %}
-    {% with webimage=page.webimages.first %}
-    <div class="festival-details-webimages">
-      <div>
-        <a href="/media/images/extra-large-no-watermark/{{ webimage.filename }}"><img src="/media/images/enlargement/{{ webimage.filename }}" alt="{{ webimage.name }}" class="img-responsive center-block" width="600" /></a>
-      </div>
-      <p class="enlargement-text"><i class="fa fa-search-plus" aria-hidden="true"></i> Click image for enlargement</p>
-    </div>
-    {% endwith %}
-  {% endif %}
+  {{ page_content|safe }}
 </div>
 
 {% if products.count > 0 %}

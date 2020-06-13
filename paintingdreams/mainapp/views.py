@@ -1,5 +1,7 @@
 import os
 import json
+import re
+
 import requests
 
 from datetime import datetime, timedelta, timezone
@@ -229,9 +231,43 @@ def product_detail(request, slug):
 
 def festival_page(request, slug):
     page = get_object_or_404(FestivalPage, slug=slug)
+    page_content = page.details
+    images = page.webimages.order_by('order').all()
+
+    # group 0: entire placeholder
+    # group 1: image index
+    # group 2: size attribute
+    # group 3: size
+    image_placeholders = re.findall(r'(<div id="img(\d*)"( size="(\d*)")?></div>)', page_content)
+    for placeholder_details in image_placeholders:
+        image_idx = int(placeholder_details[1])
+        if image_idx >= len(images):
+            continue
+        image = images[image_idx]
+
+        if placeholder_details[3]:
+            image_size = placeholder_details[3]
+        else:
+            image_size = 600
+
+        page_content = page_content.replace(
+            placeholder_details[0],
+            (
+                '<div class="festival-details-webimage">'
+                f'<a href="/media/images/extra-large-no-watermark/{image.filename()}"><img src="/media/images/enlargement/{image.filename()}" alt="{image.name}" class="img-responsive center-block" width="{image_size}" /></a>'
+                '<p class="enlargement-text"><i class="fa fa-search-plus" aria-hidden="true"></i> Click image for enlargement</p>'
+                '</div>'
+            ),
+        )
+
     products = page.products.prefetch_related('webimages').order_by('festivalpageproduct__order')
 
-    context = {'pagetitle': page.title, 'page': page, 'products': products}
+    context = {
+        'pagetitle': page.title,
+        'page': page,
+        'page_content': page_content,
+        'products': products,
+    }
     return render(request, 'festival/detail.html', context)
 
 
