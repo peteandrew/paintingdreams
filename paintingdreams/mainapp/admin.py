@@ -68,6 +68,7 @@ class GalleryAdmin(admin.ModelAdmin):
 
 class ImageGalleryAdmin(admin.ModelAdmin):
     list_display = ['image', 'gallery', 'order']
+    search_fields = ['image__title', 'gallery__name']
 
 
 class ProductTypeAdmin(admin.ModelAdmin):
