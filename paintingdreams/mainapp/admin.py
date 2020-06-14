@@ -72,6 +72,7 @@ class ImageGalleryAdmin(admin.ModelAdmin):
 
 class ProductTypeAdmin(admin.ModelAdmin):
     list_display = ['slug', 'title', 'parent', 'order']
+    search_fields = ['title']
 
 
 class HomePageWebimageAdmin(admin.ModelAdmin):
