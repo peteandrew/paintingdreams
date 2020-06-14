@@ -52,17 +52,19 @@ class ImageAdmin(admin.ModelAdmin):
     inlines = [ImageWebimageInline, ProductInline, ImageGalleryInline]
 
     list_display = ['slug', 'title']
+    search_fields = ['title']
 
 
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductWebimageInline, ProductAdditionalProductInline]
 
     list_display = ['image', 'product_type', 'product_type_order']
+    search_fields = ['image__title', 'product_type__title']
 
 
 class GalleryAdmin(admin.ModelAdmin):
     list_display = ['slug', 'name', 'parent', 'order']
-
+ 
 
 class ImageGalleryAdmin(admin.ModelAdmin):
     list_display = ['image', 'gallery', 'order']

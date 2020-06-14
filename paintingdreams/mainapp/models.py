@@ -220,6 +220,7 @@ class Gallery(models.Model):
 
     class Meta:
         ordering = ['order',]
+        verbose_name_plural = 'Galleries'
 
     def __str__(self):
         return self.name
@@ -251,6 +252,7 @@ class ImageGallery(models.Model):
 
     class Meta:
         ordering = ['gallery', 'order',]
+        verbose_name_plural = 'Image galleries'
 
 
 class ProductTag(models.Model):
