@@ -472,7 +472,8 @@ class PostagePrice(models.Model):
     DESTINATION_CHOICES = (
         ('GB', 'United Kingdom'),
         ('EUROPE', 'Europe'),
-        ('WORLD', 'Worldwide')
+        ('WORLD', 'Worldwide'),
+        ('US', 'United States'),
     )
 
     destination = models.CharField(choices=DESTINATION_CHOICES, max_length=6)
