@@ -13,6 +13,7 @@ from mainapp.models import (
     HomePageWebimage,
     HolidayMessage,
     ProductTypeAdditionalProduct,
+    ProductTypeDestinationShippingWeightOverride,
     ProductAdditionalProduct,
     FestivalPage,
     FestivalPageWebimage,
@@ -71,7 +72,14 @@ class ImageGalleryAdmin(admin.ModelAdmin):
     search_fields = ['image__title', 'gallery__name']
 
 
+class ProductTypeDestinationShippingWeightOverrideInline(admin.TabularInline):
+    model = ProductTypeDestinationShippingWeightOverride
+    extra = 0
+
+
 class ProductTypeAdmin(admin.ModelAdmin):
+    inlines = [ProductTypeDestinationShippingWeightOverrideInline]
+
     list_display = ['slug', 'title', 'parent', 'order']
     search_fields = ['title']
 
@@ -88,6 +96,7 @@ class HolidayMessageAdmin(admin.ModelAdmin):
 
 class ProductTypeAdditionalProductAdmin(admin.ModelAdmin):
     list_display = ['product_type', 'product']
+
 
 
 class FestivalPageWebimageInline(admin.TabularInline):

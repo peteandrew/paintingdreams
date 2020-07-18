@@ -17,6 +17,14 @@ import logging
 logger = logging.getLogger('django')
 
 
+SHIPPING_DESTINATION_CHOICES = (
+    ('GB', 'United Kingdom'),
+    ('EUROPE', 'Europe'),
+    ('WORLD', 'Worldwide'),
+    ('US', 'United States'),
+)
+
+
 def get_webimage_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (uuid.uuid4(), ext)
@@ -191,22 +199,55 @@ class ProductType(models.Model):
         else:
             return self.price
 
-    @property
-    def shipping_weight_final(self):
+    def shipping_weight_final(self, destination=None):
         # Return inherited from type here
         if self.inherit_shipping_weight and self.parent:
-            return self.parent.shipping_weight_final
+            return self.parent.shipping_weight_final(destination)
         else:
-            return self.shipping_weight
+            # If ProductTypeDestinationShippingWeightOverride exists for destination,
+            # use that shipping_weight
+            # else use this ProductType shipping_weight
+            try:
+                shipping_weight_override = self.destination_shipping_weight_overrides.get(
+                    destination=destination,
+                )
+                return shipping_weight_override.shipping_weight
+            except ProductTypeDestinationShippingWeightOverride.DoesNotExist:
+                return self.shipping_weight
 
-    @property
-    def shipping_weight_multiple_final(self):
+    def shipping_weight_multiple_final(self, destination=None):
         if self.inherit_shipping_weight_multiple and self.parent:
-            return self.parent.shipping_weight_multiple_final
-        elif self.shipping_weight_multiple > 0:
-            return self.shipping_weight_multiple
+            return self.parent.shipping_weight_multiple_final(destination)
         else:
-            return self.shipping_weight_final
+            # If ProductTypeDestinationShippingWeightOverride exists for destination,
+            # use that shipping_weight_multiple
+            # else use this ProductType shipping_weight_multiple if it exists
+            # else fallback to shipping_weight_final
+            try:
+                shipping_weight_override = self.destination_shipping_weight_overrides.get(
+                    destination=destination,
+                )
+                return shipping_weight_override.shipping_weight_multiple
+            except ProductTypeDestinationShippingWeightOverride.DoesNotExist:
+                if self.shipping_weight_multiple > 0:
+                    return self.shipping_weight_multiple
+                else:
+                    return self.shipping_weight_final(destination)
+
+
+class ProductTypeDestinationShippingWeightOverride(models.Model):
+    product_type = models.ForeignKey(
+        ProductType,
+        on_delete=models.CASCADE,
+        related_name='destination_shipping_weight_overrides',
+    )
+    destination = models.CharField(choices=SHIPPING_DESTINATION_CHOICES, max_length=6)
+    shipping_weight = models.IntegerField(default=0)
+    shipping_weight_multiple = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ['product_type', 'destination']
+        verbose_name = 'destination shipping weight override'
 
 
 class Gallery(models.Model):
@@ -469,14 +510,7 @@ class OrderTransaction(models.Model):
 
 
 class PostagePrice(models.Model):
-    DESTINATION_CHOICES = (
-        ('GB', 'United Kingdom'),
-        ('EUROPE', 'Europe'),
-        ('WORLD', 'Worldwide'),
-        ('US', 'United States'),
-    )
-
-    destination = models.CharField(choices=DESTINATION_CHOICES, max_length=6)
+    destination = models.CharField(choices=SHIPPING_DESTINATION_CHOICES, max_length=6)
     min_weight = models.PositiveSmallIntegerField(default=0)
     max_weight = models.PositiveSmallIntegerField(blank=True, null=True)
     price = models.DecimalField(max_digits=6, decimal_places=2, default=0)

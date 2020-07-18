@@ -328,9 +328,9 @@ def calc_postage(destination, items):
     weight = 0
     for item in items:
         if item.quantity > 1:
-            item_weight = item.product.product_type.shipping_weight_multiple_final
+            item_weight = item.product.product_type.shipping_weight_multiple_final(destination)
         else:
-            item_weight = item.product.product_type.shipping_weight_final
+            item_weight = item.product.product_type.shipping_weight_final(destination)
 
         weight += item.quantity * item_weight
 
@@ -734,7 +734,7 @@ class OrderListView(generics.ListCreateAPIView):
                 "product": cart_item.product.id,
                 "title": cart_item.product.displayname,
                 "item_price": cart_item.product.product_type.price_final,
-                "item_weight": cart_item.product.product_type.shipping_weight_final,
+                "item_weight": cart_item.product.product_type.shipping_weight_final(),
                 "quantity": cart_item.quantity
             })
 
