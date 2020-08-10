@@ -6,5 +6,7 @@ def classify(country_code):
         return 'GB'
     elif country_code in EUR_COUNTRY_CODES:
         return 'EUROPE'
+    elif country_code == 'US':
+        return 'US'
     else:
         return 'WORLD'

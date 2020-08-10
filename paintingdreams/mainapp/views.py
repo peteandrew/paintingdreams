@@ -311,7 +311,7 @@ def basket_change_quantity(request):
 
 def basket_change_destination(request):
     destination = request.POST['destination']
-    if destination in ['GB','EUROPE','WORLD']:
+    if destination in ['GB', 'EUROPE', 'US', 'WORLD']:
         request.session['destination'] = destination
 
     return redirect('/basket')
