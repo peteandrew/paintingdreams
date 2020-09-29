@@ -60,6 +60,7 @@ from mainapp.models import (
     ProductTypeAdditionalProduct,
     ProductAdditionalProduct,
     FestivalPage,
+    DiscountCode,
 )
 from mainapp.forms import OrderDetailsForm, MailingListSubscribeForm
 from mainapp.email import send_order_complete_email, send_payment_failed_email
@@ -293,6 +294,7 @@ def basket_add(request):
         return redirect('/basket')
 
 
+@require_POST
 def basket_change_quantity(request):
     product = Product.objects.get(pk=request.POST['product_id'])
     cart = Cart(request.session)
@@ -309,10 +311,29 @@ def basket_change_quantity(request):
         return redirect('/basket')
 
 
+@require_POST
 def basket_change_destination(request):
     destination = request.POST['destination']
     if destination in ['GB', 'EUROPE', 'US', 'WORLD']:
         request.session['destination'] = destination
+
+    return redirect('/basket')
+
+
+@require_POST
+def apply_discount_code(request):
+    try:
+        code = DiscountCode.objects.get(code=request.POST['code'])
+    except DiscountCode.DoesNotExist:
+        code = None
+
+    if not code or not code.is_valid():
+        # TODO: add messsage that code does not exist
+        print("invalid")
+        return redirect('/basket')
+
+    request.session['discount_code'] = request.POST['code']
+    print(request.session['discount_code'])
 
     return redirect('/basket')
 

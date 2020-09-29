@@ -18,6 +18,8 @@ from mainapp.models import (
     FestivalPage,
     FestivalPageWebimage,
     FestivalPageProduct,
+    DiscountCode,
+    DiscountCodeProduct,
 )
 
 
@@ -98,17 +100,28 @@ class ProductTypeAdditionalProductAdmin(admin.ModelAdmin):
     list_display = ['product_type', 'product']
 
 
-
 class FestivalPageWebimageInline(admin.TabularInline):
     model = FestivalPageWebimage
     extra = 1
+
 
 class FestivalPageProductInline(admin.TabularInline):
     model = FestivalPageProduct
     extra = 1
 
+
 class FestivalPageAdmin(admin.ModelAdmin):
     inlines = [FestivalPageWebimageInline, FestivalPageProductInline]
+
+
+class DiscountCodeProductInline(admin.TabularInline):
+    model = DiscountCodeProduct
+    extra = 1
+
+
+class DiscountCodeAdmin(admin.ModelAdmin):
+    inlines = [DiscountCodeProductInline]
+    list_display = ['code']
 
 
 admin.site.register(Image, ImageAdmin)
@@ -120,4 +133,5 @@ admin.site.register(HomePageWebimage, HomePageWebimageAdmin)
 admin.site.register(HolidayMessage, HolidayMessageAdmin)
 admin.site.register(ProductTypeAdditionalProduct, ProductTypeAdditionalProductAdmin)
 admin.site.register(FestivalPage, FestivalPageAdmin)
+admin.site.register(DiscountCode, DiscountCodeAdmin)
 admin.site.register([ImageTag, ProductTag, PostagePrice])
