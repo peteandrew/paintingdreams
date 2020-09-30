@@ -22,7 +22,7 @@ ln -sf ../../../custom/bootstrap.less bootstrap.less
 ln -sf ../../../custom/paintingdreams.less paintingdreams.less
 
 cd ..
-grunt dist
+node_modules/grunt/bin/grunt dist
 
 ts=`date +%s`
 cd dist/css

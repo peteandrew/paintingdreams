@@ -49,6 +49,7 @@ class Order(models.Model):
     # may change and we don't want to affect historic orders
     postage_price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     state = models.CharField(choices=STATE_CHOICES, max_length=18, default='notpaid')
+    discount_code = models.CharField(max_length=50, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -88,12 +89,13 @@ class OrderLine(models.Model):
     # We store product title, price and weight here instead of just referring
     # to the product object as these values may change and we don't want to
     # affect historic orders
-    product = models.ForeignKey('Product', blank=True, null=True, on_delete=models.CASCADE)
+    product = models.ForeignKey('Product', blank=True, null=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=255)
     item_price = models.DecimalField(max_digits=6, decimal_places=2)
     item_weight = models.IntegerField()
     quantity = models.SmallIntegerField()
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    discounted = models.BooleanField(default=False)
 
     @property
     def line_price(self):

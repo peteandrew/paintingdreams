@@ -1,5 +1,6 @@
 <p>The following order has been placed</p>
 <p><strong>Order ID: {{ order.unique_id }}</strong><br />
+{% if order.discount_code %}Discount code: {{ order.discount_code }}<br />{% endif %}
 Transaction ID: {{ order.last_transaction.unique_id }}<br />
 Payment processor: {{ order.last_transaction.payment_processor }}</p>
 <p>

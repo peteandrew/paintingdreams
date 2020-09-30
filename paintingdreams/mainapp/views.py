@@ -20,6 +20,7 @@ from django.http import HttpResponse, HttpResponseForbidden, JsonResponse, Http4
 from django.conf import settings
 from django.dispatch import receiver
 from django.core.mail import send_mail
+from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import permission_required
 
@@ -35,14 +36,13 @@ from rest_framework.parsers import JSONParser, FormParser
 
 from itertools import chain
 
-from carton.cart import Cart
-
 from paypal.standard.forms import PayPalPaymentsForm
 from paypal.standard.models import ST_PP_COMPLETED
 from paypal.standard.ipn.signals import valid_ipn_received
 
 import cardsave.signals
 
+from mainapp.cart import Cart
 from mainapp.models import (
     Image,
     ImageTag,
@@ -328,12 +328,20 @@ def apply_discount_code(request):
         code = None
 
     if not code or not code.is_valid():
-        # TODO: add messsage that code does not exist
-        print("invalid")
+        messages.warning(request, 'Invalid discount code entered')
         return redirect('/basket')
 
+    cart = Cart(request.session)
+
+    for discounted_product in code.discountcodeproduct_set.all():
+        if discounted_product.product in cart:
+            cart.set_discounted_price(
+                discounted_product.product,
+                discounted_product.discounted_price,
+            )
+
     request.session['discount_code'] = request.POST['code']
-    print(request.session['discount_code'])
+    messages.success(request, 'Discount code applied')
 
     return redirect('/basket')
 
@@ -375,7 +383,8 @@ def basket_show(request):
         'weight': postage['weight'],
         'destination': request.session['destination'],
         'postage_price': postage['price'],
-        'order_total': order_total
+        'order_total': order_total,
+        'discount_code': request.session.get('discount_code', None)
     }
     return render(request, 'basket/index.html', context)
 
@@ -754,9 +763,10 @@ class OrderListView(generics.ListCreateAPIView):
             order_lines.append({
                 "product": cart_item.product.id,
                 "title": cart_item.product.displayname,
-                "item_price": cart_item.product.product_type.price_final,
+                "item_price": cart_item.price,
                 "item_weight": cart_item.product.product_type.shipping_weight_final(),
-                "quantity": cart_item.quantity
+                "quantity": cart_item.quantity,
+                "discounted": cart_item.discounted
             })
 
         # Need to allow for addresses as flat structure (as will be the case with form posted data)
@@ -779,6 +789,8 @@ class OrderListView(generics.ListCreateAPIView):
 
         data['order_lines'] = order_lines
         data['postage_price'] = postage['price']
+
+        data['discount_code'] = request.session.get('discount_code', None)
 
         serializer = OrderSerializer(data=data)
         if serializer.is_valid():
