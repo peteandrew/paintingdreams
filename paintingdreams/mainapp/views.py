@@ -285,6 +285,9 @@ def search(request):
 def basket_add(request):
     product = Product.objects.get(pk=request.POST['product_id'])
     cart = Cart(request.session)
+
+    # TODO: check whether discount code has been entered and whether
+    # this product should be discounted
     cart.add(product, price=product.product_type.price_final, quantity=request.POST['quantity'])
 
     if request.is_ajax():

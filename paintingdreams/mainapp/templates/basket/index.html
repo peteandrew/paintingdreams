@@ -50,6 +50,7 @@
     {% if discount_code %}
       <p>Discount code applied: <span>{{ discount_code }}</span></p>
     {% else %}
+      <h2>Discount code</h2>
       <form action="/apply-discount" method="POST" class="form-inline">
         {% csrf_token %}
         <input type="text" class="form-control" name="code" value="">
@@ -58,9 +59,9 @@
     {% endif %}
   </div>
   <div class="basket-postage-calc">
+    <h2>Destination</h2>
     <form action="/basket-change-destination" method="POST" class="form-inline">
       {% csrf_token %}
-      <span>Destination:</span>
       <select class="form-control" name="destination">
         <option value="GB" {% if destination == 'GB' %}selected{% endif %}>UK</option>
         <option value="EUROPE" {% if destination == 'EUROPE' %}selected{% endif %}>Mainland Europe</option>

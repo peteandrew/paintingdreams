@@ -1,3 +1,5 @@
+import pytz
+from datetime import datetime
 from django.db import models
 
 
@@ -8,7 +10,15 @@ class DiscountCode(models.Model):
     valid_until = models.DateTimeField(blank=True, null=True)
 
     def is_valid(self):
+        if self.disabled:
+            return False
+        now = datetime.now(pytz.utc)
+        if (self.valid_from and self.valid_from > now) or (self.valid_until and self.valid_until < now):
+            return False
         return True
+
+    def __str__(self):
+        return self.code
 
 
 class DiscountCodeProduct(models.Model):
