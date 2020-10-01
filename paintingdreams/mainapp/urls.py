@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^basket-change-quantity$', views.basket_change_quantity),
     url(r'^basket-change-destination$', views.basket_change_destination),
     url(r'^basket$', views.basket_show),
+    url(r'^apply-discount$', views.apply_discount_code),
     url(r'^order-start$', views.order_start),
     url(r'^order-payment$', views.order_payment),
     url(r'^order-complete$', views.order_transaction_complete, name='order-transaction-complete'),

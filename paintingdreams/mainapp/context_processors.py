@@ -1,4 +1,4 @@
-from carton.cart import Cart
+from mainapp.cart import Cart
 from mainapp.holiday_messages import messages
 
 import logging

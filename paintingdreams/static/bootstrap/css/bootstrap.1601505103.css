@@ -7146,6 +7146,19 @@ table.wholesale_subtotal td:nth-child(1) {
   margin-bottom: .5em;
   font-size: .9em;
 }
+.basket-discount-code {
+  margin-bottom: 1.5em;
+}
+.basket-postage-calc {
+  margin-bottom: 1.5em;
+}
+.basket .discount-original-price {
+  color: #555;
+}
+.basket .discount-label {
+  font-size: .9em;
+  color: #c7c725;
+}
 .panel {
   background-color: transparent;
 }
@@ -7466,5 +7479,13 @@ fieldset.order-mailinglist legend {
 }
 #search-box {
   clear: right;
+}
+.messages {
+  background-color: #ddd;
+}
+.messages p {
+  margin-bottom: 0;
+  font-size: 1.1em;
+  font-weight: bold;
 }
 /*# sourceMappingURL=bootstrap.css.map */

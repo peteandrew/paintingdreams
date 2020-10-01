@@ -20,6 +20,7 @@ from django.http import HttpResponse, HttpResponseForbidden, JsonResponse, Http4
 from django.conf import settings
 from django.dispatch import receiver
 from django.core.mail import send_mail
+from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import permission_required
 
@@ -35,14 +36,13 @@ from rest_framework.parsers import JSONParser, FormParser
 
 from itertools import chain
 
-from carton.cart import Cart
-
 from paypal.standard.forms import PayPalPaymentsForm
 from paypal.standard.models import ST_PP_COMPLETED
 from paypal.standard.ipn.signals import valid_ipn_received
 
 import cardsave.signals
 
+from mainapp.cart import Cart
 from mainapp.models import (
     Image,
     ImageTag,
@@ -60,6 +60,7 @@ from mainapp.models import (
     ProductTypeAdditionalProduct,
     ProductAdditionalProduct,
     FestivalPage,
+    DiscountCode,
 )
 from mainapp.forms import OrderDetailsForm, MailingListSubscribeForm
 from mainapp.email import send_order_complete_email, send_payment_failed_email
@@ -284,6 +285,9 @@ def search(request):
 def basket_add(request):
     product = Product.objects.get(pk=request.POST['product_id'])
     cart = Cart(request.session)
+
+    # TODO: check whether discount code has been entered and whether
+    # this product should be discounted
     cart.add(product, price=product.product_type.price_final, quantity=request.POST['quantity'])
 
     if request.is_ajax():
@@ -293,6 +297,7 @@ def basket_add(request):
         return redirect('/basket')
 
 
+@require_POST
 def basket_change_quantity(request):
     product = Product.objects.get(pk=request.POST['product_id'])
     cart = Cart(request.session)
@@ -309,10 +314,37 @@ def basket_change_quantity(request):
         return redirect('/basket')
 
 
+@require_POST
 def basket_change_destination(request):
     destination = request.POST['destination']
     if destination in ['GB', 'EUROPE', 'US', 'WORLD']:
         request.session['destination'] = destination
+
+    return redirect('/basket')
+
+
+@require_POST
+def apply_discount_code(request):
+    try:
+        code = DiscountCode.objects.get(code=request.POST['code'])
+    except DiscountCode.DoesNotExist:
+        code = None
+
+    if not code or not code.is_valid():
+        messages.warning(request, 'Invalid discount code entered')
+        return redirect('/basket')
+
+    cart = Cart(request.session)
+
+    for discounted_product in code.discountcodeproduct_set.all():
+        if discounted_product.product in cart:
+            cart.set_discounted_price(
+                discounted_product.product,
+                discounted_product.discounted_price,
+            )
+
+    request.session['discount_code'] = request.POST['code']
+    messages.success(request, 'Discount code applied')
 
     return redirect('/basket')
 
@@ -354,7 +386,8 @@ def basket_show(request):
         'weight': postage['weight'],
         'destination': request.session['destination'],
         'postage_price': postage['price'],
-        'order_total': order_total
+        'order_total': order_total,
+        'discount_code': request.session.get('discount_code', None)
     }
     return render(request, 'basket/index.html', context)
 
@@ -733,9 +766,10 @@ class OrderListView(generics.ListCreateAPIView):
             order_lines.append({
                 "product": cart_item.product.id,
                 "title": cart_item.product.displayname,
-                "item_price": cart_item.product.product_type.price_final,
+                "item_price": cart_item.price,
                 "item_weight": cart_item.product.product_type.shipping_weight_final(),
-                "quantity": cart_item.quantity
+                "quantity": cart_item.quantity,
+                "discounted": cart_item.discounted
             })
 
         # Need to allow for addresses as flat structure (as will be the case with form posted data)
@@ -758,6 +792,8 @@ class OrderListView(generics.ListCreateAPIView):
 
         data['order_lines'] = order_lines
         data['postage_price'] = postage['price']
+
+        data['discount_code'] = request.session.get('discount_code', None)
 
         serializer = OrderSerializer(data=data)
         if serializer.is_valid():

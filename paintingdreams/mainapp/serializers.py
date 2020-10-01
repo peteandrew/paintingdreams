@@ -22,7 +22,7 @@ class ImageSerializer(serializers.ModelSerializer):
 class OrderLineSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderLine
-        fields = ('product', 'title', 'item_price', 'item_weight', 'quantity', 'line_price', 'line_weight')
+        fields = ('product', 'title', 'item_price', 'item_weight', 'quantity', 'line_price', 'line_weight', 'discounted')
 
 
 class OrderAddressSerializer(serializers.ModelSerializer):
@@ -99,6 +99,7 @@ class OrderSerializer(serializers.ModelSerializer):
                     'total_price',
                     'order_transactions',
                     'state',
+                    'discount_code',
                     'created',
                     'updated')
 

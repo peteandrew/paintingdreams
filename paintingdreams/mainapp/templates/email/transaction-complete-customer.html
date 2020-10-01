@@ -1,6 +1,7 @@
 {% if holiday_message %}<p><strong>{{ holiday_message }}</strong></p>{% endif %}
 <p>Thank you for placing an order on Painting Dreams. The details of your order are below. Please contact info@paintingdreams.co.uk if any of these details are incorrect.</p>
 <p><strong>Order ID: {{ order.unique_id }}</strong><br />
+{% if order.discount_code %}Discount code: {{ order.discount_code }}<br />{% endif %}
 Transaction ID: {{ order.last_transaction.unique_id }}<br />
 Payment processor: {{ order.last_transaction.payment_processor }}</p>
 <p>

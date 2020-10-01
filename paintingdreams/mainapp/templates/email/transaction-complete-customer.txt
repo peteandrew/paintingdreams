@@ -3,6 +3,7 @@
 Thank you for placing an order on Painting Dreams. The details of your order are below. Please contact info@paintingdreams.co.uk if any of these details are incorrect.
 
 Order ID: {{ order.unique_id }}
+{% if order.discount_code %}Discount code: {{ order.discount_code }}{% endif %}
 Transaction ID: {{ order.last_transaction.unique_id }}
 Payment processor: {{ order.last_transaction.payment_processor }}
 

@@ -1,6 +1,7 @@
 The following order has been placed
 
 Order ID: {{ order.unique_id }}
+{% if order.discount_code %}Discount code: {{ order.discount_code }}{% endif %}
 Transaction ID: {{ order.last_transaction.unique_id }}
 Payment processor: {{ order.last_transaction.payment_processor }}
 
