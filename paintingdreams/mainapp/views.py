@@ -326,7 +326,7 @@ def basket_change_destination(request):
 @require_POST
 def apply_discount_code(request):
     try:
-        code = DiscountCode.objects.get(code=request.POST['code'])
+        code = DiscountCode.objects.get(code__iexact=request.POST['code'])
     except DiscountCode.DoesNotExist:
         code = None
 
