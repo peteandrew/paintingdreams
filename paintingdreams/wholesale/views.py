@@ -31,7 +31,7 @@ def get_categories_products(products_removed):
 def start(request, special_name):
     special = None
     products_removed = []
-    postage_option = 'std'
+    postage_option = 'none'
     product_errors = []
 
     if len(special_name) > 0:
@@ -201,7 +201,7 @@ def store_order(ctx):
 
 
 def build_order(request, special_name='', complete=False):
-    postage_option = 'std'
+    postage_option = 'none'
     special = None
 
     if len(special_name) > 0:
