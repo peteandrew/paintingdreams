@@ -16,5 +16,9 @@ class DestinationClassificationTestCase(TestCase):
 
 
     def test_classify_worldwide_destination(self):
-        self.assertEqual(destination_classification.classify('US'), 'WORLD')
         self.assertEqual(destination_classification.classify('AU'), 'WORLD')
+        self.assertEqual(destination_classification.classify('JP'), 'WORLD')
+
+
+    def test_classify_us_destination(self):
+        self.assertEqual(destination_classification.classify('US'), 'US')
