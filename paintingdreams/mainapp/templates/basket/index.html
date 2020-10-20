@@ -2,77 +2,81 @@
 
 {% block content %}
 <h1>Shopping Basket</h1>
-{% if holiday_messages.website %}<p class="holiday-message">{{ holiday_messages.website|safe }}</p>{% endif %}
-<table class="table basket">
-    <thead>
-        <tr>
-            <th colspan="2">Product</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Product total</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-{% for item in cart.items %}
-        <tr>
-            <td>
-              {% with webimage=item.product.webimages.first %}
-                <img src="/media/images/thumbnail/{{ webimage.filename }}" alt="{{ webimage.name }}" />
-              {% endwith %}
-            </td>
-            <td>{{ item.product.displayname }}{% if item.discounted %}<br /><span class="discount-label">discounted price</span>{% endif %}</td>
-            <td>{% if item.discounted %}<span class="discount-original-price">&pound;{{ item.original_price }}</span><br />{% endif %}&pound;{{ item.price }}</td>
-            <td>
-                <form action="/basket-change-quantity" method="POST" class="form-inline">
-                    {% csrf_token %}
-                    <input type="hidden" name="product_id" value="{{ item.product.id }}" />
-                    <input name="quantity" type="number" class="form-control" min="0" step="1" value="{{ item.quantity }}" />
-                    <button type="submit" class="btn btn-default">Update</button>
-                </form>
-            </td>
-            <td>&pound;{{ item.subtotal }}</td>
-            <td>
-                <form action="/basket-change-quantity" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="product_id" value="{{ item.product.id }}" />
-                    <input type="hidden" name="quantity" value="0" />
-                    <button type="submit" class="btn btn-default">Remove</button>
-                </form>
-            </td>
-        </tr>
-{% endfor %}
-    </tbody>
-</table>
-<div class="basket-subtotal">
-  <p>Subtotal: &pound;{{ cart.total }}</p>
-  <div class="basket-discount-code">
-    {% if discount_code %}
-      <p>Discount code applied: <span>{{ discount_code }}</span></p>
-    {% else %}
-      <h2>Discount code</h2>
-      <form action="/apply-discount" method="POST" class="form-inline">
-        {% csrf_token %}
-        <input type="text" class="form-control" name="code" value="">
-        <button type="submit" class="btn btn-default">Apply discount code</button>
-      </form>
-    {% endif %}
-  </div>
-  <div class="basket-postage-calc">
-    <h2>Destination</h2>
-    <form action="/basket-change-destination" method="POST" class="form-inline">
-      {% csrf_token %}
-      <select class="form-control" name="destination">
-        <option value="GB" {% if destination == 'GB' %}selected{% endif %}>UK</option>
-        <option value="EUROPE" {% if destination == 'EUROPE' %}selected{% endif %}>Mainland Europe</option>
-        <option value="US" {% if destination == 'US' %}selected{% endif %}>US</option>
-        <option value="WORLD" {% if destination == 'WORLD' %}selected{% endif %}>Worldwide</option>
-      </select>
-      <button type="submit" class="btn btn-default">Update</button>
-    </form>
-  </div>
-  <p>Postage: &pound;{{ postage_price }}</p>
-  <p>Total: &pound;{{ order_total }}</p>
-</div>
-<p><a href="/order-start" class="btn btn-primary btn-lg" role="button">Checkout</a></p>
+{% if not cart.items %}
+    <p class="page-top-message">Your basket is currently empty. Please add some items.</p>
+{% else %}
+    {% if holiday_messages.website %}<p class="holiday-message">{{ holiday_messages.website|safe }}</p>{% endif %}
+    <table class="table basket">
+        <thead>
+            <tr>
+                <th colspan="2">Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Product total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in cart.items %}
+            <tr>
+                <td>
+                  {% with webimage=item.product.webimages.first %}
+                      <img src="/media/images/thumbnail/{{ webimage.filename }}" alt="{{ webimage.name }}" />
+                  {% endwith %}
+                </td>
+                <td>{{ item.product.displayname }}{% if item.discounted %}<br /><span class="discount-label">discounted price</span>{% endif %}</td>
+                <td>{% if item.discounted %}<span class="discount-original-price">&pound;{{ item.original_price }}</span><br />{% endif %}&pound;{{ item.price }}</td>
+                <td>
+                    <form action="/basket-change-quantity" method="POST" class="form-inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ item.product.id }}" />
+                        <input name="quantity" type="number" class="form-control" min="0" step="1" value="{{ item.quantity }}" />
+                        <button type="submit" class="btn btn-default">Update</button>
+                    </form>
+                </td>
+                <td>&pound;{{ item.subtotal }}</td>
+                <td>
+                    <form action="/basket-change-quantity" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ item.product.id }}" />
+                        <input type="hidden" name="quantity" value="0" />
+                        <button type="submit" class="btn btn-default">Remove</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="basket-subtotal">
+        <p>Subtotal: &pound;{{ cart.total }}</p>
+        <div class="basket-discount-code">
+        {% if discount_code %}
+            <p>Discount code applied: <span>{{ discount_code }}</span></p>
+        {% else %}
+            <h2>Discount code</h2>
+            <form action="/apply-discount" method="POST" class="form-inline">
+                {% csrf_token %}
+                <input type="text" class="form-control" name="code" value="">
+                <button type="submit" class="btn btn-default">Apply discount code</button>
+            </form>
+        {% endif %}
+        </div>
+        <div class="basket-postage-calc">
+            <h2>Destination</h2>
+            <form action="/basket-change-destination" method="POST" class="form-inline">
+                {% csrf_token %}
+                <select class="form-control" name="destination">
+                    <option value="GB" {% if destination == 'GB' %}selected{% endif %}>UK</option>
+                    <option value="EUROPE" {% if destination == 'EUROPE' %}selected{% endif %}>Mainland Europe</option>
+                    <option value="US" {% if destination == 'US' %}selected{% endif %}>US</option>
+                    <option value="WORLD" {% if destination == 'WORLD' %}selected{% endif %}>Worldwide</option>
+                </select>
+                <button type="submit" class="btn btn-default">Update</button>
+            </form>
+        </div>
+        <p>Postage: &pound;{{ postage_price }}</p>
+        <p>Total: &pound;{{ order_total }}</p>
+    </div>
+    <p><a href="/order-start" class="btn btn-primary btn-lg" role="button">Checkout</a></p>
+{% endif %}
 {% endblock %}

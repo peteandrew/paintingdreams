@@ -284,11 +284,28 @@ def search(request):
 @require_POST
 def basket_add(request):
     product = Product.objects.get(pk=request.POST['product_id'])
+    price = product.product_type.price_final
+    discounted = False
     cart = Cart(request.session)
 
-    # TODO: check whether discount code has been entered and whether
-    # this product should be discounted
-    cart.add(product, price=product.product_type.price_final, quantity=request.POST['quantity'])
+    try:
+        code = DiscountCode.objects.get(code=request.session['discount_code'])
+        discounted_product = code.discountcodeproduct_set.get(product=product)
+        price = discounted_product.discounted_price
+        discounted = True
+    except KeyError:
+        # discount_code not set in session
+        pass
+    except DiscountCode.DoesNotExist:
+        pass
+
+    cart.add(
+        product,
+        price=price,
+        quantity=request.POST['quantity'],
+        discounted=discounted,
+        original_price=product.product_type.price_final,
+    )
 
     if request.is_ajax():
         return HttpResponse()
@@ -306,6 +323,13 @@ def basket_change_quantity(request):
     except ValueError:
         quantity = 0
     cart.set_quantity(product, quantity=quantity)
+
+    # If basket is now empty, clear discount code if it was set
+    if len(cart.items) == 0:
+        try:
+            del(request.session['discount_code'])
+        except KeyError:
+            pass
 
     if request.is_ajax():
         return HttpResponse()
@@ -378,7 +402,7 @@ def basket_show(request):
         request.session['destination'] = 'GB'
 
     postage = calc_postage(request.session['destination'], cart.items)
-    order_total = cart.total + postage['price']
+    order_total = cart.total + getattr(postage, 'price', 0)
 
     context = {
         'pagetitle': 'Shopping basket',
@@ -545,11 +569,12 @@ def order_transaction_complete(request):
     except:
         return redirect('/')
 
-    # Clear basket
+    # Clear basket and discount code
     if order.state == 'paid':
         try:
             cart = Cart(request.session)
             cart.clear()
+            del(request.session['discount_code'])
         except:
             pass
 
