@@ -82,6 +82,28 @@ class DiscountCodeTestCase(TestCase):
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]), 'Invalid discount code entered')
 
+    def test_apply_discount_code_stored_in_session(self):
+        response = self.client.post('/apply-discount', {
+            'code': 'test1234',
+        })
+        self.assertEqual(response.status_code, 302)
+
+        session = self.client.session
+        self.assertIn('discount_code', session)
+        self.assertEqual(session['discount_code'], 'test1234')
+        del(session['discount_code'])
+        session.save()
+
+        # Correct discount code case stored
+        response = self.client.post('/apply-discount', {
+            'code': 'TeSt1234',
+        })
+        self.assertEqual(response.status_code, 302)
+
+        session = self.client.session
+        self.assertIn('discount_code', session)
+        self.assertEqual(session['discount_code'], 'test1234')
+
     def _test_cart_discounted_price(self):
         cart = Cart(self.client.session)
         for item in cart.items:

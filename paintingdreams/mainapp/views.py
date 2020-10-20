@@ -367,7 +367,7 @@ def apply_discount_code(request):
                 discounted_product.discounted_price,
             )
 
-    request.session['discount_code'] = request.POST['code']
+    request.session['discount_code'] = code.code
     messages.success(request, 'Discount code applied')
 
     return redirect('/basket')
