@@ -8,7 +8,7 @@
     <link rel="shortcut icon" href="/static/favicon.ico" />
 
     <!-- Bootstrap -->
-    <link href="/static/bootstrap/css/bootstrap.1603208083.min.css" rel="stylesheet">
+    <link href="/static/bootstrap/css/bootstrap.1603278042.min.css" rel="stylesheet">
 
     <link href="/static/jquery_lighter/stylesheets/jquery.lighter.css" rel="stylesheet" type="text/css" />
 
@@ -47,6 +47,7 @@
         <div class="container">
           <div class="row">
             <div class="col-md-9 col-xs-6">
+              <p><a href="/cookies">Cookies</a></p>
               <p><a href="/delivery-info">Delivery info</a></p>
               <p><a href="/terms-and-conditions">Terms and Conditions</a></p>
             </div>
@@ -62,11 +63,21 @@
         </div>
     </footer>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script-->
+    <div class="cookie" style="display: none">
+        <div class="cookie__container">
+            <div class="cookie__message">
+                <p>We use cookies to enable some of the functionality on this site and to analyse our web traffic. By continuing to use this website you are consenting to our use of cookies. Read our <a href="/cookies">cookies</a> page for further information.</p>
+            </div>
+            <div class="cookie__action">
+                <a href="#" class="cookie__btn">Accept</a>
+            </div>
+        </div>
+    </div>
+
     <script src="/static/jquery.min.js"></script>
+    <script src="/static/js/js.cookie.2.2.1.js"></script>
+    <script src="/static/js/cookie-notice.201021.js"></script>
     <script src="/static/js/paintingdreams_base.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
     <script src="/static/jquery_lighter/javascripts/jquery.lighter.js" type="text/javascript"></script>
     <script src="/static/add-stars.js?v2"></script>

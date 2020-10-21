@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^shows$', views.shows),
     url(r'^feedback$', views.feedback),
     url(r'^wholesale-info$', views.wholesale_info),
+    url(r'^cookies$', views.cookies),
     url(r'^delivery-info$', views.delivery_info),
     url(r'^terms-and-conditions$', views.terms_and_conditions),
     url(r'^mailinglist$', views.mailinglist_subscribe),

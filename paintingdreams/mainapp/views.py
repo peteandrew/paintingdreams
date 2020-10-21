@@ -129,6 +129,11 @@ def terms_and_conditions(request):
     return render(request, 'terms_and_conditions.html', ctx)
 
 
+def cookies(request):
+    ctx = {'pagetitle': 'Cookies'}
+    return render(request, 'cookies.html', ctx)
+
+
 def gallery(request, slug):
     base_gallery = get_object_or_404(Gallery, slug=slug)
     images = Image.objects.prefetch_related('webimages').filter(galleries=base_gallery).order_by('imagegallery__order')

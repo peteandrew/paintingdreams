@@ -1,0 +1,31 @@
+{% extends "mainapp_base.html" %}
+
+{% block content %}
+<h1>Cookies</h1>
+<div class="info-text">
+    <h2>What are cookies?</h2>
+    <p>Cookies are small text files sent to your browser by the websites you visit. They help the websites to remember information about your visit, like options you've selected and items you've added to your order. They don't collect personal data from your computer, they carry the data created by your browsing history.</p>
+    <h2>Cookies on Painting Dreams</h2>
+    <p>We use a number of different cookies on Painting Dreams. Some of these are required for the correct operation of the site and some are useful for us to help improve the site. The cookies used are shown in the table below.</p>
+    <table class="table table-bordered">
+        <tr>
+            <td style="width: 200px">sessionid</td>
+            <td>Allows us to keep track of the items added to your basket and the progress of your orders. This is required for the site to function correctly.</td>
+        </tr>
+        <tr>
+            <td style="width: 200px">csrftoken</td>
+            <td>Ensures requests to add items to your basket, start orders, or similar requests originate from this site i.e. helps avoid cross site request forgeries (CSRF). This is required for the site to function correctly.</td>
+        </tr>
+        <tr>
+            <td style="width: 200px">_gat, _gid, _ga</td>
+            <td>Allows us to analyse how the site is being used. These are set by default but are not required for the site to function correctly.</td>
+        </tr>
+        <tr>
+            <td style="width: 200px">cookie_notice_accepted</td>
+            <td>Lets us know you've read and accepted the cookie notice and that we don't need to show the notice on your next visist. This isn't required but the cookie notice will always be shown if it is blocked.</td>
+        </tr>
+    </table>
+    <h2>Blocking cookies</h2>
+    <p>You can stop cookies from being stored on your device by updating your browser settings that allow you to block all or some cookies. Please note, if update these settings to block cookies you may not be able to access parts of this site.</p>
+</div>
+{% endblock %}
