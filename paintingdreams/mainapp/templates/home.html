@@ -24,28 +24,29 @@
       </div>
     </div>
     {% endif %}
-    {% if homepage_products %}
+    {% if homepage_products.exists %}
         <h1>Selected products</h1>
         <div class="homepage-products row gallery">
-        {% for product in homepage_products %}
+        {% for homepage_product in homepage_products %}
+            {% with product=homepage_product.product %}
             <div class="col-md-3 col-xs-6">
             {% if product.image %}
                 <a class="thumbnail" href="{% url 'product_detail' product.image.slug %}__{{ product.product_type.slug }}">
-            {% endif %}
-            {% if not product.image %}
+            {% else %}
                 <a class="thumbnail" href="{% url 'product_detail' product.product_type.slug %}">
             {% endif %}
-                {% with webimage=product.webimages.first %}
-                    <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ webimage.filename }}" alt="{{ webimage.name }}" />
-                {% endwith %}
-                <div class="caption">
-                    <p>
-                        {% if product.image %}{{ product.image.title }} - {% endif %}
-                        {{ product.product_type.displayname_final }}
-                    </p>
-                </div>
+                    {% with webimage=product.webimages.first %}
+                        <img class="galleryitem-thumbnail" src="/media/images/thumbnail/{{ webimage.filename }}" alt="{{ webimage.name }}" />
+                    {% endwith %}
+                        <div class="caption">
+                            <p>
+                                {% if product.image %}{{ product.image.title }} - {% endif %}
+                                {{ product.product_type.displayname_final }}
+                            </p>
+                        </div>
                 </a>
             </div>
+            {% endwith %}        
         {% endfor %}
         </div>
     {% endif %}

@@ -14,6 +14,7 @@ from mainapp.models.galleries import (
     ImageGallery,
 )
 from mainapp.models.products import (
+    HomePageProduct,
     PostagePrice,
     ProductType,
     ProductTypeDestinationShippingWeightOverride,
@@ -67,4 +68,5 @@ __all__ = (
     Image,
     DiscountCode,
     DiscountCodeProduct,
+    HomePageProduct,
 )

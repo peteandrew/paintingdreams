@@ -36,7 +36,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'carton',
     'crispy_forms',
     'mainapp',
     'paypal.standard.ipn',

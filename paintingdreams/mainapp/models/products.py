@@ -227,3 +227,11 @@ class ProductTag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class HomePageProduct(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']

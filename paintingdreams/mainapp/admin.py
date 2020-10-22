@@ -20,6 +20,7 @@ from mainapp.models import (
     FestivalPageProduct,
     DiscountCode,
     DiscountCodeProduct,
+    HomePageProduct,
 )
 
 
@@ -124,6 +125,10 @@ class DiscountCodeAdmin(admin.ModelAdmin):
     list_display = ['code']
 
 
+class HomePageProductAdmin(admin.ModelAdmin):
+    list_display = ['product', 'order']
+
+
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Gallery, GalleryAdmin)
@@ -134,4 +139,5 @@ admin.site.register(HolidayMessage, HolidayMessageAdmin)
 admin.site.register(ProductTypeAdditionalProduct, ProductTypeAdditionalProductAdmin)
 admin.site.register(FestivalPage, FestivalPageAdmin)
 admin.site.register(DiscountCode, DiscountCodeAdmin)
+admin.site.register(HomePageProduct, HomePageProductAdmin)
 admin.site.register([ImageTag, ProductTag, PostagePrice])

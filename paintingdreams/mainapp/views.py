@@ -57,6 +57,7 @@ from mainapp.models import (
     Gallery,
     ImageGallery,
     HomePageWebimage,
+    HomePageProduct,
     ProductTypeAdditionalProduct,
     ProductAdditionalProduct,
     FestivalPage,
@@ -75,13 +76,13 @@ logger = logging.getLogger('django')
 
 def home(request):
     homepage_images = HomePageWebimage.objects.filter(enabled=True).order_by('order')
-    homepage_products = Product.objects.filter(
-        tags__slug__exact='home'
+    homepage_products = HomePageProduct.objects.select_related(
+        'product'
     ).filter(
-        sold_out=False
+        product__sold_out=False
     ).filter(
-        temporarily_unavailable=False
-    ).order_by('-updated')
+        product__temporarily_unavailable=False
+    )
     context = {'homepage_images': homepage_images, 'homepage_products': homepage_products}
     return render(request, 'home.html', context)
 
