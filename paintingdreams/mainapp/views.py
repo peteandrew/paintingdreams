@@ -62,6 +62,7 @@ from mainapp.models import (
     ProductAdditionalProduct,
     FestivalPage,
     DiscountCode,
+    DiscountCodeProduct,
 )
 from mainapp.forms import OrderDetailsForm, MailingListSubscribeForm
 from mainapp.email import send_order_complete_email, send_payment_failed_email
@@ -303,6 +304,10 @@ def basket_add(request):
         # discount_code not set in session
         pass
     except DiscountCode.DoesNotExist:
+        # ignore non-existent DiscountCode
+        pass
+    except DiscountCodeProduct.DoesNotExist:
+        # ignore non-existent DiscountCodeProduct
         pass
 
     cart.add(

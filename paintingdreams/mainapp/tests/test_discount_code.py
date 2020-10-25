@@ -128,9 +128,14 @@ class DiscountCodeTestCase(TestCase):
         session = self.client.session
         cart = Cart(session)
         cart.clear()
-        cart.add(self.product_2, price=self.product_2.product_type.price_final, quantity=1)
         session['discount_code'] = 'test1234'
         session.save()
+
+        response = self.client.post('/basket-add', {
+            'product_id': self.product_2.pk,
+            'quantity': 1,
+        })
+        self.assertEqual(response.status_code, 302)
 
         response = self.client.post('/basket-add', {
             'product_id': self.product_1.pk,
