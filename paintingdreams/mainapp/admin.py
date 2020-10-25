@@ -110,9 +110,22 @@ class FestivalPageProductInline(admin.TabularInline):
     model = FestivalPageProduct
     extra = 1
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        field = super().formfield_for_foreignkey(db_field, request, **kwargs)
+        if db_field.name == "product" and hasattr(self, "cached_products"):
+            field.choices = self.cached_products
+        return field
+
 
 class FestivalPageAdmin(admin.ModelAdmin):
     inlines = [FestivalPageWebimageInline, FestivalPageProductInline]
+
+    def get_formsets_with_inlines(self, request, obj=None):
+        cached_products = [('', '---------',)] + [(i.pk, str(i)) for i in Product.objects.all()]
+        for inline in self.get_inline_instances(request, obj):
+            if inline.model == FestivalPageProduct:
+                inline.cached_products = cached_products
+            yield inline.get_formset(request, obj), inline
 
 
 class DiscountCodeProductInline(admin.TabularInline):
