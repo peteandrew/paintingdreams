@@ -161,6 +161,12 @@ class ProductTypeDestinationShippingWeightOverride(models.Model):
         verbose_name = 'destination shipping weight override'
 
 
+class ProductManager(models.Manager):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.select_related('product_type').select_related('image')
+
+
 class Product(models.Model):
     code = models.CharField(max_length=20, blank=True)
     image = models.ForeignKey('Image', null=True, default=None, blank=True, on_delete=models.CASCADE)
@@ -176,6 +182,8 @@ class Product(models.Model):
     product_type_order = models.IntegerField(default=0)
     temporarily_unavailable = models.BooleanField(default=False)
     stock_count = models.PositiveIntegerField(default=0)
+
+    objects = ProductManager()
 
     class Meta:
         unique_together = ("image", "product_type")
