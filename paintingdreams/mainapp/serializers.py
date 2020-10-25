@@ -1,7 +1,7 @@
 from mainapp.models import Image, Order, OrderLine, OrderAddress, OrderTransaction
 from rest_framework import serializers
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 
 from paypal.standard.forms import PayPalPaymentsForm

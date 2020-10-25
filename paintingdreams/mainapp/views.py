@@ -13,7 +13,7 @@ from PIL import Image as PILImage, ImageDraw, ImageFont
 from django.db.models import F
 from django.db import IntegrityError, transaction
 from django.shortcuts import render, get_object_or_404, redirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse, Http404, QueryDict
