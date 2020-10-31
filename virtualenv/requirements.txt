@@ -1,4 +1,4 @@
-Django~=1.11
+Django~=2.2
 django-countries~=6.0
 django-crispy-forms==1.8.1
 django-paypal==1.0.0
