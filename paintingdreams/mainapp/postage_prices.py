@@ -12,4 +12,4 @@ def calculate(destination, weight):
     if len(prices) > 0:
         return prices[0].price
     else:
-        return None
+        return 0
