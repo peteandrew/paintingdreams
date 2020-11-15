@@ -413,7 +413,7 @@ def basket_show(request):
         request.session['destination'] = 'GB'
 
     postage = calc_postage(request.session['destination'], cart.items)
-    order_total = cart.total + getattr(postage, 'price', 0)
+    order_total = cart.total + postage['price']
 
     context = {
         'pagetitle': 'Shopping basket',

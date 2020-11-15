@@ -39,7 +39,7 @@ class PostagePriceTestCase(TestCase):
 
 
     def test_get_postage_price_greater_than_large(self):
-        self.assertIsNone(postage_prices.calculate('GB', 3001))
+        self.assertEqual(postage_prices.calculate('GB', 3001), 0)
 
     def test_get_postage_price_large_no_max_weight(self):
         PostagePrice.objects.create(
