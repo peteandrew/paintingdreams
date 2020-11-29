@@ -45,7 +45,7 @@ class OrderTransactionSerializer(serializers.ModelSerializer):
                 "item_name": "Painting Dreams products",
                 "invoice": obj.unique_id,
                 "notify_url": settings.BASE_URL + reverse('paypal-ipn'),
-                "return_url": settings.BASE_URL + reverse('order-transaction-complete'),
+                "return": settings.BASE_URL + reverse('order-transaction-complete'),
                 "cancel_return": settings.BASE_URL + reverse('paypal-cancel')
             }
             paypal_form = PayPalPaymentsForm(initial=paypal_dict)
