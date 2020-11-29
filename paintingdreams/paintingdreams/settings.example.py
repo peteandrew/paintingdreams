@@ -132,7 +132,7 @@ EMAIL_FILE_PATH = '/tmp/app-messages'
 #EMAIL_HOST_PASSWORD = ''
 ##EMAIL_USE_TLS
 #EMAIL_USE_SSL = True
-#EMAIL_TIMEOUT = 5
+#EMAIL_TIMEOUT = 15
 ##EMAIL_SSL_KEYFILE
 ##EMAIL_SSL_CERTFILE
 
@@ -144,9 +144,6 @@ DEFAULT_FROM_EMAIL = ''
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-#STATICFILES_DIRS = (
-#    os.path.join(BASE_DIR, 'static'),
-#)
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
