@@ -5,7 +5,7 @@ from urllib.parse import urlencode
 from django.conf import settings
 from django.test import TestCase
 from django.test.utils import override_settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from cardsave.models import PaymentResult
 from cardsave.signals import payment_successful, payment_unsuccessful
