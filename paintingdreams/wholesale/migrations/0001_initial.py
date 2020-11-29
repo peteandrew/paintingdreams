@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('price', models.DecimalField(max_digits=6, default=0, decimal_places=2)),
                 ('new', models.BooleanField(default=False)),
                 ('sold_out', models.BooleanField(default=False)),
-                ('category', models.ForeignKey(to='wholesale.Category')),
+                ('category', models.ForeignKey(to='wholesale.Category', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -41,8 +41,8 @@ class Migration(migrations.Migration):
             name='SpecialProductRemoved',
             fields=[
                 ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
-                ('product', models.ForeignKey(to='wholesale.Product')),
-                ('special', models.ForeignKey(to='wholesale.Special')),
+                ('product', models.ForeignKey(to='wholesale.Product', on_delete=models.CASCADE)),
+                ('special', models.ForeignKey(to='wholesale.Special', on_delete=models.CASCADE)),
             ],
         ),
     ]

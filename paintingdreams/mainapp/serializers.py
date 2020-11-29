@@ -1,7 +1,7 @@
 from mainapp.models import Image, Order, OrderLine, OrderAddress, OrderTransaction
 from rest_framework import serializers
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 
 from paypal.standard.forms import PayPalPaymentsForm
@@ -45,7 +45,7 @@ class OrderTransactionSerializer(serializers.ModelSerializer):
                 "item_name": "Painting Dreams products",
                 "invoice": obj.unique_id,
                 "notify_url": settings.BASE_URL + reverse('paypal-ipn'),
-                "return_url": settings.BASE_URL + reverse('order-transaction-complete'),
+                "return": settings.BASE_URL + reverse('order-transaction-complete'),
                 "cancel_return": settings.BASE_URL + reverse('paypal-cancel')
             }
             paypal_form = PayPalPaymentsForm(initial=paypal_dict)

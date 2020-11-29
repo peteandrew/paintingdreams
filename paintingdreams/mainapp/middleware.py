@@ -1,4 +1,7 @@
-class XRealIPMiddleware(object):
+from django.utils.deprecation import MiddlewareMixin
+
+
+class XRealIPMiddleware(MiddlewareMixin):
 	"""Replaces REMOTE_ADDR with the value X-Real-IP header"""
 
 	def process_request(self, request):
@@ -10,7 +13,7 @@ class XRealIPMiddleware(object):
 			request.META['REMOTE_ADDR'] = real_ip
 
 
-class XForwardedForMiddleware(object):
+class XForwardedForMiddleware(MiddlewareMixin):
     """Replaces REMOTE_ADDR with the value of the X-Forwarded-For header"""
 
     def process_request(self, request):

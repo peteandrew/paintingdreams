@@ -53,10 +53,10 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        permissions = (
-            ("view_order", "Can view orders"),
-        )
+    # class Meta:
+    #     permissions = (
+    #         ("view_order", "Can view orders"),
+    #     )
 
     @property
     def current_transaction(self):
