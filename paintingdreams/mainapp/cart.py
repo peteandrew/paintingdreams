@@ -35,6 +35,8 @@ class CartItem:
         """
         Subtotal for the cart item.
         """
+        if self.product and self.product.sold_out:
+            return 0
         return self.price * self.quantity
 
 
@@ -142,7 +144,19 @@ class Cart:
     @property
     def items(self):
         """
-        The list of cart items.
+        The list of cart items excluding those that are sold out.
+        """
+        items_not_sold_out = []
+        for item in self._items_dict.values():
+            if item.product and item.product.sold_out:
+                continue
+            items_not_sold_out.append(item)
+        return items_not_sold_out
+
+    @property
+    def items_including_sold_out(self):
+        """
+        The list of cart items including those that are sold out.
         """
         return self._items_dict.values()
 
@@ -158,7 +172,7 @@ class Cart:
         Note how the product pk servers as the dictionary key.
         """
         cart_representation = {}
-        for item in self.items:
+        for item in self.items_including_sold_out:
             # JSON serialization: object attribute should be a string
             product_id = str(item.product.pk)
             cart_representation[product_id] = item.to_dict()
@@ -195,11 +209,11 @@ class Cart:
         """
         The list of associated products.
         """
-        return [item.product for item in self.items]
+        return [item.product for item in self.items_including_sold_out]
 
     @property
     def total(self):
         """
-        The total value of all items in the cart.
+        The total value of all non sold out items in the cart.
         """
         return sum([item.subtotal for item in self.items])

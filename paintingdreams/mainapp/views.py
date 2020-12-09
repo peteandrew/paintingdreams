@@ -412,15 +412,18 @@ def basket_show(request):
     if not request.session.get('destination'):
         request.session['destination'] = 'GB'
 
-    postage = calc_postage(request.session['destination'], cart.items)
-    order_total = cart.total + postage['price']
+    if cart.total == 0:
+        postage_price = 0
+    else:
+        postage = calc_postage(request.session['destination'], cart.items)
+        postage_price = postage['price']
+    order_total = cart.total + postage_price
 
     context = {
         'pagetitle': 'Shopping basket',
         'cart': cart,
-        'weight': postage['weight'],
         'destination': request.session['destination'],
-        'postage_price': postage['price'],
+        'postage_price': postage_price,
         'order_total': order_total,
         'discount_code': request.session.get('discount_code', None)
     }
