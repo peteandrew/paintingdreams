@@ -121,6 +121,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Set session time to 1 day
+SESSION_COOKIE_AGE = 86400
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = '/tmp/app-messages'
