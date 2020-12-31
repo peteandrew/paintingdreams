@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^gallery/(.+)$', views.gallery, name='image_index'),
     url(r'^image/(.+)$', views.image_detail, name='image_detail'),
     url(r'^products/(.+)$', views.product_index, name='product_index'),
+    url(r'^special-offers$', views.product_special_offer_index, name='product_special-offers'),
     url(r'^product/(.+)$', views.product_detail, name='product_detail'),
     url(r'^search$', views.search),
     url(r'^basket-add$', views.basket_add),

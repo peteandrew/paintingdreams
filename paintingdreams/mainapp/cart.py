@@ -11,11 +11,12 @@ class CartItem:
     """
     A cart item, with the associated product, its quantity and its price.
     """
-    def __init__(self, product, quantity, price, discounted, original_price):
+    def __init__(self, product, quantity, price, discounted, special_offer, original_price):
         self.product = product
         self.quantity = int(quantity)
         self.price = Decimal(str(price))
         self.discounted = discounted
+        self.special_offer = special_offer
         self.original_price = Decimal(str(original_price))
 
     def __repr__(self):
@@ -27,6 +28,7 @@ class CartItem:
             'quantity': self.quantity,
             'price': str(self.price),
             'discounted': self.discounted,
+            'special_offer': self.special_offer,
             'original_price': str(self.original_price),
         }
 
@@ -61,6 +63,7 @@ class Cart:
                     item['quantity'],
                     Decimal(item['price']),
                     item.get('discounted', False),
+                    item.get('special_offer', False),
                     Decimal(item.get('original_price', '0')),
                 )
 
@@ -77,7 +80,7 @@ class Cart:
         self.session[SESSION_KEY] = self.cart_serializable
         self.session.modified = True
 
-    def add(self, product, price=None, quantity=1, discounted=False, original_price='0'):
+    def add(self, product, price=None, quantity=1, discounted=False, special_offer=False, original_price='0'):
         """
         Adds or creates products in cart. For an existing product,
         the quantity is increased and the price is ignored.
@@ -90,7 +93,7 @@ class Cart:
         else:
             if price == None:
                 raise ValueError('Missing price when adding to cart')
-            self._items_dict[product.pk] = CartItem(product, quantity, price, discounted, original_price)
+            self._items_dict[product.pk] = CartItem(product, quantity, price, discounted, special_offer, original_price)
         self.update_session()
 
     def remove(self, product):

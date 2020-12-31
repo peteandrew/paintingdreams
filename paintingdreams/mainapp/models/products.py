@@ -36,8 +36,8 @@ class ProductType(models.Model):
     product_listing_message = models.TextField(blank=True)
     stand_alone = models.BooleanField(default=False)
     inherit_stand_alone = models.BooleanField(default=True)
-    old_price = models.DecimalField(blank=True, max_digits=6, decimal_places=2, default=0)
-    price = models.DecimalField(blank=True, max_digits=6, decimal_places=2, default=0)
+    price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    special_offer_price = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     inherit_price = models.BooleanField(default=True)
     shipping_weight = models.IntegerField(default=0)
     inherit_shipping_weight = models.BooleanField(default=False)
@@ -104,11 +104,26 @@ class ProductType(models.Model):
             return self.stand_alone
 
     @property
+    def special_offer(self):
+        if self.inherit_price and self.parent:
+            return self.parent.special_offer
+        elif self.special_offer_price:
+            return True
+        return False
+
+    @property
     def price_final(self):
         if self.inherit_price and self.parent:
             return self.parent.price_final
-        else:
-            return self.price
+        elif self.special_offer_price:
+            return self.special_offer_price
+        return self.price
+
+    @property
+    def old_price_final(self):
+        if self.inherit_price and self.parent:
+            return self.parent.old_price_final
+        return self.price
 
     def shipping_weight_final(self, destination=None):
         # Return inherited from type here
@@ -182,6 +197,7 @@ class Product(models.Model):
     product_type_order = models.IntegerField(default=0)
     temporarily_unavailable = models.BooleanField(default=False)
     stock_count = models.PositiveIntegerField(default=0)
+    special_offer_price = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
 
     objects = ProductManager()
 
@@ -211,6 +227,24 @@ class Product(models.Model):
             string += str(self.image) + " - "
         string += self.product_type.displayname_final
         return string
+
+    @property
+    def special_offer(self):
+        if self.special_offer_price or self.product_type.special_offer:
+            return True
+        return False
+
+    @property
+    def price(self):
+        if self.special_offer_price:
+            return self.special_offer_price
+        return self.product_type.price_final
+
+    @property
+    def old_price(self):
+        if self.special_offer_price:
+            return self.product_type.price_final
+        return self.product_type.old_price_final
 
 
 class ProductAdditionalProduct(models.Model):
