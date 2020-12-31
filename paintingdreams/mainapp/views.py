@@ -197,6 +197,19 @@ def product_index(request, slug):
     return render(request, 'product/index.html', context)
 
 
+def product_special_offer_index(request):
+    special_offer_product_type_products = list(Product.objects.filter(product_type__in=ProductType.objects.exclude(special_offer_price__isnull=True)).filter(sold_out=False, hidden=False))
+    special_offer_products = special_offer_product_type_products + list(Product.objects.exclude(special_offer_price__isnull=True).filter(sold_out=False, hidden=False))
+    return render(
+        request,
+        'product/special_offer_index.html',
+        {
+            'pagetitle': 'Special offers',
+            'special_offer_products': special_offer_products,
+        },
+    )
+
+
 def product_detail(request, slug):
     slug_components = slug.split('__')
 
@@ -291,7 +304,7 @@ def search(request):
 @require_POST
 def basket_add(request):
     product = Product.objects.get(pk=request.POST['product_id'])
-    price = product.product_type.price_final
+    price = product.price
     discounted = False
     cart = Cart(request.session)
 
@@ -315,7 +328,8 @@ def basket_add(request):
         price=price,
         quantity=request.POST['quantity'],
         discounted=discounted,
-        original_price=product.product_type.price_final,
+        special_offer=product.special_offer,
+        original_price=product.price,
     )
 
     if request.is_ajax():

@@ -3,19 +3,15 @@
     {% if output_name %}
       <p>{{ product.displayname }}</p>
     {% endif %}
-    {% if display_sale_price %}
-      {% if product.product_type.old_price %}
-        <p class="old-price">Original price: &pound;{{ product.product_type.old_price }}</p>
-        <p class="price"><span style="color: #C7C725">Sale price: &pound;{{ product.product_type.price_final }}</span></p>
+    {% if product.special_offer %}
+      {% if display_sale_price %}
+        <p class="old-price">Original price: &pound;{{ product.old_price }}</p>
+        <p class="price"><span style="color: #C7C725">Special offer price: &pound;{{ product.price }}</span></p>
       {% else %}
-        <p class="price">&pound;{{ product.product_type.price_final }}</p>
+        <p class="price"><del>&pound;{{ product.old_price }}</del> &pound;{{ product.price }}</p>
       {% endif %}
     {% else %}
-      {% if product.product_type.old_price %}
-        <p class="price"><del>&pound;{{ product.product_type.old_price }}</del> &pound;{{ product.product_type.price_final }}</p>
-      {% else %}
-        <p class="price">&pound;{{ product.product_type.price_final }}</p>
-      {% endif %}
+      <p class="price">&pound;{{ product.price }}</p>
     {% endif %}
     {% if not product.sold_out and not product.temporarily_unavailable %}
       <form action="/basket-add" method="POST" class="form-inline">
