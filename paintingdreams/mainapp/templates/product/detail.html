@@ -40,12 +40,12 @@
     {% if holiday_messages.website %}<div class="col-md-6 col-xs-12"><p class="holiday-message">{{ holiday_messages.website|safe }}</p></div>{% endif %}
 
     {% if additional_products %}
-      {% include "product/add_to_basket.html" with product=product output_name=True display_sale_price=True %}
+      {% include "product/add_to_basket.html" with product=product output_name=True separate_price_paras=True %}
       {% for additional_product in additional_products %}
-        {% include "product/add_to_basket.html" with product=additional_product output_name=True display_sale_price=False %}
+        {% include "product/add_to_basket.html" with product=additional_product output_name=True separate_price_paras=False %}
       {% endfor %}
     {% else %}
-      {% include "product/add_to_basket.html" with product=product output_name=False display_sale_price=True %}
+      {% include "product/add_to_basket.html" with product=product output_name=False separate_price_paras=True %}
     {% endif %}
 
     <div class="col-md-6 product-description col-xs-12">

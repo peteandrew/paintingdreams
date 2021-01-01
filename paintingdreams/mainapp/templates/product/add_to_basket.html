@@ -4,11 +4,16 @@
       <p>{{ product.displayname }}</p>
     {% endif %}
     {% if product.special_offer %}
-      {% if display_sale_price %}
-        <p class="old-price">Original price: &pound;{{ product.old_price }}</p>
+      {% if separate_price_paras %}
+        {% comment %}
+          Some products may be created specifically as special offers so won't have a differnt original price
+        {% endcomment %}
+        {% if product.old_price != product.price %}
+          <p class="old-price">Original price: &pound;{{ product.old_price }}</p>
+        {% endif %}
         <p class="price"><span style="color: #C7C725">Special offer price: &pound;{{ product.price }}</span></p>
       {% else %}
-        <p class="price"><del>&pound;{{ product.old_price }}</del> &pound;{{ product.price }}</p>
+        <p class="price">{% if product.old_price != product.price %}<del>&pound;{{ product.old_price }}</del> {% endif %}&pound;{{ product.price }}</p>
       {% endif %}
     {% else %}
       <p class="price">&pound;{{ product.price }}</p>

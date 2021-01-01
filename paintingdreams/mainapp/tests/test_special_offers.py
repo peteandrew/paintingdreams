@@ -86,6 +86,13 @@ class SpecialOffersTestCase(TestCase):
         self.assertContains(response, 'Original price: &pound;10')
         self.assertContains(response, 'Special offer price: &pound;8.25')
 
+    def test_original_price_not_shown_when_special_offer_price_equals_old_price(self):
+        self.product_3.special_offer_price = Decimal(10)
+        self.product_3.save()
+        response = self.client.get('/product/product-type3')
+        self.assertNotContains(response, 'Original price: &pound;10')
+        self.assertContains(response, 'Special offer price: &pound;10')
+
     def test_special_offer_price_in_basket(self):
         response = self.client.post('/basket-add', data={
             'product_id': self.product_2.id,
