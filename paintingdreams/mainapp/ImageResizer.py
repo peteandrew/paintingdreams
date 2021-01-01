@@ -73,28 +73,32 @@ class ImageResizer:
         image.paste(watermark_layer, (left,top), watermark_layer)
 
 
-    def resize(self, optional_sizes=None):
+    def resize(self, img_sizes=None):
+        if not img_sizes:
+            img_sizes = ['standard', 'enlargement', 'thumbnail']
+
         sizes = {}
 
-        for img_type in settings.IMAGE_SIZES.keys():
-            if 'optional' in settings.IMAGE_SIZES[img_type] and settings.IMAGE_SIZES[img_type]['optional']:
-                if not optional_sizes or img_type not in optional_sizes:
-                    continue
+        for img_size in img_sizes:
+            try:
+                img_size_settings = settings.IMAGE_SIZES[img_size]
+            except KeyError:
+                continue
 
             img_full_path = ImageResizer.build_full_path('original', self.image_filename)
             self.img_original = Image.open(img_full_path)
 
-            longest_side_max_length = settings.IMAGE_SIZES[img_type]['longest_side']
+            longest_side_max_length = img_size_settings['longest_side']
             new_size = ImageResizer.calc_new_size(self.img_original.size, longest_side_max_length)
             new_img = self.img_original.resize(new_size, Image.BICUBIC)
 
-            if settings.IMAGE_SIZES[img_type]['watermark']:
-                fontsize_base = settings.IMAGE_SIZES[img_type]['watermark_base_size']
+            if img_size_settings['watermark']:
+                fontsize_base = img_size_settings['watermark_base_size']
                 ImageResizer.add_watermark(new_img, longest_side_max_length, fontsize_base)
 
-            img_full_path = ImageResizer.build_full_path(settings.IMAGE_SIZES[img_type]['path'], self.image_filename)
+            img_full_path = ImageResizer.build_full_path(img_size_settings['path'], self.image_filename)
             new_img.save(img_full_path, 'jpeg', quality=85)
 
-            sizes[img_type] = new_size
+            sizes[img_size] = new_size
 
         return sizes

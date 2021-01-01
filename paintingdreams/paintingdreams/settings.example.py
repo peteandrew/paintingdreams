@@ -171,6 +171,11 @@ TEMPLATES = [
 ]
 
 IMAGE_SIZES = {
+    'thumbnail': {
+        'path': 'thumbnail',
+        'longest_side': 150,
+        'watermark': False
+    },
     'standard': {
         'path': 'standard',
         'longest_side': 500,
@@ -183,17 +188,16 @@ IMAGE_SIZES = {
         'watermark': True,
         'watermark_base_size': 60
     },
+    'enlargement-no-watermark': {
+        'path': 'enlargement',
+        'longest_side': 800,
+        'watermark': False,
+    },
     'extra-large-no-watermark': {
         'path': 'extra-large-no-watermark',
         'longest_side': 1500,
         'watermark': False,
-        'optional': True,
     },
-    'thumbnail': {
-        'path': 'thumbnail',
-        'longest_side': 150,
-        'watermark': False
-    }
 }
 
 CART_PRODUCT_MODEL = 'mainapp.models.Product'

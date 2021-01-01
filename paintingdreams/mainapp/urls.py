@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^artist-info$', views.artist_info),
     url(r'^shows$', views.shows),
     url(r'^feedback$', views.feedback),
+    url(r'^feedback-new$', views.feedback_new),
     url(r'^wholesale-info$', views.wholesale_info),
     url(r'^cookies$', views.cookies),
     url(r'^delivery-info$', views.delivery_info),
