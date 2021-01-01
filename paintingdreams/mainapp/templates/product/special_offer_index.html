@@ -3,7 +3,7 @@
 {% block content %}
 <h1>Special Offers</h1>
 {% if special_offer_products|length == 0 %}
-    <p>There currently aren't any special offers</p>
+    <p class="page-top-message">Sorry, there currently aren't any special offers</p>
 {% else %}
     <div class="row gallery">
         {% for product in special_offer_products %}
