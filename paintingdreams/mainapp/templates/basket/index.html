@@ -5,12 +5,8 @@
 {% if not cart.items_including_sold_out %}
     <p class="page-top-message">Your basket is currently empty. Please add some items.</p>
 {% else %}
+    <p class="holiday-message">Please note that sadly, due to Brexit, orders going to Europe may now incur a customs duty charge</p>
     {% if holiday_messages.website %}<p class="holiday-message">{{ holiday_messages.website|safe }}</p>{% endif %}
-    <div class="holiday-message">
-        <h4>Please note</h4>
-        <p>Due to the Covid situation some orders are taking much longer than usual to arrive.</p>
-        <p>Please allow up to two weeks for UK orders and up to six weeks for international orders.</p>
-    </div>
     <table class="table basket">
         <thead>
             <tr>

@@ -4,6 +4,7 @@
 {% block content %}
 <h1>Wholesale Order</h1>
 <div id="wholesale-container">
+  <p class="holiday-message">Please note that sadly, due to Brexit, orders going to Europe may now incur a customs duty charge</p>
   {% if holiday_messages.wholesale %}<p class="holiday-message">{{ holiday_messages.wholesale }}</p>{% endif %}
   {% if product_errors|length > 0 %}
     <div class="product-errors">
