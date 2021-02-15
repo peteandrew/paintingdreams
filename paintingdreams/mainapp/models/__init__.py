@@ -15,6 +15,7 @@ from mainapp.models.galleries import (
 )
 from mainapp.models.products import (
     HomePageProduct,
+    NewProduct,
     PostagePrice,
     ProductType,
     ProductTypeDestinationShippingWeightOverride,
@@ -51,6 +52,7 @@ __all__ = (
     OrderTransaction,
     Gallery,
     ImageGallery,
+    NewProduct,
     PostagePrice,
     ProductType,
     ProductTypeDestinationShippingWeightOverride,

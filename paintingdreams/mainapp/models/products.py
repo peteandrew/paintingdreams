@@ -280,3 +280,11 @@ class HomePageProduct(models.Model):
 
     class Meta:
         ordering = ['order']
+
+
+class NewProduct(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']

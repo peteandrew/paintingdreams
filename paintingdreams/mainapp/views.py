@@ -58,6 +58,7 @@ from mainapp.models import (
     ImageGallery,
     HomePageWebimage,
     HomePageProduct,
+    NewProduct,
     ProductTypeAdditionalProduct,
     ProductAdditionalProduct,
     FestivalPage,
@@ -206,6 +207,17 @@ def product_special_offer_index(request):
         {
             'pagetitle': 'Special offers',
             'special_offer_products': special_offer_products,
+        },
+    )
+
+
+def new_product_index(request):
+    return render(
+        request,
+        'product/new_product_index.html',
+        {
+            'pagetitle': 'New products',
+            'new_products': NewProduct.objects.all(),
         },
     )
 

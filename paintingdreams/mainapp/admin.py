@@ -6,6 +6,7 @@ from mainapp.models import (
     ProductType,
     Gallery,
     ImageGallery,
+    NewProduct,
     ProductTag,
     Product,
     ProductWebimage,
@@ -142,6 +143,10 @@ class HomePageProductAdmin(admin.ModelAdmin):
     list_display = ['product', 'order']
 
 
+class NewProductAdmin(admin.ModelAdmin):
+    list_display = ['product', 'order']
+
+
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Gallery, GalleryAdmin)
@@ -153,4 +158,5 @@ admin.site.register(ProductTypeAdditionalProduct, ProductTypeAdditionalProductAd
 admin.site.register(FestivalPage, FestivalPageAdmin)
 admin.site.register(DiscountCode, DiscountCodeAdmin)
 admin.site.register(HomePageProduct, HomePageProductAdmin)
+admin.site.register(NewProduct, NewProductAdmin)
 admin.site.register([ImageTag, ProductTag, PostagePrice])
