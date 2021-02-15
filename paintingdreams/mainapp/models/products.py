@@ -146,14 +146,17 @@ class ProductType(models.Model):
             return self.parent.shipping_weight_multiple_final(destination)
         else:
             # If ProductTypeDestinationShippingWeightOverride exists for destination,
-            # use that shipping_weight_multiple
+            # and it has shipping_weight_multiple set use that otherwise use shipping_weight
             # else use this ProductType shipping_weight_multiple if it exists
             # else fallback to shipping_weight_final
             try:
                 shipping_weight_override = self.destination_shipping_weight_overrides.get(
                     destination=destination,
                 )
-                return shipping_weight_override.shipping_weight_multiple
+                if shipping_weight_override.shipping_weight_multiple > 0:
+                    return shipping_weight_override.shipping_weight_multiple
+                else:
+                    return shipping_weight_override.shipping_weight
             except ProductTypeDestinationShippingWeightOverride.DoesNotExist:
                 if self.shipping_weight_multiple > 0:
                     return self.shipping_weight_multiple
