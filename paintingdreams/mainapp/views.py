@@ -490,7 +490,7 @@ def order_start(request):
             form_data = form.cleaned_data
 
             # Check for and remove UK only products
-            if 'shipping_address1' in form_data:
+            if form_data['shipping_address1']:
                 shipping_country = form_data['shipping_country']
             else:
                 shipping_country = form_data['billing_country']
