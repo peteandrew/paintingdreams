@@ -201,6 +201,7 @@ class Product(models.Model):
     temporarily_unavailable = models.BooleanField(default=False)
     stock_count = models.PositiveIntegerField(default=0)
     special_offer_price = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    uk_only = models.BooleanField(default=False, verbose_name='UK orders only')
 
     objects = ProductManager()
 

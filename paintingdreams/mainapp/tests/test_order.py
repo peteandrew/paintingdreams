@@ -1,8 +1,12 @@
 import uuid
 
+from decimal import Decimal
+from unittest import mock
+
 from django.test import TestCase, override_settings
 from django.core import mail
 
+from mainapp.cart import Cart
 from mainapp.models import (
     ProductType,
     Product,
@@ -14,8 +18,137 @@ from mainapp.models import (
 from mainapp.views import _handle_order_transaction_success, _handle_order_transaction_failed
 
 
+class OrderStartViewTestCase(TestCase):
+
+    def setUp(self):
+        product_type = ProductType.objects.create(
+            slug = 'product-type1',
+            title = 'Product Title',
+            price = Decimal(12),
+            stand_alone = True,
+        )
+        self.product = Product.objects.create(
+            product_type = product_type,
+        )
+
+        session = self.client.session
+        cart = Cart(session)
+        cart.add(self.product, price=product_type.price, quantity=1)
+        session.save()
+
+    def test_basket_empty_redirect(self):
+        session = self.client.session
+        cart = Cart(session)
+        cart.clear()
+        session.save()
+
+        response = self.client.get('/order-start')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/')
+
+    def test_empty_customer_details_form(self):
+        response = self.client.get('/order-start')
+        self.assertEqual(response.status_code, 200)
+        form = response.context['form']
+        self.assertEqual(len(form.data), 0)
+        field_keys = form.fields.keys()
+        test_fields = [
+            'customer_name',
+            'customer_email',
+            'billing_address1',
+            'billing_2sserdda',
+            'billing_3sserdda',
+            'billing_4sserdda',
+            'billing_city',
+            'billing_state',
+            'billing_post_code',
+            'billing_country',
+            'shipping_same',
+            'shipping_name',
+            'shipping_address1',
+            'shipping_2sserdda',
+            'shipping_3sserdda',
+            'shipping_4sserdda',
+            'shipping_city',
+            'shipping_state',
+            'shipping_post_code',
+            'shipping_country',
+            'mailinglist_subscribe',
+        ]
+        for test_field in test_fields:
+            self.assertIn(test_field, field_keys)
+
+    def test_customer_details_in_session_added_to_form(self):
+        session = self.client.session
+        session['customer_details'] = {
+            'customer_name': 'Test Name',
+            'customer_email': 'test@example.com',
+            'billing_address': {
+                'address1': 'Test address',
+                'address2': '',
+                'address3': '',
+                'address4': '',
+                'city': 'Some City',
+                'state': 'A County',
+                'post_code': 'AB12 3DE',
+                'country': 'UK',
+            }
+        }
+        session.save()
+
+        response = self.client.get('/order-start')
+        form = response.context['form']
+        self.assertEqual(len(form.data), 10)
+        self.assertEqual(form.data['customer_name'], 'Test Name')
+        self.assertEqual(form.data['customer_email'], 'test@example.com')
+        self.assertEqual(form.data['billing_address1'], 'Test address')
+
+    @mock.patch('mainapp.views.mailchimp_subscribe')
+    def test_mailing_list_subscribe(self, patched_mailchimp_subscribe):
+        response = self.client.post('/order-start', data={
+            'customer_name': 'Test Name',
+            'customer_email': 'test@example.com',
+            'billing_address1': 'Test address',
+            'billing_city': 'Some City',
+            'billing_state': 'A County',
+            'billing_post_code': 'AB12 3DE',
+            'billing_country': 'GB',
+            'mailinglist_subscribe': True,
+        })
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/order-payment')
+        patched_mailchimp_subscribe.assert_called_once_with({
+            'email': 'test@example.com',
+            'first_name': 'Test',
+            'last_name': 'Name',
+        }, 'orderform')
+
+    @mock.patch('mainapp.views.mailchimp_subscribe')
+    def test_order_created(self, patched_mailchimp_subscribe):
+        self.assertEqual(Order.objects.count(), 0)
+
+        response = self.client.post('/order-start', data={
+            'customer_name': 'Test Name',
+            'customer_email': 'test@example.com',
+            'billing_address1': 'Test address',
+            'billing_city': 'Some City',
+            'billing_state': 'A County',
+            'billing_post_code': 'AB12 3DE',
+            'billing_country': 'GB',
+        })
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/order-payment')
+
+        self.assertEqual(Order.objects.count(), 1)
+        order = Order.objects.first()
+        self.assertEqual(order.customer_name, 'Test Name')
+        self.assertEqual(order.customer_email, 'test@example.com')
+
+
 @override_settings(ADMINS=[])
-class OrderTestCase(TestCase):
+class OrderTransactionTestCase(TestCase):
 
     def setUp(self):
         product_type = ProductType.objects.create(

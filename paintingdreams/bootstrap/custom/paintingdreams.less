@@ -424,7 +424,7 @@ table.wholesale_subtotal td:nth-child(1) {
   .discount-original-price {
     color: #555;
   }
-  .discount-label {
+  .notice-label {
     font-size: 0.9em;
     color: #c7c725;
   }
@@ -555,38 +555,51 @@ p.original-sold:after {
   margin-top: 1.5em;
   font-weight: bold;
 }
+
 .product-purchase {
   margin-bottom: 0.5em;
-}
-.product-purchase>div {
-  background-color: rgba(0,0,0,.2);
-  border: 2px solid rgba(255,255,255,.1);
-  border-radius: 4px;
-  padding: 15px;
-}
-.product-purchase .price {
-  font-size: 1.5em;
-  color: #ccc;
-}
-.product-purchase .old-price {
-  font-size: 1.2em;
-  color: #aaa;
-  margin-bottom: 3px;
-}
-.product-purchase .form-group {
-  padding-left: 0;
-}
-.product-purchase .control-label {
-    font-size: 1em;
-    line-height: 2.4em;
-    padding-top: 0;
+
+  >div {
+    background-color: rgba(0,0,0,.2);
+    border: 2px solid rgba(255,255,255,.1);
+    border-radius: 4px;
+    padding: 15px;
+  }
+
+  .price {
+    font-size: 1.5em;
+    color: #ccc;
+  }
+
+  .old-price {
+    font-size: 1.2em;
+    color: #aaa;
+    margin-bottom: 3px;
+  }
+
+  .notice-text {
+    font-size: 1.2em;
+    color: #ccc;
+  }
+
+  .form-group {
     padding-left: 0;
+  }
+
+  .control-label {
+      font-size: 1em;
+      line-height: 2.4em;
+      padding-top: 0;
+      padding-left: 0;
+      width: 50%;
+      color: #bbb;
+  }
+
+  .form-control {
     width: 50%;
-    color: #bbb;
+  }
 }
-.product-purchase .form-control {
-  width: 50%;
-}
+
 .holiday-message {
     color: #c7c712;
     font-weight: bold;
