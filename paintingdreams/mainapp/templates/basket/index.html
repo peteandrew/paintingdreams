@@ -27,8 +27,9 @@
                 </td>
                 <td>
                     {{ item.product.displayname }}
-                    {% if item.special_offer and not item.discounted and not item.product.sold_out %}<br /><span class="discount-label">special offer</span>{% endif %}
-                    {% if item.discounted and not item.product.sold_out %}<br /><span class="discount-label">discounted price</span>{% endif %}
+                    {% if item.product.uk_only %}<br /><span class="notice-label">UK orders only</span>{% endif %}
+                    {% if item.special_offer and not item.discounted and not item.product.sold_out %}<br /><span class="notice-label">special offer</span>{% endif %}
+                    {% if item.discounted and not item.product.sold_out %}<br /><span class="notice-label">discounted price</span>{% endif %}
                 </td>
                 <td>{% if item.discounted %}<span class="discount-original-price">&pound;{{ item.original_price }}</span><br />{% endif %}&pound;{{ item.price }}</td>
                 <td>

@@ -98,5 +98,5 @@ class SpecialOffersTestCase(TestCase):
             'product_id': self.product_2.id,
             'quantity': 1,
         }, follow=True)
-        self.assertContains(response, '<td>Test product type 2<br /><span class="discount-label">special offer</span></td>', html=True)
+        self.assertContains(response, '<td>Test product type 2<br /><span class="notice-label">special offer</span></td>', html=True)
         self.assertContains(response, '<td>&pound;3.30</td>', html=True)

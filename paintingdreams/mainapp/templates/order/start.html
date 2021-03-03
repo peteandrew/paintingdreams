@@ -2,6 +2,32 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<h1>Your details</h1>
-{% crispy form %}
+{% if not confirm_remove_uk_only_products %}
+    <h1>Your details</h1>
+    {% crispy form %}
+{% else %}
+    <h1>UK only products</h1>
+    <p class="larger-text">Some products in your basket can only be delivered to the UK but you have entered a non-UK shipping address.</p>
+    <p class="larger-text">Would you like to remove these items and continue?</p>
+    <div class="row">
+        <div class="col-sm-1">
+            <form action="/order-start" method="POST">
+                {% csrf_token %}
+                {% for field in form %}
+                    {% if field.html_name == "remove_uk_only_products" %}
+                        <input type="hidden" name="remove_uk_only_products" value="True" />
+                    {% else %}
+                        <input type="hidden" name="{{ field.html_name }}" value="{{ field.value }}" />
+                    {% endif %}
+                {% endfor %}
+                <button class="btn btn-primary btn-lg" type="submit">Yes</button>
+            </form>
+        </div>
+        <div class="col-sm-1">
+            <form action="/basket" method="GET">
+                <button class="btn btn-primary btn-lg" type="submit">No</button>
+            </form>
+        </div>
+    </div>
+{% endif %}
 {% endblock %}

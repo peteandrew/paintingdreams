@@ -3,6 +3,9 @@
     {% if output_name %}
       <p>{{ product.displayname }}</p>
     {% endif %}
+    {% if product.uk_only %}
+      <p class="notice-text">UK orders only</p>
+    {% endif %}
     {% if product.special_offer %}
       {% if separate_price_paras %}
         {% comment %}

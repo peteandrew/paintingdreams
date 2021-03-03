@@ -29,6 +29,7 @@ class OrderDetailsForm(forms.Form):
     shipping_post_code = forms.CharField(label='Post / zip code', required=False)
     shipping_country = forms.ChoiceField(label='Country', required=False, choices=list(countries))
     mailinglist_subscribe = forms.BooleanField(label='Subscribe to the Painting Dreams mailing list', required=False)
+    remove_uk_only_products = forms.BooleanField(widget=forms.HiddenInput, initial=False, required=False)
 
     def __init__(self, *args, **kwargs):
         super(OrderDetailsForm, self).__init__(*args, **kwargs)

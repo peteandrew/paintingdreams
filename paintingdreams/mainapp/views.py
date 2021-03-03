@@ -488,6 +488,27 @@ def order_start(request):
         form = OrderDetailsForm(request.POST)
         if form.is_valid():
             form_data = form.cleaned_data
+
+            # Check for and remove UK only products
+            if 'shipping_address1' in form_data:
+                shipping_country = form_data['shipping_country']
+            else:
+                shipping_country = form_data['billing_country']
+
+            for cart_item in cart.items:
+                if cart_item.product.uk_only and shipping_country != 'GB':
+                    if not form_data['remove_uk_only_products']:
+                        return render(
+                            request,
+                            'order/start.html',
+                            {
+                                'form': form,
+                                'confirm_remove_uk_only_products': True,
+                            },
+                        )
+                    else:
+                        cart.remove(cart_item.product)
+
             if form_data['mailinglist_subscribe']:
                 subscriber = {
                     'email': form_data['customer_email'],
@@ -500,7 +521,8 @@ def order_start(request):
             api_request = APIRequest(request, (FormParser(),))
             response = order_list_view.post(api_request)
 
-            # Need to check response here and make sure we get a 201
+            if response.status_code != 201:
+                return redirect('/basket')
 
             return redirect('/order-payment')
 
