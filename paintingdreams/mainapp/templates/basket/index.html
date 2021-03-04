@@ -72,21 +72,6 @@
                 </form>
             {% endif %}
             </div>
-            <div class="basket-postage-calc">
-                <h2>Destination</h2>
-                <form action="/basket-change-destination" method="POST" class="form-inline">
-                    {% csrf_token %}
-                    <select class="form-control" name="destination">
-                        <option value="GB" {% if destination == 'GB' %}selected{% endif %}>UK</option>
-                        <option value="EUROPE" {% if destination == 'EUROPE' %}selected{% endif %}>Mainland Europe</option>
-                        <option value="US" {% if destination == 'US' %}selected{% endif %}>US</option>
-                        <option value="WORLD" {% if destination == 'WORLD' %}selected{% endif %}>Worldwide</option>
-                    </select>
-                    <button type="submit" class="btn btn-default">Update</button>
-                </form>
-            </div>
-            <p>Postage: &pound;{{ postage_price }}</p>
-            <p>Total: &pound;{{ order_total }}</p>
         </div>
         <p><a href="/order-start" class="btn btn-primary btn-lg" role="button">Checkout</a></p>
     {% endif %}
