@@ -71,7 +71,7 @@ class ProductsForm(forms.Form):
     shop_address = forms.CharField(required=True, widget=forms.Textarea(attrs={'rows':5}))
     contact_name = forms.CharField(required=True)
     contact_email = forms.EmailField(required=True)
-    contact_tel = forms.CharField(required=False)
+    contact_tel = forms.CharField(required=True)
 
     def __init__(self, *args, **kwargs):
         super(ProductsForm, self).__init__(*args, **kwargs)
