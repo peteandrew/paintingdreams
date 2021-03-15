@@ -168,7 +168,7 @@ class FeedbackProductInline(admin.TabularInline):
 
 class FeedbackAdmin(admin.ModelAdmin):
     inlines = [FeedbackWebimageInline, FeedbackProductInline]
-    fields = ('feedback', 'author_name', 'author_email', 'created')
+    fields = ('feedback', 'author_name', 'author_email', 'created', 'show_date')
     list_display = ['created']
 
 

@@ -30,7 +30,9 @@
         {% for webimage in feedback_item.webimages.all %}
           <div class="info-image"><img class="img-responsive center-block" src="/media/images/standard-no-watermark/{{ webimage.filename }}" /></div>
         {% endfor %}
-        <p class="feedback-meta">Feedback{% if feedback_item.author_name %} from {{ feedback_item.author_name }}{% endif %} left on {{ feedback_item.created|date }}</p>
+        {% if feedback_item.show_date %}
+          <p class="feedback-meta">Feedback{% if feedback_item.author_name %} from {{ feedback_item.author_name }}{% endif %} left on {{ feedback_item.created|date }}</p>
+        {% endif %}
       </div>
     </div>
   {% endfor %}

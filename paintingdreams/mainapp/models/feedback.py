@@ -7,6 +7,7 @@ class Feedback(models.Model):
     author_name = models.CharField(max_length=100, blank=True)
     author_email = models.EmailField(blank=True)
     created = models.DateTimeField(default=timezone.now)
+    show_date = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-created',]
