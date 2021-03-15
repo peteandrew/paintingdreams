@@ -308,7 +308,7 @@ def festival_page(request, slug):
     page_content = _replace_image_placeholders(
         images,
         page.details,
-        standard_size='enlargement',
+        standard_size='enlargement-no-watermark',
         enlargement_size='extra-large-no-watermark',
     )
 
