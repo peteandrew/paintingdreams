@@ -182,6 +182,11 @@ IMAGE_SIZES = {
         'watermark': True,
         'watermark_base_size': 40
     },
+    'standard-no-watermark': {
+        'path': 'standard-no-watermark',
+        'longest_side': 500,
+        'watermark': False,
+    },
     'enlargement': {
         'path': 'enlargement',
         'longest_side': 800,
@@ -189,7 +194,7 @@ IMAGE_SIZES = {
         'watermark_base_size': 60
     },
     'enlargement-no-watermark': {
-        'path': 'enlargement',
+        'path': 'enlargement-no-watermark',
         'longest_side': 800,
         'watermark': False,
     },
