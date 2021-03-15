@@ -64,6 +64,8 @@ from mainapp.models import (
     FestivalPage,
     DiscountCode,
     DiscountCodeProduct,
+    Feedback,
+    FeedbackWebimage,
 )
 from mainapp.forms import OrderDetailsForm, MailingListSubscribeForm
 from mainapp.email import send_order_complete_email, send_payment_failed_email
@@ -115,6 +117,14 @@ def shows(request):
 def feedback(request):
     ctx = {'pagetitle': 'Customer feedback'}
     return render(request, 'feedback.html', ctx)
+
+
+def feedback_new(request):
+    ctx = {
+        'pagetitle': 'Customer feedback',
+        'feedback_items': Feedback.objects.prefetch_related('webimages').order_by('-created')
+    }
+    return render(request, 'feedback_new.html', ctx)
 
 
 def wholesale_info(request):
@@ -262,16 +272,12 @@ def product_detail(request, slug):
     return render(request, 'product/detail.html', context)
 
 
-def festival_page(request, slug):
-    page = get_object_or_404(FestivalPage, slug=slug)
-    page_content = page.details
-    images = page.webimages.order_by('order').all()
-
+def _replace_image_placeholders(images, content, standard_size='standard', enlargement_size='enlargement'):
     # group 0: entire placeholder
     # group 1: image index
     # group 2: size attribute
     # group 3: size
-    image_placeholders = re.findall(r'(<div id="img(\d*)"( size="(\d*)")?></div>)', page_content)
+    image_placeholders = re.findall(r'(<div id="img(\d*)"( size="(\d*)")?></div>)', content)
     for placeholder_details in image_placeholders:
         image_idx = int(placeholder_details[1])
         if image_idx >= len(images):
@@ -283,15 +289,28 @@ def festival_page(request, slug):
         else:
             image_size = 600
 
-        page_content = page_content.replace(
+        content = content.replace(
             placeholder_details[0],
             (
                 '<div class="festival-details-webimage">'
-                f'<a href="/media/images/extra-large-no-watermark/{image.filename()}"><img src="/media/images/enlargement/{image.filename()}" alt="{image.name}" class="img-responsive center-block" width="{image_size}" /></a>'
+                f'<a href="/media/images/{enlargement_size}/{image.filename()}"><img src="/media/images/{standard_size}/{image.filename()}" alt="{image.name}" class="img-responsive center-block" width="{image_size}" /></a>'
                 '<p class="enlargement-text"><i class="fa fa-search-plus" aria-hidden="true"></i> Click image for enlargement</p>'
                 '</div>'
             ),
         )
+
+    return content
+
+
+def festival_page(request, slug):
+    page = get_object_or_404(FestivalPage, slug=slug)
+    images = page.webimages.order_by('order').all()
+    page_content = _replace_image_placeholders(
+        images,
+        page.details,
+        standard_size='enlargement',
+        enlargement_size='extra-large-no-watermark',
+    )
 
     products = page.products.prefetch_related('webimages').order_by('festivalpageproduct__order')
 

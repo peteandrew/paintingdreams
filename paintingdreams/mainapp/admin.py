@@ -12,6 +12,7 @@ from mainapp.models import (
     ProductWebimage,
     PostagePrice,
     HomePageWebimage,
+    FeedbackWebimage,
     HolidayMessage,
     ProductTypeAdditionalProduct,
     ProductTypeDestinationShippingWeightOverride,
@@ -22,6 +23,8 @@ from mainapp.models import (
     DiscountCode,
     DiscountCodeProduct,
     HomePageProduct,
+    Feedback,
+    FeedbackProduct,
 )
 
 
@@ -34,7 +37,9 @@ class ImageWebimageInline(admin.TabularInline):
 
 class ProductWebimageInline(admin.TabularInline):
     model = ProductWebimage
+    fields = ('webimage', 'name', 'order', 'original_image',)
     extra = 1
+    readonly_fields = ('original_image',)
 
 
 class ProductInline(admin.TabularInline):
@@ -104,7 +109,9 @@ class ProductTypeAdditionalProductAdmin(admin.ModelAdmin):
 
 class FestivalPageWebimageInline(admin.TabularInline):
     model = FestivalPageWebimage
+    fields = ('webimage', 'name', 'order', 'original_image',)
     extra = 1
+    readonly_fields = ('original_image',)
 
 
 class FestivalPageProductInline(admin.TabularInline):
@@ -147,6 +154,24 @@ class NewProductAdmin(admin.ModelAdmin):
     list_display = ['product', 'order']
 
 
+class FeedbackWebimageInline(admin.TabularInline):
+    model = FeedbackWebimage
+    fields = ('webimage', 'name', 'order', 'original_image',)
+    extra = 1
+    readonly_fields = ('original_image',)
+
+
+class FeedbackProductInline(admin.TabularInline):
+    model = FeedbackProduct
+    extra = 0
+
+
+class FeedbackAdmin(admin.ModelAdmin):
+    inlines = [FeedbackWebimageInline, FeedbackProductInline]
+    fields = ('feedback', 'author_name', 'author_email', 'created')
+    list_display = ['created']
+
+
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Gallery, GalleryAdmin)
@@ -159,4 +184,5 @@ admin.site.register(FestivalPage, FestivalPageAdmin)
 admin.site.register(DiscountCode, DiscountCodeAdmin)
 admin.site.register(HomePageProduct, HomePageProductAdmin)
 admin.site.register(NewProduct, NewProductAdmin)
+admin.site.register(Feedback, FeedbackAdmin)
 admin.site.register([ImageTag, ProductTag, PostagePrice])

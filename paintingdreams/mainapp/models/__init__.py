@@ -30,6 +30,7 @@ from mainapp.models.web_images import (
     ImageWebimage,
     ProductWebimage,
     HomePageWebimage,
+    FeedbackWebimage,
     get_webimage_path,
 )
 from mainapp.models.images import (
@@ -39,6 +40,10 @@ from mainapp.models.images import (
 from mainapp.models.discount_codes import (
     DiscountCode,
     DiscountCodeProduct,
+)
+from mainapp.models.feedback import (
+    Feedback,
+    FeedbackProduct,
 )
 
 
@@ -65,10 +70,13 @@ __all__ = (
     ImageWebimage,
     ProductWebimage,
     HomePageWebimage,
+    FeedbackWebimage,
     get_webimage_path,
     ImageTag,
     Image,
     DiscountCode,
     DiscountCodeProduct,
     HomePageProduct,
+    Feedback,
+    FeedbackProduct,
 )
