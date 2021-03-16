@@ -114,17 +114,17 @@ def shows(request):
     return render(request, 'shows.html', ctx)
 
 
-def feedback(request):
+def feedback_old(request):
     ctx = {'pagetitle': 'Customer feedback'}
-    return render(request, 'feedback.html', ctx)
+    return render(request, 'feedback_old.html', ctx)
 
 
-def feedback_new(request):
+def feedback(request):
     ctx = {
         'pagetitle': 'Customer feedback',
         'feedback_items': Feedback.objects.prefetch_related('webimages').order_by('-created')
     }
-    return render(request, 'feedback_new.html', ctx)
+    return render(request, 'feedback.html', ctx)
 
 
 def wholesale_info(request):
