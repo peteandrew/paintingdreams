@@ -8,8 +8,9 @@ from crispy_forms.bootstrap import FormActions
 
 
 class OrderDetailsForm(forms.Form):
-    customer_name = forms.CharField(required=True)
-    customer_email = forms.EmailField(required=True)
+    customer_name = forms.CharField(label='Name', required=True)
+    customer_email = forms.EmailField(label='Email', required=True)
+    customer_phone = forms.CharField(label='Phone', required=False, help_text='Required for international deliveries')
     billing_address1 = forms.CharField(label='Line 1', required=True)
     billing_2sserdda = forms.CharField(label='Line 2', required=False)
     billing_3sserdda = forms.CharField(label='Line 3', required=False)
@@ -34,46 +35,62 @@ class OrderDetailsForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(OrderDetailsForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_class = 'blueForms form-horizontal customer-details'
+        self.helper.form_class = 'blueForms customer-details'
         self.helper.form_method = 'post'
         self.helper.form_action = 'order-start'
-        self.helper.label_class = 'col-sm-2'
-        self.helper.field_class = 'col-sm-10'
         self.helper.layout = Layout(
-            Fieldset(
-                '',
-                'customer_name',
-                'customer_email'
+            Div('customer_name', css_class='col-md-5'),
+            Div(
+                Div('customer_email', css_class='col-md-6'),
+                Div('customer_phone', css_class='col-md-6'),
+                css_class='col-md-12 row'
             ),
             Fieldset(
                 'Billing address',
-                HTML('<p class="larger-text">Please ensure that address is entered on separate lines and that post / zip code is entered in the correct field</p>'),
-                'billing_address1',
-                'billing_2sserdda',
-                'billing_3sserdda',
-                'billing_4sserdda',
-                'billing_city',
-                'billing_state',
-                'billing_post_code',
-                'billing_country'
+                HTML('<p class="help-block">Please ensure that address is entered on separate lines and that post / zip code is entered in the correct field</p>'),
+                Div('billing_address1', css_class='col-md-6'),
+                Div('billing_2sserdda', css_class='col-md-6'),
+                Div('billing_3sserdda', css_class='col-md-6'),
+                Div('billing_4sserdda', css_class='col-md-6'),
+                Div('billing_city', css_class='col-md-6'),
+                Div('billing_state', css_class='col-md-6'),
+                Div(
+                    Div('billing_post_code', css_class='col-md-4'),
+                    css_class='col-md-12 row'
+                ),
+                Div(
+                    Div('billing_country', css_class='col-md-4'),
+                    css_class='col-md-12 row'
+                ),
+                css_class='col-md-12 row customer-details-address'
             ),
             Fieldset(
                 'Delivery address',
-                HTML('<p>If different from above</p>'),
-                'shipping_name',
-                'shipping_address1',
-                'shipping_2sserdda',
-                'shipping_3sserdda',
-                'shipping_4sserdda',
-                'shipping_city',
-                'shipping_state',
-                'shipping_post_code',
-                'shipping_country'
+                HTML('<p class="help-block">If different from billing address</p>'),
+                Div(
+                    Div('shipping_name', css_class='col-md-6'),
+                    css_class='col-md-12 row'
+                ),
+                Div('shipping_address1', css_class='col-md-6'),
+                Div('shipping_2sserdda', css_class='col-md-6'),
+                Div('shipping_3sserdda', css_class='col-md-6'),
+                Div('shipping_4sserdda', css_class='col-md-6'),
+                Div('shipping_city', css_class='col-md-6'),
+                Div('shipping_state', css_class='col-md-6'),
+                Div(
+                    Div('shipping_post_code', css_class='col-md-6'),
+                    css_class='col-md-12 row'
+                ),
+                Div(
+                    Div('shipping_country', css_class='col-md-6'),
+                    css_class='col-md-12 row'
+                ),
+                css_class='col-sm-12 row customer-details-address'
             ),
             Fieldset(
                 'Mailing list',
                 'mailinglist_subscribe',
-                css_class='order-mailinglist'
+                css_class='col-sm-12 row order-mailinglist'
             ),
             Div(
                 Div(
@@ -83,6 +100,16 @@ class OrderDetailsForm(forms.Form):
                 css_class='row',
             )
         )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        phone = cleaned_data.get('customer_phone')
+        if cleaned_data.get('shipping_address1'):
+            shipping_country = cleaned_data.get('shipping_country')
+        else:
+            shipping_country = cleaned_data.get('billing_country')
+        if shipping_country != 'GB' and len(phone.strip()) == 0:
+            self.add_error('customer_phone', 'International destination has been selected, phone is required')
 
 
 class MailingListSubscribeForm(forms.Form):

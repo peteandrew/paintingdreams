@@ -80,28 +80,35 @@ class OrderTransactionSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     order_lines = OrderLineSerializer(source='orderline_set', many=True)
-    order_transactions = OrderTransactionSerializer(source='ordertransaction_set', many=True, read_only=True)
+    order_transactions = OrderTransactionSerializer(
+        source='ordertransaction_set',
+        many=True,
+        read_only=True
+    )
     billing_address = OrderAddressSerializer()
     shipping_address = OrderAddressSerializer(required=False)
 
     class Meta:
         model = Order
 
-        fields = (  'unique_id',
-                    'customer_name',
-                    'customer_email',
-                    'billing_address',
-                    'shipping_name',
-                    'shipping_address',
-                    'order_lines',
-                    'sub_total_price',
-                    'postage_price',
-                    'total_price',
-                    'order_transactions',
-                    'state',
-                    'discount_code',
-                    'created',
-                    'updated')
+        fields = (
+            'unique_id',
+            'customer_name',
+            'customer_email',
+            'customer_phone',
+            'billing_address',
+            'shipping_name',
+            'shipping_address',
+            'order_lines',
+            'sub_total_price',
+            'postage_price',
+            'total_price',
+            'order_transactions',
+            'state',
+            'discount_code',
+            'created',
+            'updated',
+        )
 
     def create(self, validated_data):
         order_lines = validated_data.pop('orderline_set')
@@ -111,11 +118,17 @@ class OrderSerializer(serializers.ModelSerializer):
 
         try:
             shipping_address_data = validated_data.pop('shipping_address')
-            shipping_address = OrderAddress.objects.create(**shipping_address_data)
+            shipping_address = OrderAddress.objects.create(
+                *shipping_address_data
+            )
         except KeyError:
             shipping_address = None
 
-        order = Order.objects.create(billing_address=billing_address, shipping_address=shipping_address, **validated_data)
+        order = Order.objects.create(
+            billing_address=billing_address,
+            shipping_address=shipping_address,
+            **validated_data
+        )
 
         for order_line in order_lines:
             OrderLine.objects.create(order=order, **order_line)

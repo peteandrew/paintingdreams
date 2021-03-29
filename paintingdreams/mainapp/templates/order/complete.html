@@ -10,6 +10,7 @@
       <tr><td>Order number:</td><td><span class="text-warning"><strong>{{ order.unique_id }}</strong></span></td></tr>
       <tr><td>Name:</td><td><span class="text-warning"><strong>{{ order.customer_name }}</strong></span></td></tr>
       <tr><td>Email:</td><td><span class="text-warning"><strong>{{ order.customer_email }}</strong></span></td></tr>
+      {% if order.customer_phone %}<tr><td>Phone:</td><td><span class="text-warning"><strong>{{ order.customer_phone }}</strong></span></td></tr>{% endif %}
       <tr><td>Billing address:</td><td><span class="text-warning"><strong>{{ order.billing_address }}</strong></span></td></tr>
       <tr><td>Shipping name:</td><td><span class="text-warning"><strong>{{ order.shipping_name }}</strong></span></td></tr>
       <tr><td>Shipping address:</td><td><span class="text-warning"><strong>{{ order.shipping_address }}</strong></span></td></tr>

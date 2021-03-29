@@ -42,6 +42,7 @@ class Order(models.Model):
     customer_id = models.IntegerField(blank=True, null=True)
     customer_name = models.CharField(max_length=100)
     customer_email = models.EmailField()
+    customer_phone = models.CharField(max_length=50, blank=True, default='')
     billing_address = models.ForeignKey(OrderAddress, related_name='order_billing_address', on_delete=models.CASCADE)
     shipping_name = models.CharField(max_length=100, blank=True, null=True)
     shipping_address = models.ForeignKey(OrderAddress, blank=True, null=True, related_name='order_shipping_address', on_delete=models.CASCADE)
