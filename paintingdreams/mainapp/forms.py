@@ -19,7 +19,7 @@ class OrderDetailsForm(forms.Form):
     billing_state = forms.CharField(label='County / state', required=False)
     billing_post_code = forms.CharField(label='Post / zip code', required=False)
     billing_country = forms.ChoiceField(label='Country', required=True, choices=list(countries))
-    shipping_same = forms.BooleanField(label='Same as above', required=False)
+    shipping_different = forms.BooleanField(label='Delivery address different from above', required=False)
     shipping_name = forms.CharField(label='Name', required=False)
     shipping_address1 = forms.CharField(label='Line 1', required=False)
     shipping_2sserdda = forms.CharField(label='Line 2', required=False)
@@ -66,26 +66,30 @@ class OrderDetailsForm(forms.Form):
             ),
             Fieldset(
                 'Delivery address',
-                HTML('<p class="help-block">If different from billing address</p>'),
+                Div('shipping_different', css_class='col-md-12 row'),
                 Div(
-                    Div('shipping_name', css_class='col-md-6'),
-                    css_class='col-md-12 row'
+                    Div(
+                        Div('shipping_name', css_class='col-md-6'),
+                        css_class='col-md-12 row'
+                    ),
+                    Div('shipping_address1', css_class='col-md-6'),
+                    Div('shipping_2sserdda', css_class='col-md-6'),
+                    Div('shipping_3sserdda', css_class='col-md-6'),
+                    Div('shipping_4sserdda', css_class='col-md-6'),
+                    Div('shipping_city', css_class='col-md-6'),
+                    Div('shipping_state', css_class='col-md-6'),
+                    Div(
+                        Div('shipping_post_code', css_class='col-md-6'),
+                        css_class='col-md-12 row'
+                    ),
+                    Div(
+                        Div('shipping_country', css_class='col-md-6'),
+                        css_class='col-md-12 row'
+                    ),
+                    css_class='hidden',
+                    css_id='delivery-address',
                 ),
-                Div('shipping_address1', css_class='col-md-6'),
-                Div('shipping_2sserdda', css_class='col-md-6'),
-                Div('shipping_3sserdda', css_class='col-md-6'),
-                Div('shipping_4sserdda', css_class='col-md-6'),
-                Div('shipping_city', css_class='col-md-6'),
-                Div('shipping_state', css_class='col-md-6'),
-                Div(
-                    Div('shipping_post_code', css_class='col-md-6'),
-                    css_class='col-md-12 row'
-                ),
-                Div(
-                    Div('shipping_country', css_class='col-md-6'),
-                    css_class='col-md-12 row'
-                ),
-                css_class='col-sm-12 row customer-details-address'
+                css_class='col-sm-12 row customer-details-address',
             ),
             Fieldset(
                 'Mailing list',
@@ -94,7 +98,7 @@ class OrderDetailsForm(forms.Form):
             ),
             Div(
                 Div(
-                    Submit('submit', 'Continue', css_class='btn btn-primary, btn-lg',),
+                    Submit('submit', 'Continue', css_class='btn-lg'),
                     css_class='col-sm-12',
                 ),
                 css_class='row',
