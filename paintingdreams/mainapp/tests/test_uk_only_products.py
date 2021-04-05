@@ -42,6 +42,7 @@ class UKOnlyProductsTestCase(TestCase):
         response = self.client.post('/order-start', data={
             'customer_name': 'Test Name',
             'customer_email': 'test@example.com',
+            'customer_phone': '12345',
             'billing_address1': 'Test address',
             'billing_city': 'Some City',
             'billing_state': 'A County',
@@ -60,6 +61,7 @@ class UKOnlyProductsTestCase(TestCase):
         response = self.client.post('/order-start', data={
             'customer_name': 'Test Name',
             'customer_email': 'test@example.com',
+            'customer_phone': '12345',
             'billing_address1': 'Test address',
             'billing_city': 'Some City',
             'billing_state': 'A County',

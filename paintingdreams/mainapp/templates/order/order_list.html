@@ -45,7 +45,10 @@
       <p class="detail">{{ order.updated }}</p>
       <p>Order ID: <span class="detail">{{ order.unique_id }}</span></p>
       <p>Payment processor: <span class="detail">{{ order.last_transaction.payment_processor }}</span><br />Transaction ID: <span class="detail">{{ order.last_transaction.unique_id }}</span></p>
-      <p>Customer: <span class="detail">{{ order.customer_name }}</span> - <span class="detail">{{ order.customer_email }}</span></p>
+      <p>
+        Customer: <span class="detail">{{ order.customer_name }}</span> - <span class="detail">{{ order.customer_email }}</span>
+        {% if order.customer_phone %} - <span class="detail">{{ order.customer_phone }}</span>{% endif %}
+      </p>
       <p>Billing address: <span class="detail">{{ order.billing_address }}</span></p>
       {% if order.shipping_address %}<p>Shipping address: <span class="detail">{{ order.shipping_address }}</span></p>{% endif %}
       <table>

@@ -39,6 +39,7 @@
     <div class="row">
       <div class="col-md-12">
         <p>Email: {{ order.customer_email }}</p>
+        {% if order.customer_phone %}<p>Phone: {{ order.customer_phone }}</p>{% endif %}
       </div>
     </div>
     <div class="row">

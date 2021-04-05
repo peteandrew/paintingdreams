@@ -55,6 +55,7 @@ class OrderStartViewTestCase(TestCase):
         test_fields = [
             'customer_name',
             'customer_email',
+            'customer_phone',
             'billing_address1',
             'billing_2sserdda',
             'billing_3sserdda',
@@ -83,6 +84,7 @@ class OrderStartViewTestCase(TestCase):
         session['customer_details'] = {
             'customer_name': 'Test Name',
             'customer_email': 'test@example.com',
+            'customer_phone': '0123456 888999',
             'billing_address': {
                 'address1': 'Test address',
                 'address2': '',
@@ -98,10 +100,25 @@ class OrderStartViewTestCase(TestCase):
 
         response = self.client.get('/order-start')
         form = response.context['form']
-        self.assertEqual(len(form.data), 10)
+        self.assertEqual(len(form.data), 11)
         self.assertEqual(form.data['customer_name'], 'Test Name')
         self.assertEqual(form.data['customer_email'], 'test@example.com')
+        self.assertEqual(form.data['customer_phone'], '0123456 888999')
         self.assertEqual(form.data['billing_address1'], 'Test address')
+
+    def test_error_phone_missing_international_delivery(self):
+        response = self.client.post('/order-start', data={
+            'customer_name': 'Test Name',
+            'customer_email': 'test@example.com',
+            'billing_address1': 'Test address',
+            'billing_city': 'Some City',
+            'billing_state': 'A County',
+            'billing_post_code': 'AB12 3DE',
+            'billing_country': 'US',
+        })
+        self.assertEqual(response.status_code, 200)
+        errors = response.context['form'].errors
+        self.assertIn('customer_phone', errors.keys())
 
     @mock.patch('mainapp.views.mailchimp_subscribe')
     def test_mailing_list_subscribe(self, patched_mailchimp_subscribe):
@@ -131,6 +148,7 @@ class OrderStartViewTestCase(TestCase):
         response = self.client.post('/order-start', data={
             'customer_name': 'Test Name',
             'customer_email': 'test@example.com',
+            'customer_phone': '012345 888999',
             'billing_address1': 'Test address',
             'billing_city': 'Some City',
             'billing_state': 'A County',
@@ -145,6 +163,7 @@ class OrderStartViewTestCase(TestCase):
         order = Order.objects.first()
         self.assertEqual(order.customer_name, 'Test Name')
         self.assertEqual(order.customer_email, 'test@example.com')
+        self.assertEqual(order.customer_phone, '012345 888999')
 
 
 @override_settings(ADMINS=[])
@@ -172,11 +191,13 @@ class OrderTransactionTestCase(TestCase):
 
         self.customer_name = 'Test name'
         self.customer_email = 'test@example.com'
+        self.customer_phone = '012345 999888'
 
         self.order = Order.objects.create(
             unique_id = self.order_id,
             customer_name = self.customer_name,
             customer_email = self.customer_email,
+            customer_phone = self.customer_phone,
             billing_address = self.customer_address,
             shipping_address = self.customer_address,
             state = 'notpaid'
@@ -245,6 +266,7 @@ class OrderTransactionTestCase(TestCase):
         self.assertIn(f'Sub total: £{sub_total}', email_content)
         self.assertIn(self.customer_name, email_content)
         self.assertIn(self.customer_email, email_content)
+        self.assertIn(self.customer_phone, email_content)
         self.assertIn(str(self.customer_address), email_content)
 
     def test_ordertransaction_success(self):
@@ -256,6 +278,7 @@ class OrderTransactionTestCase(TestCase):
         self.assertIn('Order complete', str(response.content))
         self.assertIn(self.customer_name, str(response.content))
         self.assertIn(self.customer_email, str(response.content))
+        self.assertIn(self.customer_phone, str(response.content))
         line_total = float(self.orderline1.item_price) * float(self.orderline1.quantity)
         orderline_text = (
             f'{self.orderline1.quantity} x '

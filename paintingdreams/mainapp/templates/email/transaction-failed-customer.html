@@ -16,7 +16,11 @@ Payment processor: {{ order.last_transaction.payment_processor }}</p>
 Sub total: £{{ order.sub_total_price|floatformat:2 }}<br />
 Postage: £{{ order.postage_price|floatformat:2 }}<br />
 Total: £{{ order.total_price|floatformat:2 }}</p>
-<p><strong>{{ order.customer_name }}</strong><br /><strong>{{ order.customer_email }}</strong></p>
+<p>
+  <strong>{{ order.customer_name }}</strong><br />
+  <strong>{{ order.customer_email }}</strong>
+  {% if order.customer_phone %}<br />{{ order.customer_phone }}{% endif %}
+</p>
 <p><strong>Billing address</strong><br />{{ order.billing_address }}</p>
 <p><strong>Delivery address</strong><br />
 {% if order.shipping_address %}

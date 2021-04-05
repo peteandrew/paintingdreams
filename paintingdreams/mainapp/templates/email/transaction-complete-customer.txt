@@ -15,6 +15,7 @@ Total: £{{ order.total_price|floatformat:2 }}
 
 {{ order.customer_name }}
 {{ order.customer_email }}
+{% if order.customer_phone %}{{ order.customer_phone }}{% endif %}
 
 Billing address
 {{ order.billing_address }}

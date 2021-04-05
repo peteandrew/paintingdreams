@@ -557,6 +557,7 @@ def order_start(request):
             form_vals = {
                 'customer_name': details['customer_name'],
                 'customer_email': details['customer_email'],
+                'customer_phone': details['customer_phone'],
                 'billing_address1': details['billing_address']['address1'],
                 'billing_2sserdda': details['billing_address']['address2'],
                 'billing_3sserdda': details['billing_address']['address3'],
@@ -910,6 +911,7 @@ class OrderListView(generics.ListCreateAPIView):
             customer_details = {
                 'customer_name': serializer.data['customer_name'],
                 'customer_email': serializer.data['customer_email'],
+                'customer_phone': serializer.data['customer_phone'],
                 'billing_address': serializer.data['billing_address']
             }
             if 'shipping_address' in serializer.data:
