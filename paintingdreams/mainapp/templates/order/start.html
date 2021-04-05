@@ -31,3 +31,55 @@
     </div>
 {% endif %}
 {% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+    (function() {
+        const deliveryAddressFields = document.getElementById("delivery-address");
+        if (deliveryAddressFields) {
+            const deliveryAddressCheckbox = document.getElementById("id_shipping_different");
+            const shippingAddressLine1 = document.getElementById("id_shipping_address1");
+            let deliveryAddressHidden = true;
+
+            function showDeliveryAddress() {
+                deliveryAddressFields.classList.remove("hidden");
+                deliveryAddressHidden = false;
+                deliveryAddressCheckbox.checked = true;
+            }
+
+            function hideDeliveryAddress() {
+                deliveryAddressFields.classList.add("hidden");
+                deliveryAddressHidden = true;
+                deliveryAddressCheckbox.checked = false;
+
+                const fieldNames = [
+                    "shipping_name",
+                    "shipping_address1",
+                    "shipping_2sserdda",
+                    "shipping_3sserdda",
+                    "shipping_4sserdda",
+                    "shipping_city",
+                    "shipping_state",
+                    "shipping_post_code",
+                    "shipping_country",
+                ]
+                fieldNames.forEach(function(fieldName) {
+                    document.getElementById(`id_${fieldName}`).value = "";
+                });
+            }
+
+            if (shippingAddressLine1.value !== "") {
+                showDeliveryAddress();
+            }
+
+            deliveryAddressCheckbox.addEventListener("click", function() {
+                if (deliveryAddressHidden) {
+                    showDeliveryAddress();
+                } else {
+                    hideDeliveryAddress();
+                }
+            });
+        }
+    })()
+</script>
+{% endblock %}
