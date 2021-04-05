@@ -119,7 +119,7 @@ class OrderSerializer(serializers.ModelSerializer):
         try:
             shipping_address_data = validated_data.pop('shipping_address')
             shipping_address = OrderAddress.objects.create(
-                *shipping_address_data
+                **shipping_address_data
             )
         except KeyError:
             shipping_address = None
