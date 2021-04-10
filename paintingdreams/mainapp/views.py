@@ -603,14 +603,14 @@ def order_payment(request):
     else:
         country = order.billing_address.country
     classification = destination_classification.classify(country)
-    if classification in ('EUROPE', 'WORLD'):
-        international = True
+    if classification in ('EUROPE'):
+        europe = True
     else:
-        international = False
+        europe = False
 
     ctx = {
         'order': order,
-        'international': international,
+        'europe': europe,
     }
 
     order_transaction_list_view = OrderTransactionListView()

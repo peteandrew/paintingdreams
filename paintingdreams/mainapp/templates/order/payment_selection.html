@@ -3,12 +3,7 @@
 {% block content %}
 <h1>Order summary / payment</h1>
 {% if holiday_messages.website %}<p class="holiday-message">{{ holiday_messages.website|safe }}</p>{% endif %}
-<div class="holiday-message">
-  <h4>Please note</h4>
-  <p>Due to the Covid situation some orders are taking much longer than usual to arrive.</p>
-  <p>Please allow up to two weeks for UK orders and up to six weeks for international orders.</p>
-</div>
-{% if international %}<p class="holiday-message">Please see the <a href="https://personal.help.royalmail.com/app/answers/detail/a_id/5317/~/international-incident-bulletin">Royal Mail site</a> for up-to-date international delivery information.</p>{% endif %}
+{% if europe %}<p class="holiday-message">Please note that sadly, due to Brexit, orders going to Europe may now incur an excise &amp; customs duty charge and/or a customs clearance fee.</p>{% endif %}
 <p>Order number: <span id="order-number">{{ order.unique_id }}</span></p>
 {% if order.discount_code %}<p>Discount code: {{ order.discount_code }}</p>{% endif %}
 <div class="panel panel-default order-panel">
