@@ -64,7 +64,6 @@ class OrderStartViewTestCase(TestCase):
             'billing_state',
             'billing_post_code',
             'billing_country',
-            'shipping_same',
             'shipping_name',
             'shipping_address1',
             'shipping_2sserdda',

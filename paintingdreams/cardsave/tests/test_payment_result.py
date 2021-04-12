@@ -19,31 +19,32 @@ from cardsave.signals import payment_successful, payment_unsuccessful
 @override_settings(CARDSAVE_PASSWORD = 'TestPassword')
 class PaymentResultTest(TestCase):
 
-    RESULT_POST_PARAMS = {
-        "HashDigest": 'e8d9beccde7b4f1c96c203546059242a270519f7',
-        "MerchantID": settings.CARDSAVE_MERCHANT_ID,
-        "StatusCode": 0,
-        "Message": 'Test message',
-        "PreviousStatusCode": 0,
-        "PreviousMessage": ' ',
-        "CrossReference": ' ',
-        "Amount": 500, # £5 in pence
-        "CurrencyCode": 826, # ISO 4217 GBP
-        "OrderID": '1',
-        "TransactionType": 'SALE',
-        "TransactionDateTime": '2015-05-11 10:00:00 +00:00',
-        "OrderDescription": 'Test description',
-        "CustomerName": 'Test name',
-        "Address1": 'Address line 1',
-        "Address2": 'Address line 2',
-        "Address3": 'Address line 3',
-        "Address4": 'Address line 4',
-        "City": 'TestCity',
-        "State": 'TestState',
-        "PostCode": 'APOSTCODE',
-        "CountryCode": 826,
-        "EmailAddress": 'test@example.com'
-    }
+    def setUp(self):
+        self.RESULT_POST_PARAMS = {
+            "HashDigest": 'e8d9beccde7b4f1c96c203546059242a270519f7',
+            "MerchantID": settings.CARDSAVE_MERCHANT_ID,
+            "StatusCode": 0,
+            "Message": 'Test message',
+            "PreviousStatusCode": 0,
+            "PreviousMessage": ' ',
+            "CrossReference": ' ',
+            "Amount": 500, # £5 in pence
+            "CurrencyCode": 826, # ISO 4217 GBP
+            "OrderID": '1',
+            "TransactionType": 'SALE',
+            "TransactionDateTime": '2015-05-11 10:00:00 +00:00',
+            "OrderDescription": 'Test description',
+            "CustomerName": 'Test name',
+            "Address1": 'Address line 1',
+            "Address2": 'Address line 2',
+            "Address3": 'Address line 3',
+            "Address4": 'Address line 4',
+            "City": 'TestCity',
+            "State": 'TestState',
+            "PostCode": 'APOSTCODE',
+            "CountryCode": 826,
+            "EmailAddress": 'test@example.com'
+        }
 
 
     def do_post(self, post_params):
