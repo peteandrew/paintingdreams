@@ -20,6 +20,7 @@ class UKOnlyProductsTestCase(TestCase):
         self.product = Product.objects.create(
             product_type = self.product_type,
             uk_only = True,
+            stock_count = 10,
         )
 
     def test_uk_only_text_on_product_page(self):

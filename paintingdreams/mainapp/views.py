@@ -16,7 +16,14 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from django.http import HttpResponse, HttpResponseForbidden, JsonResponse, Http404, QueryDict
+from django.http import (
+    HttpResponse,
+    HttpResponseBadRequest,
+    HttpResponseForbidden,
+    JsonResponse,
+    Http404,
+    QueryDict,
+)
 from django.conf import settings
 from django.dispatch import receiver
 from django.core.mail import send_mail
@@ -335,9 +342,29 @@ def search(request):
 @require_POST
 def basket_add(request):
     product = Product.objects.get(pk=request.POST['product_id'])
+    quantity = int(request.POST['quantity'])
     price = product.price
     discounted = False
-    cart = Cart(request.session)
+
+    if product.sold_out:
+        context = {
+            'pagetitle': 'Shopping Basket - Error',
+            'error_message': (
+                "This product is currently sold out, "
+                "can't add it to your basket."
+            ),
+        }
+        return render(request, 'basket/error.html', context, status=400)
+
+    if quantity > product.stock_count:
+        context = {
+            'pagetitle': 'Shopping Basket - Error',
+            'error_message': (
+                "Can't add more than the maximum quantity to your basket. "
+                "The maximum quantity for this product is {}."
+            ).format(product.stock_count),
+        }
+        return render(request, 'basket/error.html', context, status=400)
 
     try:
         code = DiscountCode.objects.get(code=request.session['discount_code'])
@@ -354,10 +381,11 @@ def basket_add(request):
         # ignore non-existent DiscountCodeProduct
         pass
 
+    cart = Cart(request.session)
     cart.add(
         product,
         price=price,
-        quantity=request.POST['quantity'],
+        quantity=quantity,
         discounted=discounted,
         special_offer=product.special_offer,
         original_price=product.price,

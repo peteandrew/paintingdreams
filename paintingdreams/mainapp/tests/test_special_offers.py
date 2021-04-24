@@ -31,13 +31,16 @@ class SpecialOffersTestCase(TestCase):
         )
         self.product_1 = Product.objects.create(
             product_type = self.product_type_1,
+            stock_count = 10,
         )
         self.product_2 = Product.objects.create(
             product_type = self.product_type_2,
+            stock_count = 10,
         )
         self.product_3 = Product.objects.create(
             product_type = self.product_type_3,
             special_offer_price = Decimal(8.25),
+            stock_count = 10,
         )
 
     def test_correct_product_special_offer_state_returned(self):
