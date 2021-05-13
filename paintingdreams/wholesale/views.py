@@ -33,12 +33,14 @@ def start(request, special_name):
     products_removed = []
     postage_option = 'none'
     product_errors = []
+    display_vat_message = True
 
     if len(special_name) > 0:
         try:
             special = Special.objects.get(name=special_name)
             products_removed = SpecialProductRemoved.objects.filter(special=special).all()
             postage_option = special.postage_option
+            display_vat_message = special.display_vat_message
         except Special.DoesNotExist:
             raise Http404("Special form %s does not exist" % (special_name,))
 
@@ -112,6 +114,7 @@ def start(request, special_name):
             return redirect(url)
 
     ctx = {
+        'display_vat_message': display_vat_message,
         'form': form,
         'postage_option': postage_option,
         'categories_products': categories_products,
@@ -203,11 +206,13 @@ def store_order(ctx):
 def build_order(request, special_name='', complete=False):
     postage_option = 'none'
     special = None
+    display_vat_message = True
 
     if len(special_name) > 0:
         try:
             special = Special.objects.get(name=special_name)
             postage_option = special.postage_option
+            display_vat_message = special.display_vat_message
         except Special.DoesNotExist:
             raise Http404("Special form %s does not exist" % (special_name,))
 
@@ -217,6 +222,7 @@ def build_order(request, special_name='', complete=False):
         categories_products = get_categories_products([])
 
         ctx = {
+            'display_vat_message': display_vat_message,
             'shop': {
                 'name': order_details['shop_name'],
                 'address': order_details['shop_address']

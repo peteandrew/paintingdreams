@@ -24,6 +24,10 @@ class Product(models.Model):
 class Special(models.Model):
     name = models.CharField(max_length=30, unique=True)
     postage_option = models.CharField(max_length=8, choices=(('std','std'),('none','none'),('wghtcalc','wghtcalc')))
+    display_vat_message = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
 
 
 class SpecialProductRemoved(models.Model):
