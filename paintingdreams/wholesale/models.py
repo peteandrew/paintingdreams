@@ -25,6 +25,7 @@ class Special(models.Model):
     name = models.CharField(max_length=30, unique=True)
     postage_option = models.CharField(max_length=8, choices=(('std','std'),('none','none'),('wghtcalc','wghtcalc')))
     display_vat_message = models.BooleanField(default=True)
+    display_brexit_message = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
