@@ -53,7 +53,7 @@ def info():
         <p class="wholesale-order-info">For all other items your order can be placed via this order form.</p>
         <p class="wholesale-order-info">Please contact me if you have any questions about the new ordering arrangement. info@paintingdreams.co.uk</p>
         <p class="wholesale-order-info">The minimum order is £50.</p>
-        <p class="wholesale-order-info">For orders under £100 there is a delivery charge of £8.</p><p class="wholesale-order-info">For international orders, postage will be calculated depending on the weight of the order.</p>
+        {% if postage_option != 'wghtcalc' %}<p class="wholesale-order-info">For orders under £100 there is a delivery charge of £8.</p>{% endif %}
         {% if postage_option == 'wghtcalc' %}<p class="wholesale-order-info">The carriage cost will be calculated depending on weight and you will be notified of the total cost before dispatch. Please confirm you are happy to proceed with the order once you have received the notification.</p>{% endif %}"""
 
     return html
