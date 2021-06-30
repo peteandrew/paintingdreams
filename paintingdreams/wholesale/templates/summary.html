@@ -4,7 +4,7 @@
 <div id="wholesale-container">
   <h1>Wholesale Order - {% if complete %}Complete{% else %}Summary{% endif %}</h1>
   {% if display_vat_message %}<p class="holiday-message">Please note PAINTING DREAMS IS NOW A VAT REGISTERED BUSINESS.<br>The prices here are exclusive of VAT. The VAT will be added on your invoice.</p>{% endif %}
-  {% if display_brexit_message %}<p class="holiday-message">Please note that sadly, due to Brexit, orders going to Europe may now incur an excise &amp; customs duty charge and/or a customs clearance fee.</p>{% endif %}
+  {% if display_brexit_message %}<p class="holiday-message">Please note that sadly, due to Brexit, orders going to Europe may now incur an excise &amp; customs duty charge and/or a customs clearance fee and local VAT.</p>{% endif %}
   {% if holiday_messages.wholesale %}<p class="holiday-message">{{ holiday_messages.wholesale }}</p>{% endif %}
   <p class="step-num">Step {% if complete %}3{% else %}2{% endif %} of 3</p>
   <p>Shop name: {{ shop.name }}</p>

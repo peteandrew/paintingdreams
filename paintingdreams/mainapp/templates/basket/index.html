@@ -5,7 +5,7 @@
 {% if not cart.items_including_sold_out %}
     <p class="page-top-message">Your basket is currently empty. Please add some items.</p>
 {% else %}
-    <p class="holiday-message">Please note that sadly, due to Brexit, orders going to Europe may now incur an excise &amp; customs duty charge and/or a customs clearance fee.</p>
+    <p class="holiday-message">Please note that sadly, due to Brexit, orders going to Europe may now incur an excise &amp; customs duty charge and/or a customs clearance fee and local VAT.</p>
     {% if holiday_messages.website %}<p class="holiday-message">{{ holiday_messages.website|safe }}</p>{% endif %}
     <table class="table basket">
         <thead>
